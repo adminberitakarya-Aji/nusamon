@@ -36,8 +36,9 @@ static func create(species: Dictionary, detail: Dictionary, stage_index: int, le
 	inst.level = level
 	inst.stage_index = stage_index
 	inst.ability = String(detail.get("ability", ""))
-	inst.stats = NusamonData.stats_for_stage(species, stage_index)
-	inst.max_hp = _hitung_hp(int(inst.stats["hp"]), level)
+	var base_stats := NusamonData.stats_for_stage(species, stage_index)
+	inst.max_hp = _hitung_hp(int(base_stats["hp"]), level)
+	inst.stats = _stat_runtime(base_stats, level)
 	inst.current_hp = inst.max_hp
 	inst.exp_total = level * level * level
 	inst._ambil_moves(detail, level)
@@ -50,6 +51,19 @@ static func _hitung_hp(base: int, level: int) -> int:
 
 static func _hitung_stat(base: int, level: int) -> int:
 	return int(floor(2.0 * base * level / 100.0)) + 5
+
+
+## Konversi base stats (hasil skala tahap) → stat runtime pada level tertentu.
+## Kunci "hp" sengaja tetap base — nilai HP runtime tersimpan di max_hp
+## (rumus _hitung_hp), dan base hp dipakai ulang saat evolusi (exp_system._evolve).
+static func _stat_runtime(base_stats: Dictionary, level: int) -> Dictionary:
+	var hasil := {}
+	for k in base_stats:
+		if k == "hp":
+			hasil[k] = int(base_stats[k])
+		else:
+			hasil[k] = _hitung_stat(int(base_stats[k]), level)
+	return hasil
 
 
 ## Ambil move dari learnset yang tersedia pada level tsb (maks. 4, yang terbaru).

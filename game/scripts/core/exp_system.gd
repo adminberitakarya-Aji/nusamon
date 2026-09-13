@@ -15,7 +15,7 @@ static func total_exp(level: int) -> int:
 
 ## EXP diperoleh dari mengalahkan `level_lawan`.
 static func exp_gain(base_exp_yield: int, level_lawan: int, is_trainer := false) -> int:
-	var dasar := int(floor(float(base_exp_yield * level_lawan) / 7.0))
+	var dasar: int = int(floor(float(base_exp_yield * level_lawan) / 7.0))
 	var mult := TRAINER_MULTIPLIER if is_trainer else 1.0
 	return int(floor(float(dasar) * mult))
 
@@ -73,7 +73,8 @@ static func _evolve(
 	inst.stage_index = stage
 	inst.display_name = String(tahap.get("nama", inst.display_name))
 	inst.types = tahap.get("tipe", inst.types)
-	inst.stats = NusamonData.stats_for_stage(species, stage)
-	inst.max_hp = NusamonInstance._hitung_hp(int(inst.stats["hp"]), inst.level)
+	var base_stats := NusamonData.stats_for_stage(species, stage)
+	inst.max_hp = NusamonInstance._hitung_hp(int(base_stats["hp"]), inst.level)
+	inst.stats = NusamonInstance._stat_runtime(base_stats, inst.level)
 	inst.current_hp = clampi(inst.current_hp + (inst.max_hp - old_max), 0, inst.max_hp)
 	inst._ambil_moves(detail, inst.level)

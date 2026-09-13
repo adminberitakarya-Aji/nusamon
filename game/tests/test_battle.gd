@@ -36,8 +36,8 @@ func _init() -> void:
 	cek("Tanah vs Udara = 0 (kebal)", NusamonData.effectiveness(chart, "Tanah", "Udara") == 0.0)
 	cek("Listrik vs Tanah = 0 (kebal)", NusamonData.effectiveness(chart, "Listrik", "Tanah") == 0.0)
 	cek("Racun vs Baja = 0 (kebal)", NusamonData.effectiveness(chart, "Racun", "Baja") == 0.0)
-	cek("Api vs Daun/Udara = 1.0 (2 x 0.5)",
-		is_equal_approx(NusamonData.effectiveness_multi(chart, "Api", ["Daun", "Udara"]), 1.0))
+	cek("Api vs Daun/Udara = 2.0 (2 x 1)",
+		is_equal_approx(NusamonData.effectiveness_multi(chart, "Api", ["Daun", "Udara"]), 2.0))
 
 	# ---------- 2. skala stat evolusi
 	var rimau := NusamonData.find_species(data, 1)

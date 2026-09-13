@@ -44,9 +44,10 @@ func _init() -> void:
 	cek("tangkap pasti", r_past["catch"] and r_past["guaranteed"])
 
 	# bonus status: tidur menggandakan a
+	var bersih := NusamonInstance.create(rusa, detail_rusa, 0, 10)
 	var tidur := NusamonInstance.create(rusa, detail_rusa, 0, 10)
 	BattleEngine.terapkan_status(tidur, "tidur", RandomNumberGenerator.new())
-	var a_biasa := CatchSystem.catch_a(tidur, rate, "amukan")
+	var a_biasa := CatchSystem.catch_a(bersih, rate, "amukan")
 	var a_tidur := CatchSystem.catch_a(tidur, rate, "amukan")
 	cek("status tidur x2", is_equal_approx(a_tidur, a_biasa * 2.0))
 

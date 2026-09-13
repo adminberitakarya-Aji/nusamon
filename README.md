@@ -14,7 +14,7 @@
 | Keputusan Teknis | ✅ Godot 4 + 3D low-poly (`docs/tech-stack.md`) |
 | Tooling Generator Aset | 🔨 Selesai (6/15 model MVP; perlu Blender untuk eksekusi) |
 | Fase 1 — Prototipe Battle | ✅ **Selesai** — battle core + tangkap + EXP/evolusi + PP + tahap stat (buff/debuff/heal) + UI; **78 asersi hijau (3 suite, Godot 4.7.2)**. Detail: `ROADMAP.md` |
-| Prototipe World/Catch | ⬜ Belum mulai |
+| Prototipe World/Catch (Fase 2) | 🔨 **Berjalan** — inventori & toko Amukan selesai (uang Rupiah + stok terbatas, `data/items.json`); berikutnya: tim/partai, Nusadex, ability |
 
 ## Struktur Proyek
 

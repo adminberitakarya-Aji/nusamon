@@ -15,7 +15,7 @@
 |--:|--------|-----------|------------------------|
 | 0 — Desain | ✅ **Selesai** | GDD, roster 30 spesies, type chart 11×11, base stats, data JSON tervalidasi | 9 dokumen desain + 3 file data JSON + `validate.ps1` lolos |
 | 1 — Prototipe Battle | ✅ **Selesai** | Battle 1v1, tangkap, EXP/evolusi, UI scene, PP, tahap stat, tes headless | Battle end-to-end (serang/tangkap/kabur) + EXP + evolusi + **78 asersi hijau (3 suite)** + UI terverifikasi (simulasi headless; inspeksi visual disarankan saat mulai Fase 2) |
-| 2 — Catch & Nusadex | ⬜ Belum mulai | Inventori, tim/partai, Nusadex, ability engine | Tangkap masuk tim, Nusadex terisi, ability & PP aktif |
+| 2 — Catch & Nusadex | 🔨 **Berjalan** | Inventori, tim/partai, Nusadex, ability engine | Tangkap masuk tim, Nusadex terisi, ability & PP aktif |
 | 3 — World & Gym pertama | ⬜ Belum mulai | World map Jawa, G1 Normal (Bu Sari) | Battle trainer + lencana G1 |
 | 4 — Vertical Slice | ⬜ Belum mulai | MVP end-to-end: Jawa + G1 + G2 + rival + Nusadex | Main dari Desa Sumberrejo sampai lencana G2 tanpa jebol (GDD §8) |
 | 5 — Produksi konten penuh | ⬜ Belum mulai | 30 spesies, 6 pulau, 8 gym, Liga Nusantara, story | Tamat end-to-end + Nusadex 100% |
@@ -89,11 +89,11 @@
 | Fix kosmetik log tangkap: "tertangkap" (C-7) | ✅ | bukan lagi "menang" |
 | Verifikasi UI: simulasi battle penuh headless via `test_scene.gd` | ✅ | inspeksi visual di editor disarankan saat mulai Fase 2 |
 
-### Fase 2 — Catch & Nusadex ⬜ (rencana granular)
+### Fase 2 — Catch & Nusadex 🔨 (berjalan)
 
 | Langkah | Status |
 |---------|:------:|
-| Inventori Amukan terbatas (beli/toko, pengurangan stok) | ⬜ |
+| Inventori Amukan terbatas: uang (Rupiah, awal Rp 3.000) + stok (awal 5) + toko + pengurangan stok saat lempar — data `items.json` + kelas `Inventori` + UI toko | ✅ `9fd0a9c` |
 | Tim/partai (maks. 6) + hasil tangkap masuk tim | ⬜ |
 | Switch/tukar Nusamon saat battle (GDD §4.1) | ⬜ |
 | Nusadex: record lihat/tangkap, layar daftar + detail (`docs/nusadex.md`) | ⬜ |
@@ -175,6 +175,8 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | PP diimplementasikan + move darurat **Meronta** (analog Struggle) saat semua PP habis | PP berkurang walau meleset (konvensi Pokémon); UI men-disable tombol PP 0 | `4629f5c` |
 | 2026-09-14 | Efek `efekData` hanya diterapkan bila serangan kena (bug: sebelumnya jalan walau meleset) | benar secara aturan battle | `4629f5c` |
 | 2026-09-14 | Fase 1 dinyatakan **selesai** — DoD terpenuhi (78 asersi hijau, 3 suite, simulasi battle penuh) | semua kriteria §1 terpenuhi; inspeksi visual editor tetap disarankan saat Fase 2 | `4629f5c` |
+| 2026-09-14 | Fase 2 dimulai: inventori & toko Amukan. **Harga baru didefinisikan**: Amukan Rp 200, Kuat Rp 600, Super Rp 900, Nusantara = hadiah event (tidak dijual); uang awal Rp 3.000; stok awal 5 Amukan | `gameplay-depth.md` §3 tidak menetapkan harga → diputuskan di sini + `data/items.json` (source of truth); bonus divalidasi `validate.ps1` agar = konstanta engine | `9fd0a9c` |
+| 2026-09-14 | Inventori memakai **static store** (bukan autoload) | bertahan saat scene dimuat ulang tanpa menambah dependensi; testable headless; save/load permanen menyusul | `9fd0a9c` |
 
 ## 5. Referensi
 

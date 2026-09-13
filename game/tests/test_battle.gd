@@ -128,6 +128,59 @@ func _init() -> void:
 	teracuni.take_damage(9999)
 	cek("take_damage(9999) -> pingsan", teracuni.is_fainted() and teracuni.current_hp == 0)
 
+	# ---------- 9. tahap stat (buff/debuff) & PP & samaran
+	cek("faktor_tahap(0) = 1", is_equal_approx(BattleEngine.faktor_tahap(0), 1.0))
+	cek("faktor_tahap(1) = 1.5", is_equal_approx(BattleEngine.faktor_tahap(1), 1.5))
+	cek("faktor_tahap(-1) = 2/3", is_equal_approx(BattleEngine.faktor_tahap(-1), 2.0 / 3.0))
+	var buff := NusamonInstance.create(rimau, detail_rimau, 0, 5)
+	cek("tahap awal 0", buff.ubah_tahap_stat("atk", 2) == 2)
+	for i in 8:
+		buff.ubah_tahap_stat("atk", 1)
+	cek("tahap atk clamp di +6", int(buff.stat_stages["atk"]) == 6)
+
+	# buff atk → damage lebih besar (seed sama)
+	var p0 := NusamonInstance.create(rimau, detail_rimau, 0, 5)
+	var pg := NusamonInstance.create(rimau, detail_rimau, 0, 5)
+	pg.ubah_tahap_stat("atk", 1)
+	var t_def := NusamonInstance.create(rusa, data["detailSpesies"]["22"], 0, 10)
+	var rng7 := RandomNumberGenerator.new()
+	rng7.seed = 11
+	var r_nobuff := BattleEngine.execute_move(p0, t_def, cakar_bara, chart, rng7)
+	var rng8 := RandomNumberGenerator.new()
+	rng8.seed = 11
+	var r_buff := BattleEngine.execute_move(pg, t_def, cakar_bara, chart, rng8)
+	cek("buff atk menaikkan damage", int(r_buff["damage"]) > int(r_nobuff["damage"]),
+		"buff=" + str(r_buff["damage"]) + " dasar=" + str(r_nobuff["damage"]))
+
+	# debuff def target → damage yang diterima lebih besar
+	var t_def_minus := NusamonInstance.create(rusa, data["detailSpesies"]["22"], 0, 10)
+	t_def_minus.ubah_tahap_stat("def", -1)
+	var rng9 := RandomNumberGenerator.new()
+	rng9.seed = 11
+	var r_defminus := BattleEngine.execute_move(p0, t_def_minus, cakar_bara, chart, rng9)
+	cek("debuff def target menaikkan damage",
+		int(r_defminus["damage"]) > int(r_nobuff["damage"]))
+
+	# tahap spe mengubah urutan giliran: rusa lv10 spe 16 (+2 → 24) > monyet 18
+	var kura := NusamonInstance.create(rusa, data["detailSpesies"]["22"], 0, 10)
+	kura.ubah_tahap_stat("spe", 2)
+	var u2 := BattleEngine.urutan_giliran(m, move_biasa, kura, move_biasa)
+	cek("tahap spe mengubah urutan", u2[0] == kura)
+
+	# PP
+	var anak2 := NusamonInstance.create(rimau, detail_rimau, 0, 5)
+	cek("PP cakaran = 35", anak2.pp_move("cakaran") == 35, "aktual " + str(anak2.pp_move("cakaran")))
+	cek("pakai_move mengurangi PP", anak2.pakai_move("cakaran") and anak2.pp_move("cakaran") == 34)
+	anak2.move_pp["cakaran"] = 0
+	cek("pakai_move false saat PP 0", not anak2.pakai_move("cakaran"))
+	cek("SAMARAN power 50", int(BattleEngine.SAMARAN["power"]) == 50)
+
+	# C-2: kelumpuhan tidak lagi di-rol di fase akhir giliran
+	var lumpuh := NusamonInstance.create(rimau, detail_rimau, 0, 5)
+	lumpuh.status = "kelumpuhan"
+	cek("kelumpuhan tanpa pesan di fase akhir",
+		BattleEngine.akhir_giliran_status(lumpuh, RandomNumberGenerator.new()) == "")
+
 	# ---------- ringkasan
 	print("=== Hasil: %d lulus, %d gagal ===" % [lulus, gagal])
 	quit(1 if gagal > 0 else 0)

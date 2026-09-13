@@ -1,7 +1,8 @@
 extends Control
 ## Battle scene prototipe NUSAMON — UI dibangun programatik.
 ## Pemakaian: jalankan proyek (scene utama) → battle vs Nusamon liar.
-## Sistem aktif: serang (4 move), Amukan (4 jenis), kabur, EXP, evolusi.
+## Sistem aktif: serang (4 move, PP), tahap stat (buff/debuff/heal), status,
+## Amukan (4 jenis), kabur, EXP, evolusi.
 
 const WILD_IDS := [22, 23, 24]          # rusa, monyet, ayam (Common — Jawa)
 const WILD_LEVEL_RANGE := [2, 6]
@@ -217,8 +218,12 @@ func _semua_menu(mati: bool) -> void:
 # ------------------------------------------------------------ giliran & serangan
 
 func _pilih_move(idx: int) -> void:
+	var id := String(player.move_ids[idx])
+	if player.pp_move(id) <= 0:
+		_log("PP %s habis! Pilih move lain." % id)
+		return
 	_tutup_sub_menu()
-	var mv := BattleEngine.cari_move(moves_db, String(player.move_ids[idx]))
+	var mv := BattleEngine.cari_move(moves_db, id)
 	_giliran(true, mv)
 
 
@@ -239,12 +244,24 @@ func _giliran(pemain_menyerang: bool, move: Dictionary) -> void:
 
 
 func _move_pemain_acak() -> Dictionary:
-	var id := String(player.move_ids[rng.randi_range(0, player.move_ids.size() - 1)])
+	var tersedia: Array = []
+	for id in player.move_ids:
+		if player.pp_move(String(id)) > 0:
+			tersedia.append(id)
+	if tersedia.is_empty():
+		return BattleEngine.SAMARAN  # semua PP habis
+	var id := String(tersedia[rng.randi_range(0, tersedia.size() - 1)])
 	return BattleEngine.cari_move(moves_db, id)
 
 
 func _move_acak_musuh() -> Dictionary:
-	var id := String(wild.move_ids[rng.randi_range(0, wild.move_ids.size() - 1)])
+	var tersedia: Array = []
+	for id in wild.move_ids:
+		if wild.pp_move(String(id)) > 0:
+			tersedia.append(id)
+	if tersedia.is_empty():
+		return BattleEngine.SAMARAN  # semua PP habis
+	var id := String(tersedia[rng.randi_range(0, tersedia.size() - 1)])
 	return BattleEngine.cari_move(moves_db, id)
 
 
@@ -257,13 +274,15 @@ func _eksekusi_giliran_duo(
 			continue
 		var target := b if p == a else a
 		var mv := move_a if p == a else move_b
-		_eksekusi_serang(p, target, mv)
+		p.pakai_move(String(mv.get("id", "")))  # PP berkurang walau meleset
+		if _eksekusi_serang(p, target, mv):
+			# efek lanjutan (status/buff/debuff/heal) hanya bila serangan kena
+			_cek_efek_move(p, mv, target)
 		_update_bars()
 		if target.is_fainted():
 			_log("%s pingsan!" % target.display_name)
 			_akhir_battle(target == wild)
 			return
-		_cek_efek_move(mv, target)
 	# fase akhir: efek status kedua sisi
 	_fase_status(a)
 	_fase_status(b)
@@ -278,25 +297,25 @@ func _eksekusi_giliran_duo(
 		return
 
 
-func _eksekusi_serang(penyerang: NusamonInstance, bertahan: NusamonInstance, mv: Dictionary) -> void:
+func _eksekusi_serang(penyerang: NusamonInstance, bertahan: NusamonInstance, mv: Dictionary) -> bool:
 	# cek tidur / kelumpuhan sebelum menyerang
 	if penyerang.status == "tidur":
 		_log("%s tidur nyenyak..." % penyerang.display_name)
-		return
+		return false
 	if penyerang.status == "kelumpuhan" and rng.randf() < BattleEngine.PELUANG_LOMPAT_KELUMPUHAN:
 		_log("%s lumpuh dan tidak bisa bergerak!" % penyerang.display_name)
-		return
+		return false
 	var hasil := BattleEngine.execute_move(penyerang, bertahan, mv, chart, rng)
 	if hasil["missed"]:
 		_log("%s menggunakan %s... tapi meleset!" % [
 			penyerang.display_name, mv.get("nama", "?")])
-		return
+		return false
 	if mv.get("power", 0) <= 0:
 		_log("%s menggunakan %s." % [penyerang.display_name, mv.get("nama", "?")])
-		return
+		return true
 	if float(hasil["eff"]) == 0.0:
 		_log("Tidak berefek ke %s!" % bertahan.display_name)
-		return
+		return false
 	bertahan.take_damage(int(hasil["damage"]))
 	var catatan := ""
 	if bool(hasil["kritis"]):
@@ -308,18 +327,38 @@ func _eksekusi_serang(penyerang: NusamonInstance, bertahan: NusamonInstance, mv:
 	_log("%s menggunakan %s → %s terkena %d damage%s" % [
 		penyerang.display_name, mv.get("nama", "?"),
 		bertahan.display_name, int(hasil["damage"]), catatan])
+	return true
 
 
-func _cek_efek_move(mv: Dictionary, target: NusamonInstance) -> void:
+## Terapkan efekData move. Buff/heal menimpa PENGguna; debuff/status menimpa target.
+func _cek_efek_move(pengguna: NusamonInstance, mv: Dictionary, target: NusamonInstance) -> void:
 	var efek: Variant = mv.get("efekData")
 	if efek == null or typeof(efek) != TYPE_DICTIONARY:
 		return
 	var jenis := String((efek as Dictionary).get("jenis", ""))
 	var peluang := float((efek as Dictionary).get("peluang", 0.0))
-	var jenis_status := ["luka_bakar", "racun", "kelumpuhan", "tidur"]
-	if jenis_status.has(jenis) and target.status == "" and rng.randf() < peluang:
-		BattleEngine.terapkan_status(target, jenis, rng)
-		_log("%s terkena status %s!" % [target.display_name, jenis])
+	match jenis:
+		"luka_bakar", "racun", "kelumpuhan", "tidur":
+			if target.status == "" and rng.randf() < peluang:
+				BattleEngine.terapkan_status(target, jenis, rng)
+				_log("%s terkena status %s!" % [target.display_name, jenis])
+		"debuff_atk":
+			if rng.randf() < peluang:
+				target.ubah_tahap_stat("atk", -1)
+				_log("ATK %s turun!" % target.display_name)
+		"buff_atk":
+			if rng.randf() < peluang:
+				pengguna.ubah_tahap_stat("atk", 1)
+				_log("ATK %s naik!" % pengguna.display_name)
+		"buff_def":
+			if rng.randf() < peluang:
+				pengguna.ubah_tahap_stat("def", 1)
+				_log("DEF %s naik!" % pengguna.display_name)
+		"heal_50":
+			if rng.randf() < peluang:
+				var pulih := maxi(1, int(floor(float(pengguna.max_hp) / 2.0)))
+				pengguna.heal(pulih)
+				_log("%s memulihkan %d HP!" % [pengguna.display_name, pulih])
 
 
 func _fase_status(mon: NusamonInstance) -> void:
@@ -348,10 +387,10 @@ func _akhir_battle(musuh_kalah: bool) -> void:
 		_selesai(false)
 
 
-func _selesai(menang: bool) -> void:
+func _selesai(menang: bool, teks := "") -> void:
 	turn_aktif = true
 	_semua_menu(true)
-	_log("— Battle selesai (%s) —" % ("menang" if menang else "kalah"))
+	_log("— Battle selesai (%s) —" % (teks if teks != "" else ("menang" if menang else "kalah")))
 	_log("Muat ulang scene untuk battle baru.")
 
 
@@ -388,7 +427,7 @@ func _lempar_amukan(ball_id: String) -> void:
 		if getar > 0:
 			_log("Amukan bergetar %d kali..." % getar)
 		_log("Berhasil! %s tertangkap!" % wild.display_name)
-		_selesai(true)
+		_selesai(true, "tertangkap")
 		return
 	if getar > 0:
 		_log("Amukan bergetar %d kali... tapi %s berhasil keluar!" % [
@@ -420,8 +459,10 @@ func _buka_menu_move() -> void:
 	for i in player.move_ids.size():
 		var mv := BattleEngine.cari_move(moves_db, String(player.move_ids[i]))
 		var idx := i
-		_tombol_menu("%s (%s)" % [mv.get("nama", ""), mv.get("tipe", "?")], menu_move,
-			func() -> void: _pilih_move(idx))
+		var pp := player.pp_move(String(mv.get("id", "")))
+		var b := _tombol_menu("%s (%s) — PP %d" % [mv.get("nama", ""), mv.get("tipe", "?"), pp],
+			menu_move, func() -> void: _pilih_move(idx))
+		b.disabled = pp <= 0
 	_tombol_menu("Kembali", menu_move, _tutup_sub_menu)
 	menu_move.visible = true
 

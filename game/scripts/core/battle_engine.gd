@@ -13,6 +13,17 @@ const RAND_MAX := 1.0
 
 const PELUANG_LOMPAT_KELUMPUHAN := 0.25
 
+## Move darurat bila semua PP habis (konvensi Pokémon: Struggle).
+const SAMARAN := {
+	"id": "meronta", "nama": "Meronta", "tipe": "Normal", "kategori": "fisik",
+	"power": 50, "akurasi": 100, "prioritas": 0, "efekData": null
+}
+
+
+## Faktor tahap stat (konvensi Pokémon): +1=×1.5, −1=×2/3, batas -6..+6.
+static func faktor_tahap(tahap: int) -> float:
+	return (2.0 + tahap) / 2.0 if tahap >= 0 else 2.0 / (2.0 - tahap)
+
 
 ## Cari move berdasarkan id di data/moves.json.
 static func cari_move(moves_db: Dictionary, id: String) -> Dictionary:
@@ -41,12 +52,12 @@ static func execute_move(
 	if power <= 0.0:
 		return hasil
 
-	# 3) stat serang/bertahan sesuai kategori
+	# 3) stat serang/bertahan sesuai kategori + tahap stat (buff/debuff)
 	var kategori := String(move.get("kategori", "fisik"))
 	var atk_key := "atk" if kategori == "fisik" else "spa"
 	var def_key := "def" if kategori == "fisik" else "spd"
-	var atk := float(penyerang.stats[atk_key])
-	var defn := float(bertahan.stats[def_key])
+	var atk := float(penyerang.stats[atk_key]) * faktor_tahap(int(penyerang.stat_stages.get(atk_key, 0)))
+	var defn := float(bertahan.stats[def_key]) * faktor_tahap(int(bertahan.stat_stages.get(def_key, 0)))
 	# luka bakar memotong serangan fisik
 	if kategori == "fisik" and penyerang.status == "luka_bakar":
 		atk *= 0.5
@@ -85,8 +96,8 @@ static func urutan_giliran(
 	var pri_b := int(move_b.get("prioritas", 0))
 	if pri_a != pri_b:
 		return [a, b] if pri_a > pri_b else [b, a]
-	var spe_a := int(a.stats["spe"])
-	var spe_b := int(b.stats["spe"])
+	var spe_a := float(a.stats["spe"]) * faktor_tahap(int(a.stat_stages.get("spe", 0)))
+	var spe_b := float(b.stats["spe"]) * faktor_tahap(int(b.stat_stages.get("spe", 0)))
 	if spe_a == spe_b:
 		return [a, b]
 	return [a, b] if spe_a > spe_b else [b, a]
@@ -100,6 +111,7 @@ static func terapkan_status(mon: NusamonInstance, jenis: String, rng: RandomNumb
 
 
 ## Efek status di akhir giliran; mengembalikan pesan untuk log battle.
+## Catatan: kelumpuhan dicek saat mon mencoba beraksi (battle_scene), bukan di sini.
 static func akhir_giliran_status(mon: NusamonInstance, rng: RandomNumberGenerator) -> String:
 	match mon.status:
 		"luka_bakar":
@@ -110,9 +122,6 @@ static func akhir_giliran_status(mon: NusamonInstance, rng: RandomNumberGenerato
 			var d: int = maxi(1, int(floor(float(mon.max_hp) / 8.0)))
 			mon.take_damage(d)
 			return "%s kesakitan karena racun (-%d HP)" % [mon.display_name, d]
-		"kelumpuhan":
-			if rng.randf() < PELUANG_LOMPAT_KELUMPUHAN:
-				return "%s lumpuh dan tidak bisa bergerak!" % mon.display_name
 		"tidur":
 			mon.status_turn -= 1
 			if mon.status_turn <= 0:

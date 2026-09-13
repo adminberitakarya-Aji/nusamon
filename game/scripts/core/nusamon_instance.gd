@@ -18,6 +18,8 @@ var ability := ""
 var status := ""            # "", "luka_bakar", "racun", "kelumpuhan", "tidur"
 var status_turn := 0        # penghitung untuk status berdurasi (tidur)
 var exp_total := 0          # akumulasi EXP (kurva medium-fast: level^3)
+var stat_stages := {}       # tahap stat battle: atk/def/spa/spd/spe -> -6..+6
+var move_pp := {}           # sisa PP per move id (data moves.json: field "poin")
 
 
 ## Bangun instans dari data JSON.
@@ -41,6 +43,7 @@ static func create(species: Dictionary, detail: Dictionary, stage_index: int, le
 	inst.stats = _stat_runtime(base_stats, level)
 	inst.current_hp = inst.max_hp
 	inst.exp_total = level * level * level
+	inst.stat_stages = {"atk": 0, "def": 0, "spa": 0, "spd": 0, "spe": 0}
 	inst._ambil_moves(detail, level)
 	return inst
 
@@ -66,8 +69,9 @@ static func _stat_runtime(base_stats: Dictionary, level: int) -> Dictionary:
 	return hasil
 
 
-## Ambil move dari learnset yang tersedia pada level tsb (maks. 4, yang terbaru).
-func _ambil_moves(detail: Dictionary, level: int) -> void:
+## Ambil move dari learnset yang tersedia pada level tsb (maks. 4, yang terbaru)
+## dan isi PP penuh dari data moves.json (field "poin").
+func _ambil_moves(detail: Dictionary, level: int, moves_db: Dictionary = {}) -> void:
 	var tercapai: Array = []
 	for l in detail.get("learnset", []):
 		if int(l.get("lv", 0)) <= level:
@@ -75,6 +79,15 @@ func _ambil_moves(detail: Dictionary, level: int) -> void:
 	while tercapai.size() > 4:
 		tercapai.pop_front()
 	move_ids = tercapai
+	var db := moves_db
+	if db.is_empty():
+		db = NusamonData.load_moves()
+	move_pp.clear()
+	for id in move_ids:
+		for mv in db.get("moves", []):
+			if String(mv.get("id", "")) == String(id):
+				move_pp[String(id)] = int(mv.get("poin", 10))
+				break
 
 
 func take_damage(nilai: int) -> void:
@@ -87,3 +100,26 @@ func heal(nilai: int) -> void:
 
 func is_fainted() -> bool:
 	return current_hp <= 0
+
+
+## Ubah tahap stat battle (mis. +1 buff_atk). Dibatasi -6..+6 (konvensi Pokémon).
+## Mengembalikan jumlah tahap yang benar-benar terpakai.
+func ubah_tahap_stat(kunci: String, delta: int) -> int:
+	var sekarang := int(stat_stages.get(kunci, 0))
+	var baru := clampi(sekarang + delta, -6, 6)
+	stat_stages[kunci] = baru
+	return baru - sekarang
+
+
+## Kurangi PP 1; false bila PP sudah 0. Move tanpa data PP (mis. Meronta) selalu bisa.
+func pakai_move(id: String) -> bool:
+	if not move_pp.has(id):
+		return true
+	if int(move_pp[id]) <= 0:
+		return false
+	move_pp[id] = int(move_pp[id]) - 1
+	return true
+
+
+func pp_move(id: String) -> int:
+	return int(move_pp.get(id, 0))

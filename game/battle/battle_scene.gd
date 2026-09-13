@@ -2,7 +2,7 @@ extends Control
 ## Battle scene prototipe NUSAMON — UI dibangun programatik.
 ## Pemakaian: jalankan proyek (scene utama) → battle vs Nusamon liar.
 ## Sistem aktif: serang (4 move, PP), tahap stat (buff/debuff/heal), status,
-## Amukan (4 jenis), kabur, EXP, evolusi.
+## Amukan (4 jenis + stok), tim (maks. 6), toko, kabur, EXP, evolusi.
 
 const WILD_IDS := [22, 23, 24]          # rusa, monyet, ayam (Common — Jawa)
 const WILD_LEVEL_RANGE := [2, 6]
@@ -36,6 +36,7 @@ var menu_move: VBoxContainer
 var menu_ball: VBoxContainer
 var menu_toko: VBoxContainer
 var uang_label: Label
+var tim_label: Label
 
 
 func _ready() -> void:
@@ -182,6 +183,12 @@ func _bangun_ui() -> void:
 	panel_uang.add_child(uang_label)
 	_update_uang()
 
+	# panel tim (di bawah panel uang)
+	var panel_tim := _panel(Vector2(930, 92), Vector2(150, 200))
+	tim_label = _label("Tim ?", 13)
+	panel_tim.add_child(tim_label)
+	_update_tim_label()
+
 
 # ------------------------------------------------------------ alur battle
 
@@ -196,9 +203,15 @@ func _mulai_battle_liar() -> void:
 	var lv := rng.randi_range(WILD_LEVEL_RANGE[0], WILD_LEVEL_RANGE[1])
 	wild = NusamonInstance.create(spesies, wild_detail, 0, lv)
 
-	var spesies_p := NusamonData.find_species(data, PLAYER_ID)
-	player = NusamonInstance.create(
-		spesies_p, data["detailSpesies"][str(PLAYER_ID)], 0, PLAYER_LEVEL)
+	# tim: buat mon awal bila kosong (prototipe: anak rimau lv5)
+	if Tim.jumlah() == 0:
+		var spesies_p := NusamonData.find_species(data, PLAYER_ID)
+		Tim.tambah(NusamonInstance.create(
+			spesies_p, data["detailSpesies"][str(PLAYER_ID)], 0, PLAYER_LEVEL))
+	# mon pingsan dipulihkan (placeholder pusat pemulihan — Fase 2/3)
+	if Tim.pulihkan_semua() > 0:
+		_log("Tim dipulihkan di pusat pemulihan.")
+	player = Tim.aktif()  # EXP/level/evolusi tersimpan di anggota tim
 
 	_log("Seekor %s liar muncul! (Lv.%d)" % [wild.display_name, wild.level])
 	_update_bars()
@@ -222,6 +235,16 @@ func _update_bars() -> void:
 	var dapat := player.exp_total - ExpSystem.total_exp(player.level)
 	p_exp.max_value = butuh
 	p_exp.value = dapat
+	_update_tim_label()
+
+
+## Panel ringkasan tim: nama + level, mon aktif ditandai.
+func _update_tim_label() -> void:
+	var baris: Array = []
+	for m in Tim.anggota:
+		baris.append("%s Lv.%d%s" % [m.display_name, m.level, " ▸" if m == Tim.aktif() else ""])
+	var isi := "\n".join(baris)
+	tim_label.text = "Tim %d/6\n%s" % [Tim.jumlah(), isi if isi != "" else "—"]
 
 
 func _semua_menu(mati: bool) -> void:
@@ -447,7 +470,13 @@ func _lempar_amukan(ball_id: String) -> void:
 	if bool(hasil["catch"]):
 		if getar > 0:
 			_log("Amukan bergetar %d kali..." % getar)
-		_log("Berhasil! %s tertangkap!" % wild.display_name)
+		if Tim.tambah(wild):
+			_log("Berhasil! %s tertangkap dan masuk tim (%d/6)!" % [
+				wild.display_name, Tim.jumlah()])
+		else:
+			_log("Berhasil! %s tertangkap... tapi tim penuh — dilepas kembali." % [
+				wild.display_name])
+		_update_tim_label()
 		_selesai(true, "tertangkap")
 		return
 	if getar > 0:

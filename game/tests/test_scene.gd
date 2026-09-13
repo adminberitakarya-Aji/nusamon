@@ -25,9 +25,10 @@ func _init() -> void:
 
 func _mulai() -> void:
 	print("=== Tes Scene Battle NUSAMON ===")
-	# inventori sesi: kondisi awal deterministik untuk tes
+	# inventori & tim sesi: kondisi awal deterministik untuk tes
 	Inventori.reset()
 	Inventori.tambah_item("amukan_super", 3)
+	Tim.reset()
 	var paket: PackedScene = load("res://game/battle/battle_scene.tscn")
 	cek("scene battle termuat", paket != null)
 	if paket == null:
@@ -47,6 +48,10 @@ func _mulai() -> void:
 	cek("stok awal amukan = 5", Inventori.stok_item("amukan") == 5)
 	cek("label uang = Rp 3000", scene.uang_label.text == "Rp 3000",
 		"aktual " + scene.uang_label.text)
+	cek("tim default dibuat (1/6)", Tim.jumlah() == 1, "tim " + str(Tim.jumlah()))
+	cek("player = mon aktif tim", scene.player == Tim.aktif())
+	cek("label tim terisi", scene.tim_label.text.contains("Tim 1/6"),
+		"aktual " + scene.tim_label.text)
 
 	# ---------- 2. menu move menampilkan PP & men-disable yang habis
 	scene._buka_menu_move()
@@ -82,6 +87,25 @@ func _mulai() -> void:
 		scene.log_label.text.contains("Battle selesai"), "iterasi=" + str(iterasi))
 	cek("turn terkunci di akhir battle", scene.turn_aktif)
 	cek("moveset pemain tersedia", scene.player.move_ids.size() > 0)
+
+	# ---------- 5. tangkap pasti (Amukan Nusantara) → masuk tim
+	# bangun battle liar "baru" secara terkontrol (log & giliran direset)
+	var tim_sebelum := Tim.jumlah()
+	scene.log_label.text = ""
+	scene.turn_aktif = false
+	var id_baru := 28  # Ikan Badut (Common, single-stage)
+	var sp_baru := NusamonData.find_species(scene.data, id_baru)
+	scene.wild_detail = scene.data["detailSpesies"][str(id_baru)]
+	scene.wild = NusamonInstance.create(sp_baru, scene.wild_detail, 0, 10)
+	Inventori.tambah_item("amukan_nusantara", 1)
+	scene._lempar_amukan("amukan_nusantara")  # a >= 255 → tangkap pasti
+	cek("tangkap pasti → log tertangkap", scene.log_label.text.contains("tertangkap"))
+	cek("hasil tangkap masuk tim", Tim.jumlah() == tim_sebelum + 1,
+		"tim " + str(Tim.jumlah()))
+	cek("anggota baru = wild yang ditangkap",
+		Tim.anggota[Tim.jumlah() - 1] == scene.wild)
+	cek("battle berakhir setelah tangkap", scene.log_label.text.contains("Battle selesai"))
+	cek("tambah ulang wild yang sama ditolak", not Tim.tambah(scene.wild))
 
 	print("=== Hasil: %d lulus, %d gagal ===" % [lulus, gagal])
 	quit(1 if gagal > 0 else 0)

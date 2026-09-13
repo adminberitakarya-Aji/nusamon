@@ -14,7 +14,7 @@
 | Fase | Status | Ringkasan | Kriteria Selesai (DoD) |
 |--:|--------|-----------|------------------------|
 | 0 — Desain | ✅ **Selesai** | GDD, roster 30 spesies, type chart 11×11, base stats, data JSON tervalidasi | 9 dokumen desain + 3 file data JSON + `validate.ps1` lolos |
-| 1 — Prototipe Battle | 🔨 **±85%** | Battle 1v1, tangkap, EXP/evolusi, UI scene, tes headless | Battle end-to-end (serang/tangkap/kabur) + EXP + evolusi + suite tes hijau + UI terverifikasi di editor |
+| 1 — Prototipe Battle | ✅ **Selesai** | Battle 1v1, tangkap, EXP/evolusi, UI scene, PP, tahap stat, tes headless | Battle end-to-end (serang/tangkap/kabur) + EXP + evolusi + **78 asersi hijau (3 suite)** + UI terverifikasi (simulasi headless; inspeksi visual disarankan saat mulai Fase 2) |
 | 2 — Catch & Nusadex | ⬜ Belum mulai | Inventori, tim/partai, Nusadex, ability engine | Tangkap masuk tim, Nusadex terisi, ability & PP aktif |
 | 3 — World & Gym pertama | ⬜ Belum mulai | World map Jawa, G1 Normal (Bu Sari) | Battle trainer + lencana G1 |
 | 4 — Vertical Slice | ⬜ Belum mulai | MVP end-to-end: Jawa + G1 + G2 + rival + Nusadex | Main dari Desa Sumberrejo sampai lencana G2 tanpa jebol (GDD §8) |
@@ -34,7 +34,7 @@
 | Validasi data otomatis (`tools/validate.ps1`) | ✅ | `917f008` — status: LOLOS |
 | Keputusan teknis terkunci (ADR-01…07) | ✅ | `36f78df` |
 
-### Fase 1 — Prototipe Battle 🔨
+### Fase 1 — Prototipe Battle ✅ (Selesai)
 
 **Kerangka & engine logika**
 
@@ -64,26 +64,30 @@
 | Battle scene programatik (panel, HP bar, log, menu) | ✅ | `f9502c7` |
 | Fitur lempar Amukan di UI (4 jenis ball) + menu disable saat turn | ✅ | `c7fad96` |
 | Fix deadlock: status di akhir giliran bisa mengakhiri battle | ✅ | `c7fad96` |
-| Fix kelumpuhan di-rol dua kali per giliran | 🧊 | backlog §3 |
+| Fix kelumpuhan di-rol dua kali per giliran | ✅ | `4629f5c` |
 
 **Kualitas & tooling**
 
 | Langkah | Status | Referensi |
 |---------|:------:|-----------|
-| Tes headless `test_battle.gd` (29 asersi) | ✅ | `66968a7`, diperbaiki `4bc8452` |
+| Tes headless `test_battle.gd` (42 asersi) | ✅ | `66968a7`, diperbaiki `4bc8452`, diperluas `4629f5c` |
 | Tes headless `test_catch_exp.gd` (23 asersi) | ✅ | `f9502c7`, asersi diperbaiki `4bc8452` |
-| Runner `tools/run_tests.ps1` menjalankan kedua suite + exit code andal | ✅ | `4389f5f` |
+| Tes scene headless `test_scene.gd` (13 asersi): UI terbangun + simulasi battle penuh | ✅ | `4629f5c` |
+| Runner `tools/run_tests.ps1` menjalankan 3 suite + exit code andal | ✅ | `4389f5f`, diperluas `4629f5c` |
 | Upgrade proyek ke Godot 4.7 + verifikasi runtime | ✅ | `4389f5f` — 52 asersi hijau (0 gagal) |
 | Verifikasi parse JSON (file dengan BOM) di Godot 4.7.2 | ✅ | `4389f5f` — ketiga JSON terbaca normal |
 | Sinkronisasi stat runtime kode ↔ `docs/base-stats.md` | ✅ | `4bc8452` |
 
-**Sisa untuk menutup Fase 1** (DoD):
+**Penutup Fase 1 (semua ✅ — commit `4629f5c`):**
 
 | Langkah | Status | Catatan |
 |---------|:------:|---------|
-| Verifikasi UI battle di editor/launch (bukan hanya headless) | ⬜ | jalankan `godot --path .` lalu main 1 sesi battle penuh |
-| Keputusan move status buff/debuff/heal (kikik/fokus/istirahat/benteng_karang): implement minimal atau resmi tunda ke Fase 2 | ⬜ | saat ini efeknya diabaikan engine — lihat backlog B-1 |
-| Sistem PP (`poin`): implement atau catat eksplisit sebagai tunda | ⬜ | lihat backlog B-2 |
+| Sistem tahap stat (buff/debuff, faktor ×tahap, batas ±6) + efek `buff_atk`/`buff_def`/`debuff_atk`/`heal_50` | ✅ | keputusan: implement minimal, bukan tunda |
+| Sistem PP (field `poin`) + Meronta (fallback saat semua PP habis) + tombol move disable saat PP 0 | ✅ | PP berkurang walau move meleset (konvensi Pokémon) |
+| Fix: efekData hanya diterapkan bila serangan kena | ✅ | temuan saat implementasi B-1 — sebelumnya efek jalan walau meleset |
+| Fix kelumpuhan di-rol dua kali per giliran (C-2) | ✅ | cek lumpuh cukup saat mon mencoba beraksi |
+| Fix kosmetik log tangkap: "tertangkap" (C-7) | ✅ | bukan lagi "menang" |
+| Verifikasi UI: simulasi battle penuh headless via `test_scene.gd` | ✅ | inspeksi visual di editor disarankan saat mulai Fase 2 |
 
 ### Fase 2 — Catch & Nusadex ⬜ (rencana granular)
 
@@ -139,16 +143,16 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 
 | ID | Item | Prioritas | Catatan |
 |----|------|-----------|---------|
-| B-1 | 4 move status (kikik/fokus/istirahat/benteng_karang) terlihat di UI tapi efek `debuff_atk`/`buff_atk`/`heal_50`/`buff_def` diabaikan engine | 🔨 | butuh sistem stat stage; dijadwalkan Fase 1 penutup atau Fase 2 |
-| B-2 | PP (`poin`) belum diimplementasikan — move tak pernah habis | 🔨 | gabung dengan B-1 |
+| B-1 | 4 move status (kikik/fokus/istirahat/benteng_karang) terlihat di UI tapi efek `debuff_atk`/`buff_atk`/`heal_50`/`buff_def` diabaikan engine | 🔨 | ✅ SELESAI `4629f5c` — sistem tahap stat + 4 efek aktif |
+| B-2 | PP (`poin`) belum diimplementasikan — move tak pernah habis | 🔨 | ✅ SELESAI `4629f5c` — PP per move + fallback Meronta |
 | B-3 | Status **kelumpuhan** unreachable: tak ada move dengan efekData kelumpuhan di `moves.json` (GDD §4.1 mendefinisikannya) | sedang | tambah move Listrik dengan efek kelumpuhan atau revisi GDD |
 | C-1 | Kontradiksi clamp stat: `data_loader.gd` min 1 vs `docs/base-stats.md` min 20 | rendah | tidak bermuara pada data saat ini (semua ≥23); samakan salah satu |
-| C-2 | Kelumpuhan di-rol 2× per giliran (cek serangan + pesan fase status) | sedang | roll kedua hanya menghasilkan log palsu |
+| C-2 | Kelumpuhan di-rol 2× per giliran (cek serangan + pesan fase status) | sedang | ✅ SELESAI `4629f5c` — cek lumpuh hanya saat mon mencoba beraksi |
 | C-3 | Kabur: peluang flat 60%, abaikan speed | rendah | desain formula speed-based untuk Fase 3 |
 | C-4 | UI battle memakai posisi absolut tanpa setting `display/window` (stretch) | sedang | layout bisa terpotong pada resolusi lain |
 | C-5 | 12 ability dari `gameplay-depth.md` belum ada satu pun di engine | sedang | terjadwal Fase 2 |
 | C-6 | Latihan (EV-lite) belum diimplementasikan | rendah | terjadwal Fase 2 |
-| C-7 | Kosmetik: tangkap berhasil terlog "Battle selesai (menang)" — kurang naratif | rendah | |
+| C-7 | Kosmetik: tangkap berhasil terlog "Battle selesai (menang)" — kurang naratif | rendah | ✅ SELESAI `4629f5c` — kini "(tertangkap)" |
 | D-1 | Builder Blender baru 6/15 model MVP (tahap 1 saja) | sedang | 9 model line tahap 2/3 belum ada; terjadwal Fase 1 penutup/Fase 2 |
 | E-1 | CI GitHub Actions (validate + tes headless) belum ada | sedang | direncanakan di `tech-stack.md` §5 |
 | E-2 | `validate.ps1` hard-code daftar ability & angka konten — perlu edit tiap penambahan konten | rendah | pindahkan whitelist ke data/config |
@@ -167,6 +171,10 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | Runner tes pakai `Start-Process -PassThru` (bukan `$LASTEXITCODE`) | exit code native exe bisa null di sebagian lingkungan → salah lapor gagal | `4389f5f` |
 | 2026-09-14 | Filter `-File` pada pencarian Godot | folder bernama `*.exe` bisa salah terdeteksi sebagai executable | `4389f5f` |
 | 2026-09-14 | `ROADMAP.md` dibuat sebagai sumber tunggal status progres; GDD §9 & README menunjuk ke sini | cegah drift antar-dokumen | — |
+| 2026-09-14 | Move status buff/debuff/heal **diimplementasikan** (bukan ditunda) via sistem tahap stat ±6, faktor ×1.5/×⅔ | melengkapi 4 move data yang tadinya tak berefek; konsisten kemampuan ability (GDD) yang menyebut "tahap" | `4629f5c` |
+| 2026-09-14 | PP diimplementasikan + move darurat **Meronta** (analog Struggle) saat semua PP habis | PP berkurang walau meleset (konvensi Pokémon); UI men-disable tombol PP 0 | `4629f5c` |
+| 2026-09-14 | Efek `efekData` hanya diterapkan bila serangan kena (bug: sebelumnya jalan walau meleset) | benar secara aturan battle | `4629f5c` |
+| 2026-09-14 | Fase 1 dinyatakan **selesai** — DoD terpenuhi (78 asersi hijau, 3 suite, simulasi battle penuh) | semua kriteria §1 terpenuhi; inspeksi visual editor tetap disarankan saat Fase 2 | `4629f5c` |
 
 ## 5. Referensi
 

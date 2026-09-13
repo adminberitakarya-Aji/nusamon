@@ -9,8 +9,8 @@ if ($cmd) {
 } else {
     # cari di lokasi umum (kedalaman terbatas agar cepat)
     $kandidat = @()
-    foreach ($dir in @('C:\Program Files', 'C:\Program Files (x86)', "$env:LOCALAPPDATA\Programs", 'D:\')) {
-        $kandidat += Get-ChildItem $dir -Recurse -Depth 2 -Filter 'Godot*.exe' -ErrorAction SilentlyContinue |
+    foreach ($dir in @('C:\Program Files', 'C:\Program Files (x86)', "$env:LOCALAPPDATA\Programs", 'C:\Tools', "$env:USERPROFILE\Desktop", "$env:USERPROFILE\Downloads", 'D:\')) {
+        $kandidat += Get-ChildItem $dir -Recurse -Depth 2 -Filter 'Godot*.exe' -File -ErrorAction SilentlyContinue |
             Select-Object -ExpandProperty FullName
     }
     $kandidat = $kandidat | Where-Object { $_ -notmatch 'console' } | Select-Object -First 1
@@ -24,5 +24,18 @@ if (-not $exe) {
 }
 
 Write-Host "Godot: $exe"
-& $exe --headless --path $root --script game/tests/test_battle.gd
-exit $LASTEXITCODE
+$gagal = $false
+foreach ($tes in @('game\tests\test_battle.gd', 'game\tests\test_catch_exp.gd')) {
+    Write-Host ""
+    Write-Host "--- Menjalankan: $tes ---"
+    # Start-Process dipakai agar ExitCode terbaca andal di semua lingkungan
+    # (invokasi & langsung bisa meninggalkan $LASTEXITCODE null).
+    $proc = Start-Process -FilePath $exe -ArgumentList @('--headless', '--path', $root, '--script', $tes) -Wait -PassThru -NoNewWindow
+    Write-Host "(exit code: $($proc.ExitCode))"
+    if ($proc.ExitCode -ne 0) { $gagal = $true }
+}
+if ($gagal) {
+    Write-Host "ADA TES GAGAL." -ForegroundColor Red
+    exit 1
+}
+exit 0

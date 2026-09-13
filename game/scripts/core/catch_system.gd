@@ -46,7 +46,7 @@ static func attempt_catch(
 		return {"catch": true, "shakes": MAX_SHAKES, "guaranteed": true}
 
 	# shake threshold (konvensi formula Pokémon)
-	var b := 1048560.0 / floor(sqrt(floor(sqrt(floor(16711680.0 / a)))))
+	var b: float = 1048560.0 / floor(sqrt(floor(sqrt(floor(16711680.0 / a)))))
 	var shakes := 0
 	for i in MAX_SHAKES:
 		if rng.randi_range(0, 65535) < b:

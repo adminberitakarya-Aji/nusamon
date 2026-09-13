@@ -53,7 +53,7 @@ static func execute_move(
 
 	# 4) rumus dasar
 	var lvl := float(penyerang.level)
-	var dasar := floor(floor(floor(2.0 * lvl / 5.0 + 2.0) * power * atk / defn) / 50.0) + 2.0
+	var dasar: float = floor(floor(floor(2.0 * lvl / 5.0 + 2.0) * power * atk / defn) / 50.0) + 2.0
 
 	# 5) efektivitas tipe (dual-type: kalikan semua kolom)
 	var tipe_move := String(move.get("tipe", "Normal"))
@@ -103,11 +103,11 @@ static func terapkan_status(mon: NusamonInstance, jenis: String, rng: RandomNumb
 static func akhir_giliran_status(mon: NusamonInstance, rng: RandomNumberGenerator) -> String:
 	match mon.status:
 		"luka_bakar":
-			var d := maxi(1, int(floor(float(mon.max_hp) / 16.0)))
+			var d: int = maxi(1, int(floor(float(mon.max_hp) / 16.0)))
 			mon.take_damage(d)
 			return "%s terluka karena luka bakar (-%d HP)" % [mon.display_name, d]
 		"racun":
-			var d := maxi(1, int(floor(float(mon.max_hp) / 8.0)))
+			var d: int = maxi(1, int(floor(float(mon.max_hp) / 8.0)))
 			mon.take_damage(d)
 			return "%s kesakitan karena racun (-%d HP)" % [mon.display_name, d]
 		"kelumpuhan":

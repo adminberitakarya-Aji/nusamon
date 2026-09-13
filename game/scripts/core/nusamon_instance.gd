@@ -17,6 +17,7 @@ var move_ids: Array = []
 var ability := ""
 var status := ""            # "", "luka_bakar", "racun", "kelumpuhan", "tidur"
 var status_turn := 0        # penghitung untuk status berdurasi (tidur)
+var exp_total := 0          # akumulasi EXP (kurva medium-fast: level^3)
 
 
 ## Bangun instans dari data JSON.
@@ -38,6 +39,7 @@ static func create(species: Dictionary, detail: Dictionary, stage_index: int, le
 	inst.stats = NusamonData.stats_for_stage(species, stage_index)
 	inst.max_hp = _hitung_hp(int(inst.stats["hp"]), level)
 	inst.current_hp = inst.max_hp
+	inst.exp_total = level * level * level
 	inst._ambil_moves(detail, level)
 	return inst
 

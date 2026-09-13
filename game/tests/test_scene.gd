@@ -25,11 +25,12 @@ func _init() -> void:
 
 func _mulai() -> void:
 	print("=== Tes Scene Battle NUSAMON ===")
-	# inventori, tim, nusadex sesi: kondisi awal deterministik untuk tes
+	# inventori, tim, nusadex, save sesi: kondisi awal deterministik untuk tes
 	Inventori.reset()
 	Inventori.tambah_item("amukan_super", 3)
 	Tim.reset()
 	Nusadex.reset()
+	Simpanan.hapus()
 	var paket: PackedScene = load("res://game/battle/battle_scene.tscn")
 	cek("scene battle termuat", paket != null)
 	if paket == null:

@@ -42,6 +42,16 @@
             "toko": false,
             "tokoDariGym": null,
             "ket": "Hadiah event/rahasia — tidak dijual di toko."
+        },
+        {
+            "id": "teh_herba",
+            "nama": "Teh Herba",
+            "jenis": "latihan",
+            "bonus": null,
+            "harga": 500,
+            "toko": true,
+            "tokoDariGym": 0,
+            "ket": "Menghapus semua poin Latihan satu Nusamon (strategi bisa diubah ulang)."
         }
     ]
 }

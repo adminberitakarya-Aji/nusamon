@@ -54,12 +54,15 @@ static func execute_move(
 		return hasil
 
 	# 3) stat serang/bertahan sesuai kategori + tahap stat (buff/debuff)
+	# latihan (EV-lite) dibaca dari stats_efektif (wild tanpa latihan = salinan stats)
 	var kategori := String(move.get("kategori", "fisik"))
 	var atk_key := "atk" if kategori == "fisik" else "spa"
 	var def_key := "def" if kategori == "fisik" else "spd"
-	var atk := float(penyerang.stats[atk_key]) * faktor_tahap(int(penyerang.stat_stages.get(atk_key, 0))) \
+	var atk_s := penyerang.stats_efektif if not penyerang.stats_efektif.is_empty() else penyerang.stats
+	var def_s := bertahan.stats_efektif if not bertahan.stats_efektif.is_empty() else bertahan.stats
+	var atk := float(atk_s[atk_key]) * faktor_tahap(int(penyerang.stat_stages.get(atk_key, 0))) \
 		* AbilityEngine.faktor_setengah(penyerang, kategori)
-	var defn := float(bertahan.stats[def_key]) * faktor_tahap(int(bertahan.stat_stages.get(def_key, 0)))
+	var defn := float(def_s[def_key]) * faktor_tahap(int(bertahan.stat_stages.get(def_key, 0)))
 	# luka bakar memotong serangan fisik
 	if kategori == "fisik" and penyerang.status == "luka_bakar":
 		atk *= 0.5
@@ -104,8 +107,10 @@ static func urutan_giliran(
 	var pri_b := int(move_b.get("prioritas", 0))
 	if pri_a != pri_b:
 		return [a, b] if pri_a > pri_b else [b, a]
-	var spe_a := float(a.stats["spe"]) * faktor_tahap(int(a.stat_stages.get("spe", 0)))
-	var spe_b := float(b.stats["spe"]) * faktor_tahap(int(b.stat_stages.get("spe", 0)))
+	var spe_a := float(a.stats_efektif.get("spe", a.stats.get("spe", 0))) \
+		* faktor_tahap(int(a.stat_stages.get("spe", 0)))
+	var spe_b := float(b.stats_efektif.get("spe", b.stats.get("spe", 0))) \
+		* faktor_tahap(int(b.stat_stages.get("spe", 0)))
 	if spe_a == spe_b:
 		return [a, b]
 	return [a, b] if spe_a > spe_b else [b, a]

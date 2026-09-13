@@ -53,26 +53,34 @@ foreach ($n in $j.nusamons) {
     for ($i = 1; $i -lt $sk.Count; $i++) { if ($sk[$i] -le $sk[$i-1]) { Fail "id $($n.id): skala tidak menaik" } }
 }
 
-# --- items (Amukan) — bonus harus sama dengan CatchSystem.BALL_BONUS di engine
+# --- items (Amukan bonus = engine; Teh Herba jenis latihan)
 $bonusHarus = @{ amukan = 1.0; amukan_kuat = 1.5; amukan_super = 2.0; amukan_nusantara = 3.0 }
-if (($it.items | Measure-Object).Count -ne 4) { Fail "items != 4 (aktual $(($it.items | Measure-Object).Count))" }
+if (($it.items | Measure-Object).Count -ne 5) { Fail "items != 5 (aktual $(($it.items | Measure-Object).Count))" }
 $dupItems = $it.items | Group-Object id | Where-Object { $_.Count -gt 1 }
 if ($dupItems) { Fail ("item id duplikat: " + ($dupItems.Name -join ', ')) }
 foreach ($objek in $it.items) {
-    $harus = $bonusHarus[$objek.id]
-    if ($null -eq $harus) { Fail "item $($objek.id): id tidak dikenal" }
-    elseif ([math]::Abs([double]$objek.bonus - [double]$harus) -gt 0.0001) { Fail "item $($objek.id): bonus $($objek.bonus) != engine $harus" }
-    if ($objek.id -eq 'amukan_nusantara') {
-        if ($objek.toko) { Fail "amukan_nusantara tidak boleh dijual di toko" }
-    } else {
-        if (-not $objek.toko) { Fail "item $($objek.id): harus tersedia di toko" }
+    if ($objek.jenis -eq 'amukan') {
+        $harus = $bonusHarus[$objek.id]
+        if ($null -eq $harus) { Fail "item $($objek.id): id amukan tidak dikenal" }
+        elseif ([math]::Abs([double]$objek.bonus - [double]$harus) -gt 0.0001) { Fail "item $($objek.id): bonus $($objek.bonus) != engine $harus" }
+        if ($objek.id -eq 'amukan_nusantara') {
+            if ($objek.toko) { Fail "amukan_nusantara tidak boleh dijual di toko" }
+        } else {
+            if (-not $objek.toko) { Fail "item $($objek.id): harus tersedia di toko" }
+            if ([int]$objek.harga -le 0) { Fail "item $($objek.id): harga harus > 0" }
+        }
+    } elseif ($objek.jenis -eq 'latihan') {
+        if ($null -ne $objek.bonus) { Fail "item $($objek.id): bonus harus null" }
+        if (-not $objek.toko) { Fail "item $($objek.id): harus dijual di toko" }
         if ([int]$objek.harga -le 0) { Fail "item $($objek.id): harga harus > 0" }
+    } else {
+        Fail "item $($objek.id): jenis tidak dikenal ($($objek.jenis))"
     }
 }
 
 # --- hasil
 if ($errs.Count -eq 0) {
-    Write-Host "VALIDASI LOLOS: data NUSAMON konsisten (30 spesies / 25 move / 11 tipe / 4 item)" -ForegroundColor Green
+    Write-Host "VALIDASI LOLOS: data NUSAMON konsisten (30 spesies / 25 move / 11 tipe / 5 item)" -ForegroundColor Green
     exit 0
 } else {
     Write-Host "VALIDASI GAGAL:" -ForegroundColor Red

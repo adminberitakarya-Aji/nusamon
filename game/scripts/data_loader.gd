@@ -75,3 +75,26 @@ static func find_species(db: Dictionary, id: int) -> Dictionary:
 		if int(sp.get("id", -1)) == id:
 			return sp
 	return {}
+
+
+## Path model .glb untuk nama tahap (res://assets/models/<id>.glb).
+static func path_model(nama_tahap: String) -> String:
+	return "res://assets/models/%s.glb" % id_model(nama_tahap)
+
+
+## Nama tahap → id file model snake_case (docs/tech-stack.md §4):
+## "Anak Rimau" → "anak_rimau", "Kantong Semar Kecil" → "kantong_semar_kecil".
+static func id_model(nama_tahap: String) -> String:
+	var s := nama_tahap.to_lower()
+	var hasil := ""
+	var perlu_garis := false
+	for i in s.length():
+		var ch := s[i]
+		if ch == " ":
+			perlu_garis = true
+			continue
+		if perlu_garis and hasil != "":
+			hasil += "_"
+		hasil += ch
+		perlu_garis = false
+	return hasil

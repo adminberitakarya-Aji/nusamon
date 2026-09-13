@@ -26,13 +26,18 @@ static func _items_db() -> Dictionary:
 	return _cache
 
 
-## Semua item jenis "amukan" dari data/items.json.
-static func daftar_amukan() -> Array:
+## Semua item dengan jenis tertentu dari data/items.json.
+static func items_jenis(jenis: String) -> Array:
 	var hasil: Array = []
 	for it in _items_db().get("items", []):
-		if String(it.get("jenis", "")) == "amukan":
+		if String(it.get("jenis", "")) == jenis:
 			hasil.append(it)
 	return hasil
+
+
+## Semua item jenis "amukan" dari data/items.json.
+static func daftar_amukan() -> Array:
+	return items_jenis("amukan")
 
 
 ## Harga item; -1 bila tak dikenal/tak dijual (harga null).

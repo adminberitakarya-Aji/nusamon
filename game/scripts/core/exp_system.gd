@@ -76,5 +76,7 @@ static func _evolve(
 	var base_stats := NusamonData.stats_for_stage(species, stage)
 	inst.max_hp = NusamonInstance._hitung_hp(int(base_stats["hp"]), inst.level)
 	inst.stats = NusamonInstance._stat_runtime(base_stats, inst.level)
+	inst.stats_efektif = inst.stats.duplicate()
+	inst._hitung_stat_efektif()
 	inst.current_hp = clampi(inst.current_hp + (inst.max_hp - old_max), 0, inst.max_hp)
 	inst._ambil_moves(detail, inst.level)

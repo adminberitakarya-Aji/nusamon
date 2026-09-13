@@ -42,6 +42,9 @@ var dex_panel: PanelContainer
 var dex_header: Label
 var dex_daftar: VBoxContainer
 var dex_detail: RichTextLabel
+var p_latihan: Label
+var pratinjau_wild: Node = null
+var pratinjau_player: Node = null
 
 
 func _ready() -> void:
@@ -53,6 +56,7 @@ func _ready() -> void:
 		push_error("BattleScene: data game gagal dimuat")
 		return
 	_bangun_ui()
+	_auto_muat()
 	_mulai_battle_liar()
 
 
@@ -133,6 +137,7 @@ func _bangun_ui() -> void:
 	p_hp = _hp_bar()
 	p_hp_text = _label("HP ?/?", 13)
 	p_status = _label("", 13, Color(0.8, 0.5, 0.9))
+	p_latihan = _label("", 12, Color(0.6, 0.8, 0.6))
 	p_exp = _hp_bar(Color(0.35, 0.55, 0.95))
 	p_exp.custom_minimum_size = Vector2(240, 8)
 	p_exp.max_value = 1
@@ -141,6 +146,7 @@ func _bangun_ui() -> void:
 	vp.add_child(p_hp)
 	vp.add_child(p_hp_text)
 	vp.add_child(p_status)
+	vp.add_child(p_latihan)
 	vp.add_child(p_exp)
 
 	# log battle (bawah)
@@ -162,6 +168,8 @@ func _bangun_ui() -> void:
 	_tombol_menu("🏃 KABUR", menu_utama, _kabur)
 	_tombol_menu("📖 NU SADEX", menu_utama, _buka_nusadex)
 	_tombol_menu("🛒 TOKO", menu_utama, _buka_menu_toko)
+	_tombol_menu("💾 SIMPAN", menu_utama, _tombol_simpan)
+	_tombol_menu("📂 MUAT", menu_utama, _tombol_muat)
 
 	# menu move (muncul saat serang)
 	menu_move = VBoxContainer.new()
@@ -259,6 +267,59 @@ func _mulai_battle_liar() -> void:
 	_mon_masuk(wild, player)
 	_log("Seekor %s liar muncul! (Lv.%d)" % [wild.display_name, wild.level])
 	_update_bars()
+	_perbarui_model()
+
+
+# ------------------------------------------------------------ model 3D (tahap 2/3)
+
+## Pasang pratinjau 3D (SubViewport + model .glb). Null & diam bila model belum ada.
+func _pasang_pratinjau_3d(pos: Vector2, ukuran: Vector2, path: String) -> Node:
+	if not ResourceLoader.exists(path):
+		return null
+	var paket: PackedScene = load(path)
+	if paket == null:
+		return null
+	var svc := SubViewportContainer.new()
+	svc.position = pos
+	svc.custom_minimum_size = ukuran
+	svc.stretch = true
+	var sv := SubViewport.new()
+	sv.transparent_bg = true
+	svc.add_child(sv)
+	var inst: Node3D = paket.instantiate()
+	sv.add_child(inst)
+	var kamera := Camera3D.new()
+	kamera.position = Vector3(0, 1.4, 3.4)
+	kamera.rotation_degrees.x = -14
+	sv.add_child(kamera)
+	var cahaya := DirectionalLight3D.new()
+	cahaya.rotation_degrees = Vector3(-45, 30, 0)
+	sv.add_child(cahaya)
+	add_child(svc)
+	return svc
+
+
+## Segarkan pratinjau 3D wild & player (panggil saat battle mulai / ganti mon).
+func _perbarui_model() -> void:
+	if pratinjau_wild != null:
+		pratinjau_wild.queue_free()
+	if pratinjau_player != null:
+		pratinjau_player.queue_free()
+	pratinjau_wild = null
+	pratinjau_player = null
+	var path_wild := NusamonData.path_model(_nama_tahap(data, wild.id, wild.stage_index))
+	pratinjau_wild = _pasang_pratinjau_3d(Vector2(400, 56), Vector2(220, 190), path_wild)
+	var path_p := NusamonData.path_model(_nama_tahap(data, player.id, player.stage_index))
+	pratinjau_player = _pasang_pratinjau_3d(Vector2(560, 452), Vector2(200, 165), path_p)
+
+
+## Nama tahap aktif sebuah spesies (untuk path model).
+func _nama_tahap(d: Dictionary, id: int, tahap: int) -> String:
+	var sp := NusamonData.find_species(d, id)
+	var tahapan: Array = sp.get("tahapan", [])
+	if tahapan.is_empty():
+		return ""
+	return String(tahapan[clampi(tahap, 0, tahapan.size() - 1)].get("nama", ""))
 
 
 func _update_bars() -> void:
@@ -274,6 +335,15 @@ func _update_bars() -> void:
 	p_hp.value = player.current_hp
 	p_hp_text.text = "HP %d/%d" % [player.current_hp, player.max_hp]
 	p_status.text = "" if player.status == "" else player.status.to_upper()
+	# Latihan (EV-lite): "Latihan 12/50" — stat dengan bonus 4:1 ditandai +
+	var ringkas: Array = []
+	for k in ["atk", "def", "spa", "spd", "spe"]:
+		var poin := int(player.latihan.get(k, 0))
+		if poin > 0:
+			ringkas.append("%s+%d" % [k, int(floor(float(poin) / 4.0))])
+	p_latihan.text = "Latihan %d/50%s" % [
+		player.latihan_total,
+		(" (" + ", ".join(ringkas) + ")") if ringkas != [] else ""]
 	# progress EXP ke level berikutnya (kurva L^3)
 	var butuh := ExpSystem.total_exp(player.level + 1) - ExpSystem.total_exp(player.level)
 	var dapat := player.exp_total - ExpSystem.total_exp(player.level)
@@ -307,6 +377,7 @@ func _pilih_move(idx: int) -> void:
 		return
 	_tutup_sub_menu()
 	var mv := BattleEngine.cari_move(moves_db, id)
+	_kategori_terakhir = String(mv.get("kategori", "fisik"))  # untuk kunci Latihan
 	_giliran(true, mv)
 
 
@@ -491,6 +562,12 @@ func _akhir_battle(musuh_kalah: bool) -> void:
 			data["detailSpesies"][str(player.id)], gain)
 		for p in hasil["messages"]:
 			_log(p)
+		# Latihan (EV-lite): +1 poin untuk stat utama yang dipakai (gameplay-depth §6)
+		var stat_kunci := _stat_kunci_kemenangan()
+		var diterima := player.tambah_latihan(stat_kunci, 1)
+		if diterima > 0:
+			_log("%s mendapat 1 poin Latihan %s (%d/50)." % [
+				player.display_name, stat_kunci, player.latihan_total])
 		_selesai(true)
 	else:
 		_log("%s pingsan... pulang ke pusat pemulihan." % player.display_name)
@@ -502,6 +579,7 @@ func _selesai(menang: bool, teks := "") -> void:
 	_semua_menu(true)
 	_log("— Battle selesai (%s) —" % (teks if teks != "" else ("menang" if menang else "kalah")))
 	_log("Muat ulang scene untuk battle baru.")
+	_auto_simpan()
 
 
 func _kabur() -> void:
@@ -570,6 +648,44 @@ func _lempar_amukan(ball_id: String) -> void:
 	turn_aktif = false
 
 
+## Stat utama kemenangan untuk poin Latihan: kategori move terakhir yang dipilih
+## pemain (fisik → atk, spesial → spa); default atk.
+static var _kategori_terakhir := "fisik"
+
+
+func _stat_kunci_kemenangan() -> String:
+	return "spa" if _kategori_terakhir == "spesial" else "atk"
+
+
+# ------------------------------------------------------------ simpan/muat
+
+func _tombol_simpan() -> void:
+	if Simpanan.simpan():
+		_log("Permainan tersimpan.")
+	else:
+		_log("Gagal menyimpan permainan!")
+
+
+func _tombol_muat() -> void:
+	if Simpanan.muat():
+		_log("Permainan dimuat. Battle baru dimulai dengan state tersimpan.")
+		_update_uang()
+		_update_bars()
+		_mulai_battle_liar()
+	else:
+		_log("Tidak ada save file / tidak kompatibel.")
+
+
+## Auto-load saat scene siap (silent — bila ada save yang valid).
+func _auto_muat() -> void:
+	Simpanan.muat()
+
+
+## Auto-save di akhir battle.
+func _auto_simpan() -> void:
+	Simpanan.simpan()
+
+
 # ------------------------------------------------------------ toko
 
 func _update_uang() -> void:
@@ -598,6 +714,14 @@ func _buka_menu_toko() -> void:
 			teks = "%s — Hadiah Event" % String(it.get("nama", iid))
 		var b := _tombol_menu(teks, menu_toko, func() -> void: _beli_item(iid))
 		b.disabled = not dijual or Inventori.uang < harga_item
+	# item jenis "latihan" (Teh Herba — reset Latihan mon aktif)
+	for it2 in Inventori.items_jenis("latihan"):
+		var iid2: String = String(it2.get("id", ""))
+		var sisa2 := Inventori.stok_item(iid2)
+		var teks2 := "%s — Rp %d (stok %d)" % [
+			String(it2.get("nama", iid2)), Inventori.harga(iid2), sisa2]
+		var b2 := _tombol_menu(teks2, menu_toko, func() -> void: _pakai_teh_herba(iid2))
+		b2.disabled = sisa2 <= 0 or Inventori.uang < Inventori.harga(iid2)
 	_tombol_menu("Kembali", menu_toko, _tutup_sub_menu)
 	menu_toko.visible = true
 
@@ -610,6 +734,18 @@ func _beli_item(id: String) -> void:
 		_log("Tidak bisa membeli %s (uang kurang / tak dijual)." % id)
 	_update_uang()
 	_buka_menu_toko()  # perbarui tampilan uang/stok/disabled
+
+
+## Teh Herba: reset semua poin Latihan mon aktif (gameplay-depth §6).
+func _pakai_teh_herba(id: String) -> void:
+	if not Inventori.pakai_item(id):
+		_log("Stok %s habis!" % id)
+		return
+	var sebelum := player.latihan_total
+	player.reset_latihan()
+	_log("%s meminum Teh Herba — %d poin Latihan dihapus." % [player.display_name, sebelum])
+	_update_bars()
+	_buka_menu_toko()
 
 
 # ------------------------------------------------------------ ganti mon
@@ -658,6 +794,7 @@ func _ganti_mon(idx: int) -> void:
 	player = Tim.aktif()
 	_log("Memanggil kembali %s... %s maju!" % [lama.display_name, player.display_name])
 	_mon_masuk(player, wild)
+	_perbarui_model()
 	_update_bars()
 	# ganti menghabiskan giliran: lawan menyerang balik sekali
 	var mv := _move_acak_musuh()

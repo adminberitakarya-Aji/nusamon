@@ -11,6 +11,7 @@ var types: Array = []
 var level := 1
 var stage_index := 0
 var stats := {}
+var stats_efektif := {}
 var max_hp := 1
 var current_hp := 1
 var move_ids: Array = []
@@ -20,6 +21,8 @@ var status_turn := 0        # penghitung untuk status berdurasi (tidur)
 var exp_total := 0          # akumulasi EXP (kurva medium-fast: level^3)
 var stat_stages := {}       # tahap stat battle: atk/def/spa/spd/spe -> -6..+6
 var move_pp := {}           # sisa PP per move id (data moves.json: field "poin")
+var latihan := {}           # EV-lite: poin per stat (gameplay-depth.md §6)
+var latihan_total := 0      # total poin latihan (cap 50)
 
 
 ## Bangun instans dari data JSON.
@@ -41,6 +44,9 @@ static func create(species: Dictionary, detail: Dictionary, stage_index: int, le
 	var base_stats := NusamonData.stats_for_stage(species, stage_index)
 	inst.max_hp = _hitung_hp(int(base_stats["hp"]), level)
 	inst.stats = _stat_runtime(base_stats, level)
+	inst.stats_efektif = inst.stats.duplicate()
+	inst.latihan = {}
+	inst.latihan_total = 0
 	inst.current_hp = inst.max_hp
 	inst.exp_total = level * level * level
 	inst.stat_stages = {"atk": 0, "def": 0, "spa": 0, "spd": 0, "spe": 0}
@@ -67,6 +73,12 @@ static func _stat_runtime(base_stats: Dictionary, level: int) -> Dictionary:
 		else:
 			hasil[k] = _hitung_stat(int(base_stats[k]), level)
 	return hasil
+
+
+## Konstanta Latihan (EV-lite, gameplay-depth.md §6).
+const LATIHAN_CAP_TOTAL := 50
+const LATIHAN_CAP_STAT := 25
+const LATIHAN_POIN_PER_STAT := 4
 
 
 ## Ambil move dari learnset yang tersedia pada level tsb (maks. 4, yang terbaru)
@@ -123,3 +135,51 @@ func pakai_move(id: String) -> bool:
 
 func pp_move(id: String) -> int:
 	return int(move_pp.get(id, 0))
+
+
+# ------------------------------------------------------------ latihan (EV-lite)
+
+## Tambah poin latihan ke `kunci` (atk/def/spa/spd/spe).
+## Batas: total 50 per mon, maks. 25 per stat (gameplay-depth.md §6).
+## Mengembalikan jumlah poin yang benar-benar diterima.
+func tambah_latihan(kunci: String, n := 1) -> int:
+	if not stat_stages.has(kunci):
+		return 0
+	var diterima := 0
+	for i in n:
+		if latihan_total >= LATIHAN_CAP_TOTAL:
+			break
+		if int(latihan.get(kunci, 0)) >= LATIHAN_CAP_STAT:
+			break
+		latihan[kunci] = int(latihan.get(kunci, 0)) + 1
+		latihan_total += 1
+		diterima += 1
+	if diterima > 0:
+		_hitung_stat_efektif()
+	return diterima
+
+
+## Item "Teh Herba": hapus semua poin latihan (strategi bisa diubah ulang).
+func reset_latihan() -> void:
+	latihan = {}
+	latihan_total = 0
+	_hitung_stat_efektif()
+
+
+## Stat runtime efektif = rumus level + bonus latihan (4 poin = +1 stat).
+## Latihan dipakai dalam damage — stats dasar tetap dipertahankan (bersih untuk save).
+func _hitung_stat_efektif() -> void:
+	for k in stats:
+		if k == "hp":
+			continue
+		var bonus := int(floor(float(int(latihan.get(k, 0))) / 4.0))
+		stats_efektif[k] = int(stats[k]) + bonus
+
+
+## Kembalikan dict latihan yang aman untuk save (subset kunci stat saja).
+func latihan_untuk_save() -> Dictionary:
+	var hasil := {}
+	for k in latihan:
+		if stat_stages.has(k):
+			hasil[k] = int(latihan[k])
+	return hasil

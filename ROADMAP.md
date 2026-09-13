@@ -97,9 +97,9 @@
 | Tim/partai (maks. 6) + hasil tangkap masuk tim — kelas `Tim`, mon aktif persisten (EXP/evolusi tersimpan), pemulihan awal battle, panel tim | ✅ `ea7b214` |
 | Switch/tukar Nusamon saat battle (GDD §4.1) — menu ganti, ganti = 1 giliran (lawan menyerang balik), mon aktif/pingsan nonaktif | ✅ `40c3987` |
 | Nusadex: record lihat/tangkap, layar daftar + detail (`docs/nusadex.md`) — kelas `Nusadex`, overlay UI, field `deskripsi` 30 spesies kini terisi di `nusamons.json` | ✅ `40c3987` |
-| Ability engine: 12 ability dari `docs/gameplay-depth.md` | ⬜ |
-| Move status buff/debuff/heal + stat stage (naik/turun tahap) | ⬜ |
-| Sistem PP move (`poin` di `moves.json`) | ⬜ |
+| Ability engine: 12 ability dari `docs/gameplay-depth.md` — `AbilityEngine` + status `terpikat` | ✅ `3637879` |
+| Move status buff/debuff/heal + stat stage (naik/turun tahap) | ✅ `4629f5c` (dikerjakan di penutupan Fase 1) |
+| Sistem PP move (`poin` di `moves.json`) — PP per move + Meronta | ✅ `4629f5c` (dikerjakan di penutupan Fase 1) |
 | Latihan (EV-lite): poin per battle, cap 50/25, konversi 4:1, item reset | ⬜ |
 | Penyimpanan (save/load) — format TBD | ⬜ |
 | Impor model tahap 2/3 + tampil di battle | ⬜ |
@@ -150,7 +150,7 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | C-2 | Kelumpuhan di-rol 2× per giliran (cek serangan + pesan fase status) | sedang | ✅ SELESAI `4629f5c` — cek lumpuh hanya saat mon mencoba beraksi |
 | C-3 | Kabur: peluang flat 60%, abaikan speed | rendah | desain formula speed-based untuk Fase 3 |
 | C-4 | UI battle memakai posisi absolut tanpa setting `display/window` (stretch) | sedang | layout bisa terpotong pada resolusi lain |
-| C-5 | 12 ability dari `gameplay-depth.md` belum ada satu pun di engine | sedang | terjadwal Fase 2 |
+| C-5 | 12 ability dari `gameplay-depth.md` belum ada satu pun di engine | sedang | ✅ SELESAI `3637879` — AbilityEngine, 12/12 aktif di battle |
 | C-6 | Latihan (EV-lite) belum diimplementasikan | rendah | terjadwal Fase 2 |
 | C-7 | Kosmetik: tangkap berhasil terlog "Battle selesai (menang)" — kurang naratif | rendah | ✅ SELESAI `4629f5c` — kini "(tertangkap)" |
 | D-1 | Builder Blender baru 6/15 model MVP (tahap 1 saja) | sedang | 9 model line tahap 2/3 belum ada; terjadwal Fase 1 penutup/Fase 2 |
@@ -183,6 +183,9 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | Switch mon = **satu giliran**: lawan menyerang balik sekali (konvensi Pokémon); tombol mon aktif/pingsan nonaktif | sesuai GDD §4.1 (pilihan giliran Serang/Ganti/Item/Kabur) | `40c3987` |
 | 2026-09-14 | Field `deskripsi` 30 spesies diisi ke `nusamons.json` via script one-off Godot (**intify**: angka bulat dikembalikan ke int — JSON Godot mem-parse semua angka sebagai float) | `docs/nusadex.md` menargetkan field ini tapi belum terisi; teks UTF-8 bersih; `validate.ps1` kini wajibkan deskripsi terisi | `40c3987` |
 | 2026-09-14 | UI Nusadex = **overlay** di battle scene (bukan scene terpisah) — konsisten pola menu toko; `habitatPulau` ternyata **array pulau** → ditampilkan sebagai daftar dipisah koma | prototipe single-scene; dokumentasi nusadex.md §3.2 (daftar + detail) terpenuhi | `40c3987` |
+| 2026-09-14 | 12 ability diimplementasikan sebagai **kelas `AbilityEngine`** terpisah (hook: kalkulasi damage, akurasi, masuk battle, sentuhan fisik, akhir giliran, blokir kabur/ganti) + status baru **`terpikat`** (Madu Manis; 50% gagal menyerang) | engine tetap tipis; unit test statistical (fixed seed) memastikan peluang 10%/30%/50% sesuai docs | `3637879` |
+| 2026-09-14 | Cengkeraman Kuat memblokir kabur/ganti **tanpa mengonsumsi giliran** (log penjelasan) | opsi kembali tersedia — pemain tidak kehilangan giliran karena aksi tak tersedia | `3637879` |
+| 2026-09-14 | Fix bug saat implementasi: ejaan ability **`napas_dalam`** (bukan napas_dalan) — cocokkan ke data & docs; fix tes flaky: asersi tangkap dibuat relatif (lemparan bagian-3 bisa saja menangkap acak) | single source of truth = data; tes harus deterministik meski alur acak | `3637879` |
 
 ## 5. Referensi
 

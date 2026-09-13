@@ -37,6 +37,11 @@ var menu_ball: VBoxContainer
 var menu_toko: VBoxContainer
 var uang_label: Label
 var tim_label: Label
+var menu_ganti: VBoxContainer
+var dex_panel: PanelContainer
+var dex_header: Label
+var dex_daftar: VBoxContainer
+var dex_detail: RichTextLabel
 
 
 func _ready() -> void:
@@ -153,7 +158,9 @@ func _bangun_ui() -> void:
 	add_child(menu_utama)
 	_tombol_menu("⚔ SERANG", menu_utama, _buka_menu_move)
 	_tombol_menu("🎒 AMUKAN", menu_utama, _buka_menu_ball)
+	_tombol_menu("🔄 GANTI", menu_utama, _buka_menu_ganti)
 	_tombol_menu("🏃 KABUR", menu_utama, _kabur)
+	_tombol_menu("📖 NU SADEX", menu_utama, _buka_nusadex)
 	_tombol_menu("🛒 TOKO", menu_utama, _buka_menu_toko)
 
 	# menu move (muncul saat serang)
@@ -177,6 +184,13 @@ func _bangun_ui() -> void:
 	menu_toko.visible = false
 	add_child(menu_toko)
 
+	# menu Ganti (daftar anggota tim)
+	menu_ganti = VBoxContainer.new()
+	menu_ganti.position = Vector2(850, 300)
+	menu_ganti.custom_minimum_size = Vector2(260, 200)
+	menu_ganti.visible = false
+	add_child(menu_ganti)
+
 	# panel uang (kanan-atas)
 	var panel_uang := _panel(Vector2(930, 30), Vector2(150, 50))
 	uang_label = _label("Rp ?", 15, Color(1.0, 0.9, 0.5))
@@ -188,6 +202,33 @@ func _bangun_ui() -> void:
 	tim_label = _label("Tim ?", 13)
 	panel_tim.add_child(tim_label)
 	_update_tim_label()
+
+	# panel Nusadex (overlay layar daftar + detail)
+	dex_panel = PanelContainer.new()
+	var st_dex := StyleBoxFlat.new()
+	st_dex.bg_color = Color(0.08, 0.1, 0.12, 0.97)
+	st_dex.set_corner_radius_all(10)
+	dex_panel.add_theme_stylebox_override("panel", st_dex)
+	dex_panel.position = Vector2(30, 24)
+	dex_panel.custom_minimum_size = Vector2(840, 590)
+	add_child(dex_panel)
+	var vdex := VBoxContainer.new()
+	dex_panel.add_child(vdex)
+	dex_header = _label("", 15, Color(1.0, 0.9, 0.5))
+	vdex.add_child(dex_header)
+	var hdex := HBoxContainer.new()
+	hdex.custom_minimum_size = Vector2(820, 480)
+	vdex.add_child(hdex)
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(300, 480)
+	hdex.add_child(scroll)
+	dex_daftar = VBoxContainer.new()
+	scroll.add_child(dex_daftar)
+	dex_detail = RichTextLabel.new()
+	dex_detail.custom_minimum_size = Vector2(510, 480)
+	hdex.add_child(dex_detail)
+	_tombol_menu("Kembali", vdex, _tutup_nusadex)
+	dex_panel.visible = false
 
 
 # ------------------------------------------------------------ alur battle
@@ -202,6 +243,7 @@ func _mulai_battle_liar() -> void:
 	wild_detail = data["detailSpesies"][str(id)]
 	var lv := rng.randi_range(WILD_LEVEL_RANGE[0], WILD_LEVEL_RANGE[1])
 	wild = NusamonInstance.create(spesies, wild_detail, 0, lv)
+	Nusadex.lihat(id)  # melihat wild → entri Nusadex (siluet + nama)
 
 	# tim: buat mon awal bila kosong (prototipe: anak rimau lv5)
 	if Tim.jumlah() == 0:
@@ -248,7 +290,7 @@ func _update_tim_label() -> void:
 
 
 func _semua_menu(mati: bool) -> void:
-	for m in [menu_utama, menu_move, menu_ball, menu_toko]:
+	for m in [menu_utama, menu_move, menu_ball, menu_toko, menu_ganti]:
 		for c in m.get_children():
 			if c is Button:
 				(c as Button).disabled = mati
@@ -470,6 +512,7 @@ func _lempar_amukan(ball_id: String) -> void:
 	if bool(hasil["catch"]):
 		if getar > 0:
 			_log("Amukan bergetar %d kali..." % getar)
+		Nusadex.tangkap(wild.id)
 		if Tim.tambah(wild):
 			_log("Berhasil! %s tertangkap dan masuk tim (%d/6)!" % [
 				wild.display_name, Tim.jumlah()])
@@ -507,6 +550,7 @@ func _buka_menu_toko() -> void:
 	menu_utama.visible = false
 	menu_move.visible = false
 	menu_ball.visible = false
+	menu_ganti.visible = false
 	_bersihkan(menu_toko)
 	var info := _label("Uang: Rp %d" % Inventori.uang, 14, Color(1.0, 0.9, 0.5))
 	menu_toko.add_child(info)
@@ -536,6 +580,134 @@ func _beli_item(id: String) -> void:
 	_buka_menu_toko()  # perbarui tampilan uang/stok/disabled
 
 
+# ------------------------------------------------------------ ganti mon
+
+## Menu tukar Nusamon aktif (GDD §4.1). Ganti = satu giliran: lawan menyerang balik.
+func _buka_menu_ganti() -> void:
+	if turn_aktif:
+		return
+	menu_utama.visible = false
+	menu_move.visible = false
+	menu_ball.visible = false
+	menu_toko.visible = false
+	_bersihkan(menu_ganti)
+	for i in Tim.jumlah():
+		var m: NusamonInstance = Tim.anggota[i]
+		var idx := i
+		var tanda := " ▸" if m == Tim.aktif() else ""
+		var b := _tombol_menu("%s%s Lv.%d — %d/%d" % [
+			m.display_name, tanda, m.level, m.current_hp, m.max_hp],
+			menu_ganti, func() -> void: _ganti_mon(idx))
+		b.disabled = (m == Tim.aktif()) or m.is_fainted()
+	_tombol_menu("Kembali", menu_ganti, _tutup_sub_menu)
+	menu_ganti.visible = true
+
+
+func _ganti_mon(idx: int) -> void:
+	if turn_aktif:
+		return
+	if idx < 0 or idx >= Tim.jumlah():
+		return
+	var pilihan: NusamonInstance = Tim.anggota[idx]
+	if pilihan == Tim.aktif():
+		_log("%s sudah bertarung!" % pilihan.display_name)
+		return
+	if pilihan.is_fainted():
+		_log("%s pingsan — tidak bisa bertarung." % pilihan.display_name)
+		return
+	turn_aktif = true
+	_semua_menu(true)
+	_tutup_sub_menu()
+	var lama := Tim.aktif()
+	Tim.ubah_aktif(idx)
+	player = Tim.aktif()
+	_log("Memanggil kembali %s... %s maju!" % [lama.display_name, player.display_name])
+	_update_bars()
+	# ganti menghabiskan giliran: lawan menyerang balik sekali
+	var mv := _move_acak_musuh()
+	wild.pakai_move(String(mv.get("id", "")))
+	_eksekusi_serang(wild, player, mv)
+	_update_bars()
+	if player.is_fainted():
+		_log("%s pingsan!" % player.display_name)
+		_selesai(false)
+		return
+	_semua_menu(false)
+	turn_aktif = false
+
+
+# ------------------------------------------------------------ nusadex
+
+func _buka_nusadex() -> void:
+	if turn_aktif:
+		return
+	_semua_menu(true)
+	_tutup_sub_menu()
+	_pembaruan_dex()
+	dex_panel.visible = true
+
+
+func _tutup_nusadex() -> void:
+	dex_panel.visible = false
+	_semua_menu(false)
+
+
+## Bangun ulang daftar 30 entri + header progres.
+func _pembaruan_dex() -> void:
+	dex_header.text = "📖 Nusadex — %d/%d terlihat · %d/%d tertangkap" % [
+		Nusadex.jumlah_lihat(), Nusadex.TOTAL, Nusadex.jumlah_tangkap(), Nusadex.TOTAL]
+	_bersihkan(dex_daftar)
+	for i in data["nusamons"].size():
+		var sp: Dictionary = data["nusamons"][i]
+		var id := int(sp.get("id", 0))
+		var idx: int = i
+		var teks: String
+		if Nusadex.sudah_tangkap(id):
+			teks = "#%02d %s ✓" % [id, String(sp.get("nama", "?"))]
+		elif Nusadex.sudah_lihat(id):
+			teks = "#%02d %s ◑" % [id, String(sp.get("nama", "?"))]
+		else:
+			teks = "#%02d ??????" % id
+		var b := _tombol_menu(teks, dex_daftar, func() -> void: _pilih_dex(idx))
+		(b as Button).alignment = HORIZONTAL_ALIGNMENT_LEFT
+
+
+## Layar detail entri Nusadex (docs/nusadex.md §3.2).
+func _pilih_dex(idx: int) -> void:
+	var sp: Dictionary = data["nusamons"][idx]
+	var id := int(sp.get("id", 0))
+	var hab: Variant = data["habitatPulau"].get(str(id), "?")
+	var habitat := "?"
+	if typeof(hab) == TYPE_ARRAY:
+		var daftar: Array = []
+		for x in hab:
+			daftar.append(str(x))
+		habitat = ", ".join(daftar)
+	else:
+		habitat = str(hab)
+	var tahapan: Array = sp.get("tahapan", [])
+	var chain: Array = []
+	for i in tahapan.size():
+		var tahap: Dictionary = tahapan[i]
+		var nama := String(tahap.get("nama", "?"))
+		if tahap.get("lvEvolusi") != null:
+			nama += " (Lv %d)" % int(tahap.get("lvEvolusi"))
+		chain.append(nama)
+	var teks := "#%02d %s\n\n" % [id, String(sp.get("nama", "?"))]
+	if Nusadex.sudah_tangkap(id):
+		var tipe_akhir: Array = tahapan[tahapan.size() - 1].get("tipe", [])
+		teks += "Tipe: %s\n" % " / ".join(tipe_akhir)
+		teks += "Rarity: %s · Habitat: %s\n" % [String(sp.get("rarity", "?")), habitat]
+		teks += "Evolusi: %s\n\n" % " → ".join(chain)
+		teks += "Deskripsi:\n%s" % String(sp.get("deskripsi", "—"))
+	elif Nusadex.sudah_lihat(id):
+		teks += "Terlihat di alam — belum tertangkap.\n\n"
+		teks += "Evolusi: %s" % " → ".join(chain)
+	else:
+		teks += "Belum terlihat. Jelajahi habitatnya!"
+	dex_detail.text = teks
+
+
 func _bersihkan(n: Node) -> void:
 	for c in n.get_children():
 		c.queue_free()
@@ -547,6 +719,7 @@ func _buka_menu_move() -> void:
 	menu_utama.visible = false
 	menu_ball.visible = false
 	menu_toko.visible = false
+	menu_ganti.visible = false
 	_bersihkan(menu_move)
 	for i in player.move_ids.size():
 		var mv := BattleEngine.cari_move(moves_db, String(player.move_ids[i]))
@@ -565,6 +738,7 @@ func _buka_menu_ball() -> void:
 	menu_utama.visible = false
 	menu_move.visible = false
 	menu_toko.visible = false
+	menu_ganti.visible = false
 	_bersihkan(menu_ball)
 	for it in Inventori.daftar_amukan():
 		var bid: String = String(it.get("id", ""))
@@ -580,4 +754,5 @@ func _tutup_sub_menu() -> void:
 	menu_move.visible = false
 	menu_ball.visible = false
 	menu_toko.visible = false
+	menu_ganti.visible = false
 	menu_utama.visible = true

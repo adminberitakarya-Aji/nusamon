@@ -1,1819 +1,1849 @@
-﻿{
-    "versi":  "0.1",
-    "keterangan":  "Data roster NUSAMON. baseStatsFinal = stat tahap akhir. Stat tahap lain = baseStatsFinal x skala (dibulatkan, minimum 1).",
-    "statList":  [
-                     "hp",
-                     "atk",
-                     "def",
-                     "spa",
-                     "spd",
-                     "spe"
-                 ],
-    "nusamons":  [
-                     {
-                         "id":  1,
-                         "nama":  "Rimau",
-                         "rarity":  "starter",
-                         "peran":  "physical_attacker",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Anak Rimau",
-                                             "tipe":  [
-                                                          "Api"
-                                                      ],
-                                             "skala":  0.6
-                                         },
-                                         {
-                                             "nama":  "Rimau Muda",
-                                             "tipe":  [
-                                                          "Api"
-                                                      ],
-                                             "skala":  0.8,
-                                             "lvEvolusi":  16
-                                         },
-                                         {
-                                             "nama":  "Rimau Agung",
-                                             "tipe":  [
-                                                          "Api"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  36
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  80,
-                                                "atk":  120,
-                                                "def":  75,
-                                                "spa":  65,
-                                                "spd":  70,
-                                                "spe":  110
-                                            }
-                     },
-                     {
-                         "id":  2,
-                         "nama":  "Orangutan",
-                         "rarity":  "starter",
-                         "peran":  "tank_support",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Orangkici",
-                                             "tipe":  [
-                                                          "Daun"
-                                                      ],
-                                             "skala":  0.6
-                                         },
-                                         {
-                                             "nama":  "Oranguda",
-                                             "tipe":  [
-                                                          "Daun"
-                                                      ],
-                                             "skala":  0.8,
-                                             "lvEvolusi":  16
-                                         },
-                                         {
-                                             "nama":  "Orangraja",
-                                             "tipe":  [
-                                                          "Daun"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  36
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  100,
-                                                "atk":  85,
-                                                "def":  105,
-                                                "spa":  80,
-                                                "spd":  95,
-                                                "spe":  45
-                                            }
-                     },
-                     {
-                         "id":  3,
-                         "nama":  "Penyu",
-                         "rarity":  "starter",
-                         "peran":  "defender",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Penyuci",
-                                             "tipe":  [
-                                                          "Air"
-                                                      ],
-                                             "skala":  0.6
-                                         },
-                                         {
-                                             "nama":  "Penyula",
-                                             "tipe":  [
-                                                          "Air"
-                                                      ],
-                                             "skala":  0.8,
-                                             "lvEvolusi":  16
-                                         },
-                                         {
-                                             "nama":  "Samudragon",
-                                             "tipe":  [
-                                                          "Air"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  36
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  95,
-                                                "atk":  70,
-                                                "def":  120,
-                                                "spa":  75,
-                                                "spd":  110,
-                                                "spe":  50
-                                            }
-                     },
-                     {
-                         "id":  4,
-                         "nama":  "Elang Garuda",
-                         "rarity":  "legendary",
-                         "peran":  "speed_attacker",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Elang Garuda",
-                                             "tipe":  [
-                                                          "Udara",
-                                                          "Petarung"
-                                                      ],
-                                             "skala":  1.0
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  90,
-                                                "atk":  115,
-                                                "def":  85,
-                                                "spa":  75,
-                                                "spd":  80,
-                                                "spe":  145
-                                            }
-                     },
-                     {
-                         "id":  5,
-                         "nama":  "Cenderawasih Agung",
-                         "rarity":  "legendary",
-                         "peran":  "special_support",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Cenderawasih Agung",
-                                             "tipe":  [
-                                                          "Udara",
-                                                          "Api"
-                                                      ],
-                                             "skala":  1.0
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  85,
-                                                "atk":  70,
-                                                "def":  80,
-                                                "spa":  125,
-                                                "spd":  115,
-                                                "spe":  120
-                                            }
-                     },
-                     {
-                         "id":  6,
-                         "nama":  "Paus Samudra",
-                         "rarity":  "legendary",
-                         "peran":  "tank_support",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Paus Samudra",
-                                             "tipe":  [
-                                                          "Air"
-                                                      ],
-                                             "skala":  1.0
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  145,
-                                                "atk":  85,
-                                                "def":  105,
-                                                "spa":  95,
-                                                "spd":  105,
-                                                "spe":  60
-                                            }
-                     },
-                     {
-                         "id":  7,
-                         "nama":  "Komodo",
-                         "rarity":  "pseudo_legendary",
-                         "peran":  "attacker",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Biawak Kecil",
-                                             "tipe":  [
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  0.6
-                                         },
-                                         {
-                                             "nama":  "Komodo",
-                                             "tipe":  [
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  0.8,
-                                             "lvEvolusi":  16
-                                         },
-                                         {
-                                             "nama":  "Komodo Raja",
-                                             "tipe":  [
-                                                          "Tanah",
-                                                          "Naga"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  36
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  100,
-                                                "atk":  135,
-                                                "def":  110,
-                                                "spa":  60,
-                                                "spd":  75,
-                                                "spe":  95
-                                            }
-                     },
-                     {
-                         "id":  8,
-                         "nama":  "Gajah",
-                         "rarity":  "pseudo_legendary",
-                         "peran":  "tank",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Gajah Sapi",
-                                             "tipe":  [
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  0.6
-                                         },
-                                         {
-                                             "nama":  "Gajah Sumatra",
-                                             "tipe":  [
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  0.8,
-                                             "lvEvolusi":  16
-                                         },
-                                         {
-                                             "nama":  "Gajah Raksasa",
-                                             "tipe":  [
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  36
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  125,
-                                                "atk":  115,
-                                                "def":  120,
-                                                "spa":  60,
-                                                "spd":  80,
-                                                "spe":  55
-                                            }
-                     },
-                     {
-                         "id":  9,
-                         "nama":  "Badak",
-                         "rarity":  "pseudo_legendary",
-                         "peran":  "tank_attacker",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Badak Muda",
-                                             "tipe":  [
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  0.6
-                                         },
-                                         {
-                                             "nama":  "Badak Sumatra",
-                                             "tipe":  [
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  0.8,
-                                             "lvEvolusi":  16
-                                         },
-                                         {
-                                             "nama":  "Badak Baja",
-                                             "tipe":  [
-                                                          "Tanah",
-                                                          "Baja"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  36
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  110,
-                                                "atk":  130,
-                                                "def":  140,
-                                                "spa":  50,
-                                                "spd":  75,
-                                                "spe":  45
-                                            }
-                     },
-                     {
-                         "id":  10,
-                         "nama":  "Hiu",
-                         "rarity":  "rare",
-                         "peran":  "attacker",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Hiu Kecil",
-                                             "tipe":  [
-                                                          "Air"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Hiu Raksasa",
-                                             "tipe":  [
-                                                          "Air"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  75,
-                                                "atk":  110,
-                                                "def":  65,
-                                                "spa":  45,
-                                                "spd":  55,
-                                                "spe":  95
-                                            }
-                     },
-                     {
-                         "id":  11,
-                         "nama":  "Buaya",
-                         "rarity":  "rare",
-                         "peran":  "attacker",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Buaya Kecil",
-                                             "tipe":  [
-                                                          "Air",
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Buaya Raksasa",
-                                             "tipe":  [
-                                                          "Air",
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  85,
-                                                "atk":  105,
-                                                "def":  80,
-                                                "spa":  45,
-                                                "spd":  60,
-                                                "spe":  55
-                                            }
-                     },
-                     {
-                         "id":  12,
-                         "nama":  "Banteng",
-                         "rarity":  "rare",
-                         "peran":  "attacker",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Banteng Muda",
-                                             "tipe":  [
-                                                          "Tanah",
-                                                          "Petarung"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Banteng Murba",
-                                             "tipe":  [
-                                                          "Tanah",
-                                                          "Petarung"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  80,
-                                                "atk":  115,
-                                                "def":  75,
-                                                "spa":  35,
-                                                "spd":  55,
-                                                "spe":  65
-                                            }
-                     },
-                     {
-                         "id":  13,
-                         "nama":  "Babirusa",
-                         "rarity":  "rare",
-                         "peran":  "tank",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Babirusa Muda",
-                                             "tipe":  [
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Babirusa Raksasa",
-                                             "tipe":  [
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  90,
-                                                "atk":  85,
-                                                "def":  100,
-                                                "spa":  40,
-                                                "spd":  60,
-                                                "spe":  60
-                                            }
-                     },
-                     {
-                         "id":  14,
-                         "nama":  "Beruang Madu",
-                         "rarity":  "rare",
-                         "peran":  "tank",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Beruang Muda",
-                                             "tipe":  [
-                                                          "Normal",
-                                                          "Api"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Beruang Madu",
-                                             "tipe":  [
-                                                          "Normal",
-                                                          "Api"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  100,
-                                                "atk":  85,
-                                                "def":  85,
-                                                "spa":  70,
-                                                "spd":  70,
-                                                "spe":  45
-                                            }
-                     },
-                     {
-                         "id":  15,
-                         "nama":  "Rangkong",
-                         "rarity":  "rare",
-                         "peran":  "support",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Rangkong Muda",
-                                             "tipe":  [
-                                                          "Udara"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Rangkong Agung",
-                                             "tipe":  [
-                                                          "Udara"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  80,
-                                                "atk":  70,
-                                                "def":  70,
-                                                "spa":  85,
-                                                "spd":  80,
-                                                "spe":  70
-                                            }
-                     },
-                     {
-                         "id":  16,
-                         "nama":  "Merak",
-                         "rarity":  "rare",
-                         "peran":  "support_special",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Merak Muda",
-                                             "tipe":  [
-                                                          "Udara"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Merak Agung",
-                                             "tipe":  [
-                                                          "Udara"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  75,
-                                                "atk":  55,
-                                                "def":  70,
-                                                "spa":  100,
-                                                "spd":  95,
-                                                "spe":  75
-                                            }
-                     },
-                     {
-                         "id":  17,
-                         "nama":  "Lumba-lumba",
-                         "rarity":  "rare",
-                         "peran":  "speed_support",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Lumba Kecil",
-                                             "tipe":  [
-                                                          "Air",
-                                                          "Listrik"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Lumba Petir",
-                                             "tipe":  [
-                                                          "Air",
-                                                          "Listrik"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  70,
-                                                "atk":  70,
-                                                "def":  55,
-                                                "spa":  90,
-                                                "spd":  70,
-                                                "spe":  105
-                                            }
-                     },
-                     {
-                         "id":  18,
-                         "nama":  "Arwana",
-                         "rarity":  "rare",
-                         "peran":  "attacker",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Arwana Kecil",
-                                             "tipe":  [
-                                                          "Air"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Arwana Naga",
-                                             "tipe":  [
-                                                          "Air",
-                                                          "Naga"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  80,
-                                                "atk":  105,
-                                                "def":  70,
-                                                "spa":  65,
-                                                "spd":  65,
-                                                "spe":  75
-                                            }
-                     },
-                     {
-                         "id":  19,
-                         "nama":  "Gurita",
-                         "rarity":  "rare",
-                         "peran":  "special_control",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Gurita Kecil",
-                                             "tipe":  [
-                                                          "Air",
-                                                          "Petarung"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Gurita Raksasa",
-                                             "tipe":  [
-                                                          "Air",
-                                                          "Petarung"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  85,
-                                                "atk":  80,
-                                                "def":  70,
-                                                "spa":  100,
-                                                "spd":  75,
-                                                "spe":  60
-                                            }
-                     },
-                     {
-                         "id":  20,
-                         "nama":  "Kakatua",
-                         "rarity":  "uncommon",
-                         "peran":  "support",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Kakatua Muda",
-                                             "tipe":  [
-                                                          "Udara",
-                                                          "Normal"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Kakatua Raja",
-                                             "tipe":  [
-                                                          "Udara",
-                                                          "Normal"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  70,
-                                                "atk":  55,
-                                                "def":  60,
-                                                "spa":  85,
-                                                "spd":  85,
-                                                "spe":  75
-                                            }
-                     },
-                     {
-                         "id":  21,
-                         "nama":  "Ular",
-                         "rarity":  "uncommon",
-                         "peran":  "attacker",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Ular Kecil",
-                                             "tipe":  [
-                                                          "Racun"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Ular Raksasa",
-                                             "tipe":  [
-                                                          "Racun"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  70,
-                                                "atk":  95,
-                                                "def":  65,
-                                                "spa":  55,
-                                                "spd":  55,
-                                                "spe":  80
-                                            }
-                     },
-                     {
-                         "id":  22,
-                         "nama":  "Rusa",
-                         "rarity":  "common",
-                         "peran":  "speed",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Rusa Muda",
-                                             "tipe":  [
-                                                          "Normal"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Rusa Raksasa",
-                                             "tipe":  [
-                                                          "Normal"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  60,
-                                                "atk":  70,
-                                                "def":  55,
-                                                "spa":  45,
-                                                "spd":  50,
-                                                "spe":  90
-                                            }
-                     },
-                     {
-                         "id":  23,
-                         "nama":  "Monyet",
-                         "rarity":  "common",
-                         "peran":  "speed",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Monyet Kecil",
-                                             "tipe":  [
-                                                          "Normal"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Monyet Emas",
-                                             "tipe":  [
-                                                          "Normal"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  60,
-                                                "atk":  75,
-                                                "def":  50,
-                                                "spa":  50,
-                                                "spd":  50,
-                                                "spe":  100
-                                            }
-                     },
-                     {
-                         "id":  24,
-                         "nama":  "Ayam",
-                         "rarity":  "common",
-                         "peran":  "attacker",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Ayam Jantan",
-                                             "tipe":  [
-                                                          "Normal"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Ayam Satria",
-                                             "tipe":  [
-                                                          "Normal",
-                                                          "Api"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  60,
-                                                "atk":  90,
-                                                "def":  55,
-                                                "spa":  50,
-                                                "spd":  50,
-                                                "spe":  80
-                                            }
-                     },
-                     {
-                         "id":  25,
-                         "nama":  "Kupu-kupu",
-                         "rarity":  "common",
-                         "peran":  "support",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Ulat Daun",
-                                             "tipe":  [
-                                                          "Daun"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Kupu-kupu Ekor Walet",
-                                             "tipe":  [
-                                                          "Udara",
-                                                          "Daun"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  55,
-                                                "atk":  45,
-                                                "def":  50,
-                                                "spa":  85,
-                                                "spd":  85,
-                                                "spe":  80
-                                            }
-                     },
-                     {
-                         "id":  26,
-                         "nama":  "Udang",
-                         "rarity":  "common",
-                         "peran":  "attacker",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Udang Kecil",
-                                             "tipe":  [
-                                                          "Air"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Udang Raksasa",
-                                             "tipe":  [
-                                                          "Air"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  55,
-                                                "atk":  90,
-                                                "def":  60,
-                                                "spa":  35,
-                                                "spd":  40,
-                                                "spe":  80
-                                            }
-                     },
-                     {
-                         "id":  27,
-                         "nama":  "Kepiting",
-                         "rarity":  "common",
-                         "peran":  "tank",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Kepiting Kecil",
-                                             "tipe":  [
-                                                          "Air",
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Kepiting Kenari",
-                                             "tipe":  [
-                                                          "Air",
-                                                          "Tanah"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  70,
-                                                "atk":  80,
-                                                "def":  105,
-                                                "spa":  35,
-                                                "spd":  45,
-                                                "spe":  40
-                                            }
-                     },
-                     {
-                         "id":  28,
-                         "nama":  "Ikan Badut",
-                         "rarity":  "common",
-                         "peran":  "support",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Ikan Badut",
-                                             "tipe":  [
-                                                          "Air"
-                                                      ],
-                                             "skala":  1.0
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  60,
-                                                "atk":  50,
-                                                "def":  55,
-                                                "spa":  70,
-                                                "spd":  75,
-                                                "spe":  65
-                                            }
-                     },
-                     {
-                         "id":  29,
-                         "nama":  "Ikan Buntal",
-                         "rarity":  "common",
-                         "peran":  "defender",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Ikan Buntal Kecil",
-                                             "tipe":  [
-                                                          "Air"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Ikan Buntal Raksasa",
-                                             "tipe":  [
-                                                          "Air",
-                                                          "Racun"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  75,
-                                                "atk":  60,
-                                                "def":  85,
-                                                "spa":  65,
-                                                "spd":  70,
-                                                "spe":  40
-                                            }
-                     },
-                     {
-                         "id":  30,
-                         "nama":  "Kantong Semar",
-                         "rarity":  "common",
-                         "peran":  "special_trickster",
-                         "tahapan":  [
-                                         {
-                                             "nama":  "Kantong Semar Kecil",
-                                             "tipe":  [
-                                                          "Daun"
-                                                      ],
-                                             "skala":  0.65
-                                         },
-                                         {
-                                             "nama":  "Kantong Semar Raksasa",
-                                             "tipe":  [
-                                                          "Daun",
-                                                          "Racun"
-                                                      ],
-                                             "skala":  1.0,
-                                             "lvEvolusi":  22
-                                         }
-                                     ],
-                         "baseStatsFinal":  {
-                                                "hp":  70,
-                                                "atk":  60,
-                                                "def":  65,
-                                                "spa":  95,
-                                                "spd":  70,
-                                                "spe":  50
-                                            }
-                     }
-                 ],
-    "habitatPulau":  {
-                         "1":  [
-                                   "Jawa",
-                                   "Sumatra"
-                               ],
-                         "2":  [
-                                   "Sumatra",
-                                   "Kalimantan"
-                               ],
-                         "3":  [
-                                   "Laut Nusantara"
-                               ],
-                         "4":  [
-                                   "Maluku \u0026 Papua"
-                               ],
-                         "5":  [
-                                   "Maluku \u0026 Papua"
-                               ],
-                         "6":  [
-                                   "Laut Nusantara"
-                               ],
-                         "7":  [
-                                   "Bali \u0026 Nusa Tenggara"
-                               ],
-                         "8":  [
-                                   "Sumatra"
-                               ],
-                         "9":  [
-                                   "Jawa",
-                                   "Sumatra"
-                               ],
-                         "10":  [
-                                    "Laut Nusantara"
-                                ],
-                         "11":  [
-                                    "Kalimantan",
-                                    "Sumatra"
-                                ],
-                         "12":  [
-                                    "Jawa",
-                                    "Kalimantan"
-                                ],
-                         "13":  [
-                                    "Sulawesi"
-                                ],
-                         "14":  [
-                                    "Kalimantan",
-                                    "Sumatra"
-                                ],
-                         "15":  [
-                                    "Sumatra",
-                                    "Kalimantan"
-                                ],
-                         "16":  [
-                                    "Jawa"
-                                ],
-                         "17":  [
-                                    "Laut Nusantara"
-                                ],
-                         "18":  [
-                                    "Kalimantan"
-                                ],
-                         "19":  [
-                                    "Laut Nusantara",
-                                    "Sulawesi"
-                                ],
-                         "20":  [
-                                    "Bali \u0026 Nusa Tenggara"
-                                ],
-                         "21":  [
-                                    "Jawa",
-                                    "Sumatra"
-                                ],
-                         "22":  [
-                                    "Jawa",
-                                    "Sulawesi",
-                                    "Bali \u0026 Nusa Tenggara"
-                                ],
-                         "23":  [
-                                    "Jawa",
-                                    "Sumatra",
-                                    "Kalimantan",
-                                    "Bali \u0026 Nusa Tenggara"
-                                ],
-                         "24":  [
-                                    "Jawa"
-                                ],
-                         "25":  [
-                                    "Jawa",
-                                    "Maluku \u0026 Papua"
-                                ],
-                         "26":  [
-                                    "Kalimantan",
-                                    "Laut Nusantara"
-                                ],
-                         "27":  [
-                                    "Laut Nusantara",
-                                    "Sulawesi"
-                                ],
-                         "28":  [
-                                    "Laut Nusantara"
-                                ],
-                         "29":  [
-                                    "Laut Nusantara",
-                                    "Jawa"
-                                ],
-                         "30":  [
-                                    "Sumatra",
-                                    "Kalimantan",
-                                    "Maluku \u0026 Papua"
-                                ]
-                     },
-    "detailSpesies":  {
-                          "1":  {
-                                    "ability":  "taring_tajam",
-                                    "catchRate":  45,
-                                    "baseExpYield":  62,
-                                    "learnset":  [
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "cakaran"
-                                                     },
-                                                     {
-                                                         "lv":  7,
-                                                         "move":  "fokus"
-                                                     },
-                                                     {
-                                                         "lv":  13,
-                                                         "move":  "cakar_bara"
-                                                     },
-                                                     {
-                                                         "lv":  22,
-                                                         "move":  "pukul_silat"
-                                                     },
-                                                     {
-                                                         "lv":  30,
-                                                         "move":  "napas_panas"
-                                                     }
-                                                 ]
-                                },
-                          "2":  {
-                                    "ability":  "panen_subur",
-                                    "catchRate":  45,
-                                    "baseExpYield":  62,
-                                    "learnset":  [
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "cakaran"
-                                                     },
-                                                     {
-                                                         "lv":  7,
-                                                         "move":  "cabang_cambuk"
-                                                     },
-                                                     {
-                                                         "lv":  15,
-                                                         "move":  "benteng_karang"
-                                                     },
-                                                     {
-                                                         "lv":  24,
-                                                         "move":  "istirahat"
-                                                     },
-                                                     {
-                                                         "lv":  32,
-                                                         "move":  "sungut_akar"
-                                                     }
-                                                 ]
-                                },
-                          "3":  {
-                                    "ability":  "pelindung_karang",
-                                    "catchRate":  45,
-                                    "baseExpYield":  62,
-                                    "learnset":  [
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "cakaran"
-                                                     },
-                                                     {
-                                                         "lv":  7,
-                                                         "move":  "semburan_air"
-                                                     },
-                                                     {
-                                                         "lv":  16,
-                                                         "move":  "benteng_karang"
-                                                     },
-                                                     {
-                                                         "lv":  25,
-                                                         "move":  "istirahat"
-                                                     },
-                                                     {
-                                                         "lv":  34,
-                                                         "move":  "ombak_raksasa"
-                                                     }
-                                                 ]
-                                },
-                          "4":  {
-                                    "ability":  "mata_elang",
-                                    "catchRate":  5,
-                                    "baseExpYield":  170,
-                                    "learnset":  [
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "tebangan_sayap"
-                                                     },
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "pukul_silat"
-                                                     },
-                                                     {
-                                                         "lv":  40,
-                                                         "move":  "tendang_kilat"
-                                                     },
-                                                     {
-                                                         "lv":  45,
-                                                         "move":  "sulan_angin"
-                                                     }
-                                                 ]
-                                },
-                          "5":  {
-                                    "ability":  "napas_dalam",
-                                    "catchRate":  5,
-                                    "baseExpYield":  170,
-                                    "learnset":  [
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "cakaran"
-                                                     },
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "napas_panas"
-                                                     },
-                                                     {
-                                                         "lv":  40,
-                                                         "move":  "sulan_angin"
-                                                     },
-                                                     {
-                                                         "lv":  50,
-                                                         "move":  "fokus"
-                                                     }
-                                                 ]
-                                },
-                          "6":  {
-                                    "ability":  "kulit_tebal",
-                                    "catchRate":  5,
-                                    "baseExpYield":  170,
-                                    "learnset":  [
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "semburan_air"
-                                                     },
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "kikik"
-                                                     },
-                                                     {
-                                                         "lv":  45,
-                                                         "move":  "ombak_raksasa"
-                                                     },
-                                                     {
-                                                         "lv":  50,
-                                                         "move":  "istirahat"
-                                                     }
-                                                 ]
-                                },
-                          "7":  {
-                                    "ability":  "racun_alami",
-                                    "catchRate":  45,
-                                    "baseExpYield":  115,
-                                    "learnset":  [
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "cakaran"
-                                                     },
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "sekop"
-                                                     },
-                                                     {
-                                                         "lv":  20,
-                                                         "move":  "gempa_kecil"
-                                                     },
-                                                     {
-                                                         "lv":  28,
-                                                         "move":  "ludah_racun"
-                                                     },
-                                                     {
-                                                         "lv":  38,
-                                                         "move":  "napas_naga"
-                                                     },
-                                                     {
-                                                         "lv":  46,
-                                                         "move":  "gempa_bumi"
-                                                     }
-                                                 ]
-                                },
-                          "8":  {
-                                    "ability":  "kulit_tebal",
-                                    "catchRate":  45,
-                                    "baseExpYield":  115,
-                                    "learnset":  [
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "sekop"
-                                                     },
-                                                     {
-                                                         "lv":  12,
-                                                         "move":  "gempa_kecil"
-                                                     },
-                                                     {
-                                                         "lv":  20,
-                                                         "move":  "kikik"
-                                                     },
-                                                     {
-                                                         "lv":  30,
-                                                         "move":  "benteng_karang"
-                                                     },
-                                                     {
-                                                         "lv":  42,
-                                                         "move":  "gempa_bumi"
-                                                     }
-                                                 ]
-                                },
-                          "9":  {
-                                    "ability":  "pelindung_karang",
-                                    "catchRate":  45,
-                                    "baseExpYield":  115,
-                                    "learnset":  [
-                                                     {
-                                                         "lv":  1,
-                                                         "move":  "sekop"
-                                                     },
-                                                     {
-                                                         "lv":  14,
-                                                         "move":  "gempa_kecil"
-                                                     },
-                                                     {
-                                                         "lv":  24,
-                                                         "move":  "kepala_baja"
-                                                     },
-                                                     {
-                                                         "lv":  34,
-                                                         "move":  "gempa_bumi"
-                                                     },
-                                                     {
-                                                         "lv":  42,
-                                                         "move":  "fokus"
-                                                     }
-                                                 ]
-                                },
-                          "10":  {
-                                     "ability":  "taring_tajam",
-                                     "catchRate":  75,
-                                     "baseExpYield":  90,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "semburan_air"
-                                                      },
-                                                      {
-                                                          "lv":  20,
-                                                          "move":  "tendang_kilat"
-                                                      },
-                                                      {
-                                                          "lv":  30,
-                                                          "move":  "ombak_raksasa"
-                                                      }
-                                                  ]
-                                 },
-                          "11":  {
-                                     "ability":  "taring_tajam",
-                                     "catchRate":  75,
-                                     "baseExpYield":  90,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "sekop"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "gempa_kecil"
-                                                      },
-                                                      {
-                                                          "lv":  26,
-                                                          "move":  "tendang_kilat"
-                                                      },
-                                                      {
-                                                          "lv":  36,
-                                                          "move":  "ombak_raksasa"
-                                                      }
-                                                  ]
-                                 },
-                          "12":  {
-                                     "ability":  "taring_tajam",
-                                     "catchRate":  75,
-                                     "baseExpYield":  90,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "sekop"
-                                                      },
-                                                      {
-                                                          "lv":  12,
-                                                          "move":  "pukul_silat"
-                                                      },
-                                                      {
-                                                          "lv":  22,
-                                                          "move":  "tendang_kilat"
-                                                      },
-                                                      {
-                                                          "lv":  32,
-                                                          "move":  "gempa_bumi"
-                                                      }
-                                                  ]
-                                 },
-                          "13":  {
-                                     "ability":  "pelindung_karang",
-                                     "catchRate":  75,
-                                     "baseExpYield":  90,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  12,
-                                                          "move":  "gempa_kecil"
-                                                      },
-                                                      {
-                                                          "lv":  20,
-                                                          "move":  "pukul_silat"
-                                                      },
-                                                      {
-                                                          "lv":  30,
-                                                          "move":  "benteng_karang"
-                                                      }
-                                                  ]
-                                 },
-                          "14":  {
-                                     "ability":  "madu_manis",
-                                     "catchRate":  75,
-                                     "baseExpYield":  90,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "cakar_bara"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "fokus"
-                                                      },
-                                                      {
-                                                          "lv":  28,
-                                                          "move":  "istirahat"
-                                                      }
-                                                  ]
-                                 },
-                          "15":  {
-                                     "ability":  "mata_elang",
-                                     "catchRate":  75,
-                                     "baseExpYield":  90,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "kikik"
-                                                      },
-                                                      {
-                                                          "lv":  20,
-                                                          "move":  "tebangan_sayap"
-                                                      },
-                                                      {
-                                                          "lv":  30,
-                                                          "move":  "sulan_angin"
-                                                      }
-                                                  ]
-                                 },
-                          "16":  {
-                                     "ability":  "madu_manis",
-                                     "catchRate":  75,
-                                     "baseExpYield":  90,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "kikik"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "sulan_angin"
-                                                      },
-                                                      {
-                                                          "lv":  28,
-                                                          "move":  "istirahat"
-                                                      }
-                                                  ]
-                                 },
-                          "17":  {
-                                     "ability":  "refleks_kilat",
-                                     "catchRate":  75,
-                                     "baseExpYield":  90,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "semburan_air"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "kejut_petir"
-                                                      },
-                                                      {
-                                                          "lv":  28,
-                                                          "move":  "tombak_petir"
-                                                      }
-                                                  ]
-                                 },
-                          "18":  {
-                                     "ability":  "taring_tajam",
-                                     "catchRate":  75,
-                                     "baseExpYield":  90,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "semburan_air"
-                                                      },
-                                                      {
-                                                          "lv":  22,
-                                                          "move":  "napas_naga"
-                                                      },
-                                                      {
-                                                          "lv":  32,
-                                                          "move":  "ombak_raksasa"
-                                                      }
-                                                  ]
-                                 },
-                          "19":  {
-                                     "ability":  "cengkeraman_kuat",
-                                     "catchRate":  75,
-                                     "baseExpYield":  90,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "pukul_silat"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "semburan_air"
-                                                      },
-                                                      {
-                                                          "lv":  28,
-                                                          "move":  "ombak_raksasa"
-                                                      }
-                                                  ]
-                                 },
-                          "20":  {
-                                     "ability":  "tiruan_suara",
-                                     "catchRate":  120,
-                                     "baseExpYield":  72,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "kikik"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "tebangan_sayap"
-                                                      },
-                                                      {
-                                                          "lv":  26,
-                                                          "move":  "sulan_angin"
-                                                      }
-                                                  ]
-                                 },
-                          "21":  {
-                                     "ability":  "racun_alami",
-                                     "catchRate":  120,
-                                     "baseExpYield":  72,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "ludah_racun"
-                                                      },
-                                                      {
-                                                          "lv":  20,
-                                                          "move":  "asap_beracun"
-                                                      },
-                                                      {
-                                                          "lv":  32,
-                                                          "move":  "fokus"
-                                                      }
-                                                  ]
-                                 },
-                          "22":  {
-                                     "ability":  "refleks_kilat",
-                                     "catchRate":  190,
-                                     "baseExpYield":  55,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "tebangan_sayap"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "kikik"
-                                                      },
-                                                      {
-                                                          "lv":  26,
-                                                          "move":  "benteng_karang"
-                                                      }
-                                                  ]
-                                 },
-                          "23":  {
-                                     "ability":  "refleks_kilat",
-                                     "catchRate":  190,
-                                     "baseExpYield":  55,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "pukul_silat"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "fokus"
-                                                      },
-                                                      {
-                                                          "lv":  26,
-                                                          "move":  "tendang_kilat"
-                                                      }
-                                                  ]
-                                 },
-                          "24":  {
-                                     "ability":  "taring_tajam",
-                                     "catchRate":  190,
-                                     "baseExpYield":  55,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "cakar_bara"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "pukul_silat"
-                                                      },
-                                                      {
-                                                          "lv":  26,
-                                                          "move":  "tendang_kilat"
-                                                      }
-                                                  ]
-                                 },
-                          "25":  {
-                                     "ability":  "serbuk_sari",
-                                     "catchRate":  190,
-                                     "baseExpYield":  55,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "serbuk_tidur"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "cabang_cambuk"
-                                                      },
-                                                      {
-                                                          "lv":  26,
-                                                          "move":  "sulan_angin"
-                                                      }
-                                                  ]
-                                 },
-                          "26":  {
-                                     "ability":  "taring_tajam",
-                                     "catchRate":  190,
-                                     "baseExpYield":  55,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "semburan_air"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "pukul_silat"
-                                                      },
-                                                      {
-                                                          "lv":  26,
-                                                          "move":  "gempa_kecil"
-                                                      }
-                                                  ]
-                                 },
-                          "27":  {
-                                     "ability":  "cengkeraman_kuat",
-                                     "catchRate":  190,
-                                     "baseExpYield":  55,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "sekop"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "semburan_air"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "benteng_karang"
-                                                      },
-                                                      {
-                                                          "lv":  26,
-                                                          "move":  "gempa_bumi"
-                                                      }
-                                                  ]
-                                 },
-                          "28":  {
-                                     "ability":  "kulit_tebal",
-                                     "catchRate":  190,
-                                     "baseExpYield":  55,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "semburan_air"
-                                                      },
-                                                      {
-                                                          "lv":  16,
-                                                          "move":  "kikik"
-                                                      },
-                                                      {
-                                                          "lv":  22,
-                                                          "move":  "istirahat"
-                                                      }
-                                                  ]
-                                 },
-                          "29":  {
-                                     "ability":  "racun_alami",
-                                     "catchRate":  190,
-                                     "baseExpYield":  55,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cakaran"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "semburan_air"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "ludah_racun"
-                                                      },
-                                                      {
-                                                          "lv":  26,
-                                                          "move":  "benteng_karang"
-                                                      }
-                                                  ]
-                                 },
-                          "30":  {
-                                     "ability":  "racun_alami",
-                                     "catchRate":  190,
-                                     "baseExpYield":  55,
-                                     "learnset":  [
-                                                      {
-                                                          "lv":  1,
-                                                          "move":  "cabang_cambuk"
-                                                      },
-                                                      {
-                                                          "lv":  10,
-                                                          "move":  "ludah_racun"
-                                                      },
-                                                      {
-                                                          "lv":  18,
-                                                          "move":  "serbuk_tidur"
-                                                      },
-                                                      {
-                                                          "lv":  26,
-                                                          "move":  "sungut_akar"
-                                                      }
-                                                  ]
-                                 }
-                      }
+{
+	"detailSpesies": {
+		"1": {
+			"ability": "taring_tajam",
+			"baseExpYield": 62,
+			"catchRate": 45,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 7,
+					"move": "fokus"
+				},
+				{
+					"lv": 13,
+					"move": "cakar_bara"
+				},
+				{
+					"lv": 22,
+					"move": "pukul_silat"
+				},
+				{
+					"lv": 30,
+					"move": "napas_panas"
+				}
+			]
+		},
+		"10": {
+			"ability": "taring_tajam",
+			"baseExpYield": 90,
+			"catchRate": 75,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "semburan_air"
+				},
+				{
+					"lv": 20,
+					"move": "tendang_kilat"
+				},
+				{
+					"lv": 30,
+					"move": "ombak_raksasa"
+				}
+			]
+		},
+		"11": {
+			"ability": "taring_tajam",
+			"baseExpYield": 90,
+			"catchRate": 75,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 1,
+					"move": "sekop"
+				},
+				{
+					"lv": 18,
+					"move": "gempa_kecil"
+				},
+				{
+					"lv": 26,
+					"move": "tendang_kilat"
+				},
+				{
+					"lv": 36,
+					"move": "ombak_raksasa"
+				}
+			]
+		},
+		"12": {
+			"ability": "taring_tajam",
+			"baseExpYield": 90,
+			"catchRate": 75,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "sekop"
+				},
+				{
+					"lv": 12,
+					"move": "pukul_silat"
+				},
+				{
+					"lv": 22,
+					"move": "tendang_kilat"
+				},
+				{
+					"lv": 32,
+					"move": "gempa_bumi"
+				}
+			]
+		},
+		"13": {
+			"ability": "pelindung_karang",
+			"baseExpYield": 90,
+			"catchRate": 75,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 12,
+					"move": "gempa_kecil"
+				},
+				{
+					"lv": 20,
+					"move": "pukul_silat"
+				},
+				{
+					"lv": 30,
+					"move": "benteng_karang"
+				}
+			]
+		},
+		"14": {
+			"ability": "madu_manis",
+			"baseExpYield": 90,
+			"catchRate": 75,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "cakar_bara"
+				},
+				{
+					"lv": 18,
+					"move": "fokus"
+				},
+				{
+					"lv": 28,
+					"move": "istirahat"
+				}
+			]
+		},
+		"15": {
+			"ability": "mata_elang",
+			"baseExpYield": 90,
+			"catchRate": 75,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "kikik"
+				},
+				{
+					"lv": 20,
+					"move": "tebangan_sayap"
+				},
+				{
+					"lv": 30,
+					"move": "sulan_angin"
+				}
+			]
+		},
+		"16": {
+			"ability": "madu_manis",
+			"baseExpYield": 90,
+			"catchRate": 75,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "kikik"
+				},
+				{
+					"lv": 18,
+					"move": "sulan_angin"
+				},
+				{
+					"lv": 28,
+					"move": "istirahat"
+				}
+			]
+		},
+		"17": {
+			"ability": "refleks_kilat",
+			"baseExpYield": 90,
+			"catchRate": 75,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "semburan_air"
+				},
+				{
+					"lv": 18,
+					"move": "kejut_petir"
+				},
+				{
+					"lv": 28,
+					"move": "tombak_petir"
+				}
+			]
+		},
+		"18": {
+			"ability": "taring_tajam",
+			"baseExpYield": 90,
+			"catchRate": 75,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "semburan_air"
+				},
+				{
+					"lv": 22,
+					"move": "napas_naga"
+				},
+				{
+					"lv": 32,
+					"move": "ombak_raksasa"
+				}
+			]
+		},
+		"19": {
+			"ability": "cengkeraman_kuat",
+			"baseExpYield": 90,
+			"catchRate": 75,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "pukul_silat"
+				},
+				{
+					"lv": 18,
+					"move": "semburan_air"
+				},
+				{
+					"lv": 28,
+					"move": "ombak_raksasa"
+				}
+			]
+		},
+		"2": {
+			"ability": "panen_subur",
+			"baseExpYield": 62,
+			"catchRate": 45,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 7,
+					"move": "cabang_cambuk"
+				},
+				{
+					"lv": 15,
+					"move": "benteng_karang"
+				},
+				{
+					"lv": 24,
+					"move": "istirahat"
+				},
+				{
+					"lv": 32,
+					"move": "sungut_akar"
+				}
+			]
+		},
+		"20": {
+			"ability": "tiruan_suara",
+			"baseExpYield": 72,
+			"catchRate": 120,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "kikik"
+				},
+				{
+					"lv": 18,
+					"move": "tebangan_sayap"
+				},
+				{
+					"lv": 26,
+					"move": "sulan_angin"
+				}
+			]
+		},
+		"21": {
+			"ability": "racun_alami",
+			"baseExpYield": 72,
+			"catchRate": 120,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "ludah_racun"
+				},
+				{
+					"lv": 20,
+					"move": "asap_beracun"
+				},
+				{
+					"lv": 32,
+					"move": "fokus"
+				}
+			]
+		},
+		"22": {
+			"ability": "refleks_kilat",
+			"baseExpYield": 55,
+			"catchRate": 190,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "tebangan_sayap"
+				},
+				{
+					"lv": 18,
+					"move": "kikik"
+				},
+				{
+					"lv": 26,
+					"move": "benteng_karang"
+				}
+			]
+		},
+		"23": {
+			"ability": "refleks_kilat",
+			"baseExpYield": 55,
+			"catchRate": 190,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "pukul_silat"
+				},
+				{
+					"lv": 18,
+					"move": "fokus"
+				},
+				{
+					"lv": 26,
+					"move": "tendang_kilat"
+				}
+			]
+		},
+		"24": {
+			"ability": "taring_tajam",
+			"baseExpYield": 55,
+			"catchRate": 190,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "cakar_bara"
+				},
+				{
+					"lv": 18,
+					"move": "pukul_silat"
+				},
+				{
+					"lv": 26,
+					"move": "tendang_kilat"
+				}
+			]
+		},
+		"25": {
+			"ability": "serbuk_sari",
+			"baseExpYield": 55,
+			"catchRate": 190,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "serbuk_tidur"
+				},
+				{
+					"lv": 18,
+					"move": "cabang_cambuk"
+				},
+				{
+					"lv": 26,
+					"move": "sulan_angin"
+				}
+			]
+		},
+		"26": {
+			"ability": "taring_tajam",
+			"baseExpYield": 55,
+			"catchRate": 190,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "semburan_air"
+				},
+				{
+					"lv": 18,
+					"move": "pukul_silat"
+				},
+				{
+					"lv": 26,
+					"move": "gempa_kecil"
+				}
+			]
+		},
+		"27": {
+			"ability": "cengkeraman_kuat",
+			"baseExpYield": 55,
+			"catchRate": 190,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "sekop"
+				},
+				{
+					"lv": 10,
+					"move": "semburan_air"
+				},
+				{
+					"lv": 18,
+					"move": "benteng_karang"
+				},
+				{
+					"lv": 26,
+					"move": "gempa_bumi"
+				}
+			]
+		},
+		"28": {
+			"ability": "kulit_tebal",
+			"baseExpYield": 55,
+			"catchRate": 190,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "semburan_air"
+				},
+				{
+					"lv": 16,
+					"move": "kikik"
+				},
+				{
+					"lv": 22,
+					"move": "istirahat"
+				}
+			]
+		},
+		"29": {
+			"ability": "racun_alami",
+			"baseExpYield": 55,
+			"catchRate": 190,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 10,
+					"move": "semburan_air"
+				},
+				{
+					"lv": 18,
+					"move": "ludah_racun"
+				},
+				{
+					"lv": 26,
+					"move": "benteng_karang"
+				}
+			]
+		},
+		"3": {
+			"ability": "pelindung_karang",
+			"baseExpYield": 62,
+			"catchRate": 45,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 7,
+					"move": "semburan_air"
+				},
+				{
+					"lv": 16,
+					"move": "benteng_karang"
+				},
+				{
+					"lv": 25,
+					"move": "istirahat"
+				},
+				{
+					"lv": 34,
+					"move": "ombak_raksasa"
+				}
+			]
+		},
+		"30": {
+			"ability": "racun_alami",
+			"baseExpYield": 55,
+			"catchRate": 190,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cabang_cambuk"
+				},
+				{
+					"lv": 10,
+					"move": "ludah_racun"
+				},
+				{
+					"lv": 18,
+					"move": "serbuk_tidur"
+				},
+				{
+					"lv": 26,
+					"move": "sungut_akar"
+				}
+			]
+		},
+		"4": {
+			"ability": "mata_elang",
+			"baseExpYield": 170,
+			"catchRate": 5,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "tebangan_sayap"
+				},
+				{
+					"lv": 1,
+					"move": "pukul_silat"
+				},
+				{
+					"lv": 40,
+					"move": "tendang_kilat"
+				},
+				{
+					"lv": 45,
+					"move": "sulan_angin"
+				}
+			]
+		},
+		"5": {
+			"ability": "napas_dalam",
+			"baseExpYield": 170,
+			"catchRate": 5,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 1,
+					"move": "napas_panas"
+				},
+				{
+					"lv": 40,
+					"move": "sulan_angin"
+				},
+				{
+					"lv": 50,
+					"move": "fokus"
+				}
+			]
+		},
+		"6": {
+			"ability": "kulit_tebal",
+			"baseExpYield": 170,
+			"catchRate": 5,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "semburan_air"
+				},
+				{
+					"lv": 1,
+					"move": "kikik"
+				},
+				{
+					"lv": 45,
+					"move": "ombak_raksasa"
+				},
+				{
+					"lv": 50,
+					"move": "istirahat"
+				}
+			]
+		},
+		"7": {
+			"ability": "racun_alami",
+			"baseExpYield": 115,
+			"catchRate": 45,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "cakaran"
+				},
+				{
+					"lv": 1,
+					"move": "sekop"
+				},
+				{
+					"lv": 20,
+					"move": "gempa_kecil"
+				},
+				{
+					"lv": 28,
+					"move": "ludah_racun"
+				},
+				{
+					"lv": 38,
+					"move": "napas_naga"
+				},
+				{
+					"lv": 46,
+					"move": "gempa_bumi"
+				}
+			]
+		},
+		"8": {
+			"ability": "kulit_tebal",
+			"baseExpYield": 115,
+			"catchRate": 45,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "sekop"
+				},
+				{
+					"lv": 12,
+					"move": "gempa_kecil"
+				},
+				{
+					"lv": 20,
+					"move": "kikik"
+				},
+				{
+					"lv": 30,
+					"move": "benteng_karang"
+				},
+				{
+					"lv": 42,
+					"move": "gempa_bumi"
+				}
+			]
+		},
+		"9": {
+			"ability": "pelindung_karang",
+			"baseExpYield": 115,
+			"catchRate": 45,
+			"learnset": [
+				{
+					"lv": 1,
+					"move": "sekop"
+				},
+				{
+					"lv": 14,
+					"move": "gempa_kecil"
+				},
+				{
+					"lv": 24,
+					"move": "kepala_baja"
+				},
+				{
+					"lv": 34,
+					"move": "gempa_bumi"
+				},
+				{
+					"lv": 42,
+					"move": "fokus"
+				}
+			]
+		}
+	},
+	"habitatPulau": {
+		"1": [
+			"Jawa",
+			"Sumatra"
+		],
+		"10": [
+			"Laut Nusantara"
+		],
+		"11": [
+			"Kalimantan",
+			"Sumatra"
+		],
+		"12": [
+			"Jawa",
+			"Kalimantan"
+		],
+		"13": [
+			"Sulawesi"
+		],
+		"14": [
+			"Kalimantan",
+			"Sumatra"
+		],
+		"15": [
+			"Sumatra",
+			"Kalimantan"
+		],
+		"16": [
+			"Jawa"
+		],
+		"17": [
+			"Laut Nusantara"
+		],
+		"18": [
+			"Kalimantan"
+		],
+		"19": [
+			"Laut Nusantara",
+			"Sulawesi"
+		],
+		"2": [
+			"Sumatra",
+			"Kalimantan"
+		],
+		"20": [
+			"Bali & Nusa Tenggara"
+		],
+		"21": [
+			"Jawa",
+			"Sumatra"
+		],
+		"22": [
+			"Jawa",
+			"Sulawesi",
+			"Bali & Nusa Tenggara"
+		],
+		"23": [
+			"Jawa",
+			"Sumatra",
+			"Kalimantan",
+			"Bali & Nusa Tenggara"
+		],
+		"24": [
+			"Jawa"
+		],
+		"25": [
+			"Jawa",
+			"Maluku & Papua"
+		],
+		"26": [
+			"Kalimantan",
+			"Laut Nusantara"
+		],
+		"27": [
+			"Laut Nusantara",
+			"Sulawesi"
+		],
+		"28": [
+			"Laut Nusantara"
+		],
+		"29": [
+			"Laut Nusantara",
+			"Jawa"
+		],
+		"3": [
+			"Laut Nusantara"
+		],
+		"30": [
+			"Sumatra",
+			"Kalimantan",
+			"Maluku & Papua"
+		],
+		"4": [
+			"Maluku & Papua"
+		],
+		"5": [
+			"Maluku & Papua"
+		],
+		"6": [
+			"Laut Nusantara"
+		],
+		"7": [
+			"Bali & Nusa Tenggara"
+		],
+		"8": [
+			"Sumatra"
+		],
+		"9": [
+			"Jawa",
+			"Sumatra"
+		]
+	},
+	"keterangan": "Data roster NUSAMON. baseStatsFinal = stat tahap akhir. Stat tahap lain = baseStatsFinal x skala (dibulatkan, minimum 1).",
+	"nusamons": [
+		{
+			"baseStatsFinal": {
+				"atk": 120,
+				"def": 75,
+				"hp": 80,
+				"spa": 65,
+				"spd": 70,
+				"spe": 110
+			},
+			"deskripsi": "Harimau Sumatra asli; pola belangnya sempurna menyamar di rimba, lakunya menggetarkan dedaunan seperti guntur kecil.",
+			"id": 1,
+			"nama": "Rimau",
+			"peran": "physical_attacker",
+			"rarity": "starter",
+			"tahapan": [
+				{
+					"nama": "Anak Rimau",
+					"skala": 0.6,
+					"tipe": [
+						"Api"
+					]
+				},
+				{
+					"lvEvolusi": 16,
+					"nama": "Rimau Muda",
+					"skala": 0.8,
+					"tipe": [
+						"Api"
+					]
+				},
+				{
+					"lvEvolusi": 36,
+					"nama": "Rimau Agung",
+					"skala": 1,
+					"tipe": [
+						"Api"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 85,
+				"def": 105,
+				"hp": 100,
+				"spa": 80,
+				"spd": 95,
+				"spe": 45
+			},
+			"deskripsi": "Arsitek hutan Sumatra & Kalimantan; tangan panjangnya menyusun sarang raksasa di kanopi pohon.",
+			"id": 2,
+			"nama": "Orangutan",
+			"peran": "tank_support",
+			"rarity": "starter",
+			"tahapan": [
+				{
+					"nama": "Orangkici",
+					"skala": 0.6,
+					"tipe": [
+						"Daun"
+					]
+				},
+				{
+					"lvEvolusi": 16,
+					"nama": "Oranguda",
+					"skala": 0.8,
+					"tipe": [
+						"Daun"
+					]
+				},
+				{
+					"lvEvolusi": 36,
+					"nama": "Orangraja",
+					"skala": 1,
+					"tipe": [
+						"Daun"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 70,
+				"def": 120,
+				"hp": 95,
+				"spa": 75,
+				"spd": 110,
+				"spe": 50
+			},
+			"deskripsi": "Pelaut sejati Nusantara; berpuluh tahun kemudian ia selalu pulang ke pantai tempat dilahirkan.",
+			"id": 3,
+			"nama": "Penyu",
+			"peran": "defender",
+			"rarity": "starter",
+			"tahapan": [
+				{
+					"nama": "Penyuci",
+					"skala": 0.6,
+					"tipe": [
+						"Air"
+					]
+				},
+				{
+					"lvEvolusi": 16,
+					"nama": "Penyula",
+					"skala": 0.8,
+					"tipe": [
+						"Air"
+					]
+				},
+				{
+					"lvEvolusi": 36,
+					"nama": "Samudragon",
+					"skala": 1,
+					"tipe": [
+						"Air"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 115,
+				"def": 85,
+				"hp": 90,
+				"spa": 75,
+				"spd": 80,
+				"spe": 145
+			},
+			"deskripsi": "Penjaga langit; siluet sayapnya terinspirasi burung Garuda, lambang kebanggaan bangsa.",
+			"id": 4,
+			"nama": "Elang Garuda",
+			"peran": "speed_attacker",
+			"rarity": "legendary",
+			"tahapan": [
+				{
+					"nama": "Elang Garuda",
+					"skala": 1,
+					"tipe": [
+						"Udara",
+						"Petarung"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 70,
+				"def": 80,
+				"hp": 85,
+				"spa": 125,
+				"spd": 115,
+				"spe": 120
+			},
+			"deskripsi": "\"Manuk paradiso\" dari Papua; ekornya menyala seperti fajar di hutan hujan.",
+			"id": 5,
+			"nama": "Cenderawasih Agung",
+			"peran": "special_support",
+			"rarity": "legendary",
+			"tahapan": [
+				{
+					"nama": "Cenderawasih Agung",
+					"skala": 1,
+					"tipe": [
+						"Udara",
+						"Api"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 85,
+				"def": 105,
+				"hp": 145,
+				"spa": 95,
+				"spd": 105,
+				"spe": 60
+			},
+			"deskripsi": "Raksasa lembut samudra; lagu rendahnya menggema di palung terdalam.",
+			"id": 6,
+			"nama": "Paus Samudra",
+			"peran": "tank_support",
+			"rarity": "legendary",
+			"tahapan": [
+				{
+					"nama": "Paus Samudra",
+					"skala": 1,
+					"tipe": [
+						"Air"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 135,
+				"def": 110,
+				"hp": 100,
+				"spa": 60,
+				"spd": 75,
+				"spe": 95
+			},
+			"deskripsi": "Naga asli Indonesia; gigitannya mengandung racun alami, hanya hidup di beberapa pulau kecil.",
+			"id": 7,
+			"nama": "Komodo",
+			"peran": "attacker",
+			"rarity": "pseudo_legendary",
+			"tahapan": [
+				{
+					"nama": "Biawak Kecil",
+					"skala": 0.6,
+					"tipe": [
+						"Tanah"
+					]
+				},
+				{
+					"lvEvolusi": 16,
+					"nama": "Komodo",
+					"skala": 0.8,
+					"tipe": [
+						"Tanah"
+					]
+				},
+				{
+					"lvEvolusi": 36,
+					"nama": "Komodo Raja",
+					"skala": 1,
+					"tipe": [
+						"Tanah",
+						"Naga"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 115,
+				"def": 120,
+				"hp": 125,
+				"spa": 60,
+				"spd": 80,
+				"spe": 55
+			},
+			"deskripsi": "Penjaga hutan; jejak telapak kakinya menjadi kolam kecil tempat hewan kecil minum.",
+			"id": 8,
+			"nama": "Gajah",
+			"peran": "tank",
+			"rarity": "pseudo_legendary",
+			"tahapan": [
+				{
+					"nama": "Gajah Sapi",
+					"skala": 0.6,
+					"tipe": [
+						"Tanah"
+					]
+				},
+				{
+					"lvEvolusi": 16,
+					"nama": "Gajah Sumatra",
+					"skala": 0.8,
+					"tipe": [
+						"Tanah"
+					]
+				},
+				{
+					"lvEvolusi": 36,
+					"nama": "Gajah Raksasa",
+					"skala": 1,
+					"tipe": [
+						"Tanah"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 130,
+				"def": 140,
+				"hp": 110,
+				"spa": 50,
+				"spd": 75,
+				"spe": 45
+			},
+			"deskripsi": "Pemalu berzirah; kulit berlipatnya seperti baju baja alami, tanduknya keras seperti perkakas.",
+			"id": 9,
+			"nama": "Badak",
+			"peran": "tank_attacker",
+			"rarity": "pseudo_legendary",
+			"tahapan": [
+				{
+					"nama": "Badak Muda",
+					"skala": 0.6,
+					"tipe": [
+						"Tanah"
+					]
+				},
+				{
+					"lvEvolusi": 16,
+					"nama": "Badak Sumatra",
+					"skala": 0.8,
+					"tipe": [
+						"Tanah"
+					]
+				},
+				{
+					"lvEvolusi": 36,
+					"nama": "Badak Baja",
+					"skala": 1,
+					"tipe": [
+						"Tanah",
+						"Baja"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 110,
+				"def": 65,
+				"hp": 75,
+				"spa": 45,
+				"spd": 55,
+				"spe": 95
+			},
+			"deskripsi": "Pelari laut sejati; ia tidak pernah benar-benar berhenti berenang seumur hidupnya.",
+			"id": 10,
+			"nama": "Hiu",
+			"peran": "attacker",
+			"rarity": "rare",
+			"tahapan": [
+				{
+					"nama": "Hiu Kecil",
+					"skala": 0.65,
+					"tipe": [
+						"Air"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Hiu Raksasa",
+					"skala": 1,
+					"tipe": [
+						"Air"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 105,
+				"def": 80,
+				"hp": 85,
+				"spa": 45,
+				"spd": 60,
+				"spe": 55
+			},
+			"deskripsi": "Penguasa muara; rahangnya tercatat sebagai salah satu yang terkuat di Nusantara.",
+			"id": 11,
+			"nama": "Buaya",
+			"peran": "attacker",
+			"rarity": "rare",
+			"tahapan": [
+				{
+					"nama": "Buaya Kecil",
+					"skala": 0.65,
+					"tipe": [
+						"Air",
+						"Tanah"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Buaya Raksasa",
+					"skala": 1,
+					"tipe": [
+						"Air",
+						"Tanah"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 115,
+				"def": 75,
+				"hp": 80,
+				"spa": 35,
+				"spd": 55,
+				"spe": 65
+			},
+			"deskripsi": "Pejuang tanduk; punggungnya melengkung seperti bukit saat siap menghantam.",
+			"id": 12,
+			"nama": "Banteng",
+			"peran": "attacker",
+			"rarity": "rare",
+			"tahapan": [
+				{
+					"nama": "Banteng Muda",
+					"skala": 0.65,
+					"tipe": [
+						"Tanah",
+						"Petarung"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Banteng Murba",
+					"skala": 1,
+					"tipe": [
+						"Tanah",
+						"Petarung"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 85,
+				"def": 100,
+				"hp": 90,
+				"spa": 40,
+				"spd": 60,
+				"spe": 60
+			},
+			"deskripsi": "\"Rusa-babi\" legendaris Sulawesi; gading atasnya melengkung keluar seperti mahkota pedang.",
+			"id": 13,
+			"nama": "Babirusa",
+			"peran": "tank",
+			"rarity": "rare",
+			"tahapan": [
+				{
+					"nama": "Babirusa Muda",
+					"skala": 0.65,
+					"tipe": [
+						"Tanah"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Babirusa Raksasa",
+					"skala": 1,
+					"tipe": [
+						"Tanah"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 85,
+				"def": 85,
+				"hp": 100,
+				"spa": 70,
+				"spd": 70,
+				"spe": 45
+			},
+			"deskripsi": "Pendaki pohon berdada emas; hidungnya tajam mencium aroma madu dari jarak jauh.",
+			"id": 14,
+			"nama": "Beruang Madu",
+			"peran": "tank",
+			"rarity": "rare",
+			"tahapan": [
+				{
+					"nama": "Beruang Muda",
+					"skala": 0.65,
+					"tipe": [
+						"Normal",
+						"Api"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Beruang Madu",
+					"skala": 1,
+					"tipe": [
+						"Normal",
+						"Api"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 70,
+				"def": 70,
+				"hp": 80,
+				"spa": 85,
+				"spd": 80,
+				"spe": 70
+			},
+			"deskripsi": "Petani hutan; biji buah yang dimakannya disebar kembali — penyebar benih yang rajin.",
+			"id": 15,
+			"nama": "Rangkong",
+			"peran": "support",
+			"rarity": "rare",
+			"tahapan": [
+				{
+					"nama": "Rangkong Muda",
+					"skala": 0.65,
+					"tipe": [
+						"Udara"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Rangkong Agung",
+					"skala": 1,
+					"tipe": [
+						"Udara"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 55,
+				"def": 70,
+				"hp": 75,
+				"spa": 100,
+				"spd": 95,
+				"spe": 75
+			},
+			"deskripsi": "Sang mahkota seribu mata; menarinya memutar roda kilauan hijau-biru.",
+			"id": 16,
+			"nama": "Merak",
+			"peran": "support_special",
+			"rarity": "rare",
+			"tahapan": [
+				{
+					"nama": "Merak Muda",
+					"skala": 0.65,
+					"tipe": [
+						"Udara"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Merak Agung",
+					"skala": 1,
+					"tipe": [
+						"Udara"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 70,
+				"def": 55,
+				"hp": 70,
+				"spa": 90,
+				"spd": 70,
+				"spe": 105
+			},
+			"deskripsi": "Kilau listrik di laut; selalu bermain di haluan perahu nelayan.",
+			"id": 17,
+			"nama": "Lumba-lumba",
+			"peran": "speed_support",
+			"rarity": "rare",
+			"tahapan": [
+				{
+					"nama": "Lumba Kecil",
+					"skala": 0.65,
+					"tipe": [
+						"Air",
+						"Listrik"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Lumba Petir",
+					"skala": 1,
+					"tipe": [
+						"Air",
+						"Listrik"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 105,
+				"def": 70,
+				"hp": 80,
+				"spa": 65,
+				"spd": 65,
+				"spe": 75
+			},
+			"deskripsi": "\"Ikan naga\" dari sungai Kapuas; sisiknya berkilau seperti uang kuno.",
+			"id": 18,
+			"nama": "Arwana",
+			"peran": "attacker",
+			"rarity": "rare",
+			"tahapan": [
+				{
+					"nama": "Arwana Kecil",
+					"skala": 0.65,
+					"tipe": [
+						"Air"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Arwana Naga",
+					"skala": 1,
+					"tipe": [
+						"Air",
+						"Naga"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 80,
+				"def": 70,
+				"hp": 85,
+				"spa": 100,
+				"spd": 75,
+				"spe": 60
+			},
+			"deskripsi": "Ahli teknik delapan lengan; pandai menyusup ke celah karang dan mengunci lawan.",
+			"id": 19,
+			"nama": "Gurita",
+			"peran": "special_control",
+			"rarity": "rare",
+			"tahapan": [
+				{
+					"nama": "Gurita Kecil",
+					"skala": 0.65,
+					"tipe": [
+						"Air",
+						"Petarung"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Gurita Raksasa",
+					"skala": 1,
+					"tipe": [
+						"Air",
+						"Petarung"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 55,
+				"def": 60,
+				"hp": 70,
+				"spa": 85,
+				"spd": 85,
+				"spe": 75
+			},
+			"deskripsi": "Sang peniru; mampu meniru ratusan suara, dari derit pintu hingga nyanyian burung lain.",
+			"id": 20,
+			"nama": "Kakatua",
+			"peran": "support",
+			"rarity": "uncommon",
+			"tahapan": [
+				{
+					"nama": "Kakatua Muda",
+					"skala": 0.65,
+					"tipe": [
+						"Udara",
+						"Normal"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Kakatua Raja",
+					"skala": 1,
+					"tipe": [
+						"Udara",
+						"Normal"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 95,
+				"def": 65,
+				"hp": 70,
+				"spa": 55,
+				"spd": 55,
+				"spe": 80
+			},
+			"deskripsi": "Pembaca getaran; lidah bercabangnya mengecap udara untuk menemukan jejak hangat.",
+			"id": 21,
+			"nama": "Ular",
+			"peran": "attacker",
+			"rarity": "uncommon",
+			"tahapan": [
+				{
+					"nama": "Ular Kecil",
+					"skala": 0.65,
+					"tipe": [
+						"Racun"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Ular Raksasa",
+					"skala": 1,
+					"tipe": [
+						"Racun"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 70,
+				"def": 55,
+				"hp": 60,
+				"spa": 45,
+				"spd": 50,
+				"spe": 90
+			},
+			"deskripsi": "Pelari hutan; bertolusnya tumbuh megah tiap musim seperti mahkota baru.",
+			"id": 22,
+			"nama": "Rusa",
+			"peran": "speed",
+			"rarity": "common",
+			"tahapan": [
+				{
+					"nama": "Rusa Muda",
+					"skala": 0.65,
+					"tipe": [
+						"Normal"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Rusa Raksasa",
+					"skala": 1,
+					"tipe": [
+						"Normal"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 75,
+				"def": 50,
+				"hp": 60,
+				"spa": 50,
+				"spd": 50,
+				"spe": 100
+			},
+			"deskripsi": "Penari pohon yang nakal; jago memanjat dan selalu penasaran dengan bawaan pengelana.",
+			"id": 23,
+			"nama": "Monyet",
+			"peran": "speed",
+			"rarity": "common",
+			"tahapan": [
+				{
+					"nama": "Monyet Kecil",
+					"skala": 0.65,
+					"tipe": [
+						"Normal"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Monyet Emas",
+					"skala": 1,
+					"tipe": [
+						"Normal"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 90,
+				"def": 55,
+				"hp": 60,
+				"spa": 50,
+				"spd": 50,
+				"spe": 80
+			},
+			"deskripsi": "Leluhur ayam hutan merah; jengger merahnya menyala, simbol keberanian.",
+			"id": 24,
+			"nama": "Ayam",
+			"peran": "attacker",
+			"rarity": "common",
+			"tahapan": [
+				{
+					"nama": "Ayam Jantan",
+					"skala": 0.65,
+					"tipe": [
+						"Normal"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Ayam Satria",
+					"skala": 1,
+					"tipe": [
+						"Normal",
+						"Api"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 45,
+				"def": 50,
+				"hp": 55,
+				"spa": 85,
+				"spd": 85,
+				"spe": 80
+			},
+			"deskripsi": "Bunga yang terbang; sayap hitam-keemasannya menjuntai anggun seperti ekor walet.",
+			"id": 25,
+			"nama": "Kupu-kupu",
+			"peran": "support",
+			"rarity": "common",
+			"tahapan": [
+				{
+					"nama": "Ulat Daun",
+					"skala": 0.65,
+					"tipe": [
+						"Daun"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Kupu-kupu Ekor Walet",
+					"skala": 1,
+					"tipe": [
+						"Udara",
+						"Daun"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 90,
+				"def": 60,
+				"hp": 55,
+				"spa": 35,
+				"spd": 40,
+				"spe": 80
+			},
+			"deskripsi": "Pukul tercepat di terumbu; kakinya menyambar seperti petir kecil.",
+			"id": 26,
+			"nama": "Udang",
+			"peran": "attacker",
+			"rarity": "common",
+			"tahapan": [
+				{
+					"nama": "Udang Kecil",
+					"skala": 0.65,
+					"tipe": [
+						"Air"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Udang Raksasa",
+					"skala": 1,
+					"tipe": [
+						"Air"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 80,
+				"def": 105,
+				"hp": 70,
+				"spa": 35,
+				"spd": 45,
+				"spe": 40
+			},
+			"deskripsi": "Sang peranti baju; cangkang barunya makin tebal tiap rontok, capainya mampu memecah kelapa.",
+			"id": 27,
+			"nama": "Kepiting",
+			"peran": "tank",
+			"rarity": "common",
+			"tahapan": [
+				{
+					"nama": "Kepiting Kecil",
+					"skala": 0.65,
+					"tipe": [
+						"Air",
+						"Tanah"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Kepiting Kenari",
+					"skala": 1,
+					"tipe": [
+						"Air",
+						"Tanah"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 50,
+				"def": 55,
+				"hp": 60,
+				"spa": 70,
+				"spd": 75,
+				"spe": 65
+			},
+			"deskripsi": "Kartunis terumbu; hidup berdampingan aman dengan anemon yang menyengat — untung bersama.",
+			"id": 28,
+			"nama": "Ikan Badut",
+			"peran": "support",
+			"rarity": "common",
+			"tahapan": [
+				{
+					"nama": "Ikan Badut",
+					"skala": 1,
+					"tipe": [
+						"Air"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 60,
+				"def": 85,
+				"hp": 75,
+				"spa": 65,
+				"spd": 70,
+				"spe": 40
+			},
+			"deskripsi": "Balon beracun; menggembung saat takut — licik, tapi sayang jangan dimakan!",
+			"id": 29,
+			"nama": "Ikan Buntal",
+			"peran": "defender",
+			"rarity": "common",
+			"tahapan": [
+				{
+					"nama": "Ikan Buntal Kecil",
+					"skala": 0.65,
+					"tipe": [
+						"Air"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Ikan Buntal Raksasa",
+					"skala": 1,
+					"tipe": [
+						"Air",
+						"Racun"
+					]
+				}
+			]
+		},
+		{
+			"baseStatsFinal": {
+				"atk": 60,
+				"def": 65,
+				"hp": 70,
+				"spa": 95,
+				"spd": 70,
+				"spe": 50
+			},
+			"deskripsi": "Perangkap manis; kantongnya berisi cairan yang menjebak serangga yang datang.",
+			"id": 30,
+			"nama": "Kantong Semar",
+			"peran": "special_trickster",
+			"rarity": "common",
+			"tahapan": [
+				{
+					"nama": "Kantong Semar Kecil",
+					"skala": 0.65,
+					"tipe": [
+						"Daun"
+					]
+				},
+				{
+					"lvEvolusi": 22,
+					"nama": "Kantong Semar Raksasa",
+					"skala": 1,
+					"tipe": [
+						"Daun",
+						"Racun"
+					]
+				}
+			]
+		}
+	],
+	"statList": [
+		"hp",
+		"atk",
+		"def",
+		"spa",
+		"spd",
+		"spe"
+	],
+	"versi": "0.1"
 }

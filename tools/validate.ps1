@@ -40,6 +40,7 @@ foreach ($n in $j.nusamons) {
     foreach ($s in $n.tahapan) {
         foreach ($tp in $s.tipe) { if ($t.tipeList -notcontains $tp) { Fail "id $($n.id): tipe invalid ($tp)" } }
     }
+    if ([string]::IsNullOrWhiteSpace($n.deskripsi)) { Fail "id $($n.id): deskripsi kosong" }
     $id = $n.id.ToString()
     if (-not $j.habitatPulau.$id) { Fail "id $($n.id): habitatPulau hilang" }
     $d = $j.detailSpesies.$id

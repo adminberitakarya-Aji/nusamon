@@ -25,10 +25,11 @@ func _init() -> void:
 
 func _mulai() -> void:
 	print("=== Tes Scene Battle NUSAMON ===")
-	# inventori & tim sesi: kondisi awal deterministik untuk tes
+	# inventori, tim, nusadex sesi: kondisi awal deterministik untuk tes
 	Inventori.reset()
 	Inventori.tambah_item("amukan_super", 3)
 	Tim.reset()
+	Nusadex.reset()
 	var paket: PackedScene = load("res://game/battle/battle_scene.tscn")
 	cek("scene battle termuat", paket != null)
 	if paket == null:
@@ -52,6 +53,7 @@ func _mulai() -> void:
 	cek("player = mon aktif tim", scene.player == Tim.aktif())
 	cek("label tim terisi", scene.tim_label.text.contains("Tim 1/6"),
 		"aktual " + scene.tim_label.text)
+	cek("nusadex: wild terlihat", Nusadex.sudah_lihat(scene.wild.id) and Nusadex.jumlah_lihat() == 1)
 
 	# ---------- 2. menu move menampilkan PP & men-disable yang habis
 	scene._buka_menu_move()
@@ -97,6 +99,8 @@ func _mulai() -> void:
 	var sp_baru := NusamonData.find_species(scene.data, id_baru)
 	scene.wild_detail = scene.data["detailSpesies"][str(id_baru)]
 	scene.wild = NusamonInstance.create(sp_baru, scene.wild_detail, 0, 10)
+	# lemahkan dulu: a = rate*bonus*(3m-2c)/3m — butuh HP < ~83% agar a >= 255
+	scene.wild.take_damage(int(ceil(float(scene.wild.max_hp) * 0.8)))
 	Inventori.tambah_item("amukan_nusantara", 1)
 	scene._lempar_amukan("amukan_nusantara")  # a >= 255 → tangkap pasti
 	cek("tangkap pasti → log tertangkap", scene.log_label.text.contains("tertangkap"))
@@ -106,6 +110,41 @@ func _mulai() -> void:
 		Tim.anggota[Tim.jumlah() - 1] == scene.wild)
 	cek("battle berakhir setelah tangkap", scene.log_label.text.contains("Battle selesai"))
 	cek("tambah ulang wild yang sama ditolak", not Tim.tambah(scene.wild))
+	cek("nusadex: tangkap tercatat",
+		Nusadex.sudah_tangkap(28) and Nusadex.jumlah_tangkap() == 1)
+
+	# ---------- 6. switch/tukar mon saat battle (GDD §4.1)
+	scene.log_label.text = ""
+	scene.turn_aktif = false
+	var id_lain := 22  # Rusa
+	var sp_rusa := NusamonData.find_species(scene.data, id_lain)
+	scene.wild_detail = scene.data["detailSpesies"][str(id_lain)]
+	scene.wild = NusamonInstance.create(sp_rusa, scene.wild_detail, 0, 5)
+	var aktif_lama: NusamonInstance = Tim.aktif()
+	var target_idx := -1
+	for i in Tim.jumlah():
+		if Tim.anggota[i] != aktif_lama and not Tim.anggota[i].is_fainted():
+			target_idx = i
+			break
+	cek("ada anggota non-aktif sehat untuk ganti", target_idx >= 0)
+	scene._buka_menu_ganti()
+	cek("menu ganti terbuka", scene.menu_ganti.visible)
+	scene._ganti_mon(target_idx)
+	cek("mon aktif berganti", Tim.aktif() != aktif_lama)
+	cek("player mengikuti mon aktif", scene.player == Tim.aktif())
+	cek("log mencatat tukar", scene.log_label.text.contains("maju"))
+
+	# ---------- 7. Nusadex UI: layar daftar + detail
+	scene._buka_nusadex()
+	cek("panel nusadex terbuka", scene.dex_panel.visible)
+	cek("daftar 30 entri", scene.dex_daftar.get_child_count() == Nusadex.TOTAL)
+	scene._pilih_dex(27)  # Ikan Badut — tertangkap di bagian 5
+	cek("detail tertangkap lengkap",
+		scene.dex_detail.text.contains("Ikan Badut") and scene.dex_detail.text.contains("Deskripsi:"),
+		"isi: " + scene.dex_detail.text.left(80))
+	cek("header progres", scene.dex_header.text.contains("terlihat"))
+	scene._tutup_nusadex()
+	cek("panel nusadex tertutup", not scene.dex_panel.visible)
 
 	print("=== Hasil: %d lulus, %d gagal ===" % [lulus, gagal])
 	quit(1 if gagal > 0 else 0)

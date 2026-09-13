@@ -2,7 +2,7 @@ extends Control
 ## Battle scene prototipe NUSAMON — UI dibangun programatik.
 ## Pemakaian: jalankan proyek (scene utama) → battle vs Nusamon liar.
 ## Sistem aktif: serang (4 move, PP), tahap stat (buff/debuff/heal), status,
-## Amukan (4 jenis + stok), tim (maks. 6), toko, kabur, EXP, evolusi.
+## ability (12), Amukan (4 jenis + stok), tim (maks. 6), toko, kabur, EXP, evolusi.
 
 const WILD_IDS := [22, 23, 24]          # rusa, monyet, ayam (Common — Jawa)
 const WILD_LEVEL_RANGE := [2, 6]
@@ -255,6 +255,8 @@ func _mulai_battle_liar() -> void:
 		_log("Tim dipulihkan di pusat pemulihan.")
 	player = Tim.aktif()  # EXP/level/evolusi tersimpan di anggota tim
 
+	_mon_masuk(player, wild)
+	_mon_masuk(wild, player)
 	_log("Seekor %s liar muncul! (Lv.%d)" % [wild.display_name, wild.level])
 	_update_bars()
 
@@ -359,6 +361,8 @@ func _eksekusi_giliran_duo(
 		if _eksekusi_serang(p, target, mv):
 			# efek lanjutan (status/buff/debuff/heal) hanya bila serangan kena
 			_cek_efek_move(p, mv, target)
+			# ability penyentuh fisik bertahan (Racun Alami/Serbuk Sari/Madu Manis)
+			_cek_ability_sentuh(p, target, mv)
 		_update_bars()
 		if target.is_fainted():
 			_log("%s pingsan!" % target.display_name)
@@ -379,9 +383,12 @@ func _eksekusi_giliran_duo(
 
 
 func _eksekusi_serang(penyerang: NusamonInstance, bertahan: NusamonInstance, mv: Dictionary) -> bool:
-	# cek tidur / kelumpuhan sebelum menyerang
+	# cek status sebelum menyerang: tidur / terpikat / kelumpuhan
 	if penyerang.status == "tidur":
 		_log("%s tidur nyenyak..." % penyerang.display_name)
+		return false
+	if penyerang.status == "terpikat" and rng.randf() < AbilityEngine.PELUANG_TERPIKAT_GAGAL:
+		_log("%s terpikat — gagal menyerang!" % penyerang.display_name)
 		return false
 	if penyerang.status == "kelumpuhan" and rng.randf() < BattleEngine.PELUANG_LOMPAT_KELUMPUHAN:
 		_log("%s lumpuh dan tidak bisa bergerak!" % penyerang.display_name)
@@ -390,6 +397,9 @@ func _eksekusi_serang(penyerang: NusamonInstance, bertahan: NusamonInstance, mv:
 	if hasil["missed"]:
 		_log("%s menggunakan %s... tapi meleset!" % [
 			penyerang.display_name, mv.get("nama", "?")])
+		return false
+	if AbilityEngine.refleks_hindar(bertahan, rng):
+		_log("%s menghindar (Refleks Kilat)!" % bertahan.display_name)
 		return false
 	if mv.get("power", 0) <= 0:
 		_log("%s menggunakan %s." % [penyerang.display_name, mv.get("nama", "?")])
@@ -442,10 +452,29 @@ func _cek_efek_move(pengguna: NusamonInstance, mv: Dictionary, target: NusamonIn
 				_log("%s memulihkan %d HP!" % [pengguna.display_name, pulih])
 
 
+## Ability penyentuh fisik: bertahan merespons penyerang (hanya move fisik).
+func _cek_ability_sentuh(penyerang: NusamonInstance, bertahan: NusamonInstance, mv: Dictionary) -> void:
+	if String(mv.get("kategori", "fisik")) != "fisik":
+		return
+	var pesan := AbilityEngine.sentuh_fisik(penyerang, bertahan, rng)
+	if pesan != "":
+		_log(pesan)
+
+
 func _fase_status(mon: NusamonInstance) -> void:
 	if mon.is_fainted():
 		return
 	var pesan := BattleEngine.akhir_giliran_status(mon, rng)
+	if pesan != "":
+		_log(pesan)
+	var pesan_ability := AbilityEngine.akhir_giliran(mon)
+	if pesan_ability != "":
+		_log(pesan_ability)
+
+
+## Ability saat mon masuk battle (Pelindung Karang / Tiruan Suara).
+func _mon_masuk(m: NusamonInstance, lawan: NusamonInstance) -> void:
+	var pesan := AbilityEngine.masuk_battle(m, lawan)
 	if pesan != "":
 		_log(pesan)
 
@@ -477,6 +506,9 @@ func _selesai(menang: bool, teks := "") -> void:
 
 func _kabur() -> void:
 	if turn_aktif:
+		return
+	if AbilityEngine.lawan_terkunci(wild.ability):
+		_log("Tidak bisa kabur — %s terkunci Cengkeraman Kuat!" % player.display_name)
 		return
 	turn_aktif = true
 	_semua_menu(true)
@@ -615,6 +647,9 @@ func _ganti_mon(idx: int) -> void:
 	if pilihan.is_fainted():
 		_log("%s pingsan — tidak bisa bertarung." % pilihan.display_name)
 		return
+	if AbilityEngine.lawan_terkunci(wild.ability):
+		_log("Tidak bisa ganti — %s terkunci Cengkeraman Kuat!" % wild.display_name)
+		return
 	turn_aktif = true
 	_semua_menu(true)
 	_tutup_sub_menu()
@@ -622,6 +657,7 @@ func _ganti_mon(idx: int) -> void:
 	Tim.ubah_aktif(idx)
 	player = Tim.aktif()
 	_log("Memanggil kembali %s... %s maju!" % [lama.display_name, player.display_name])
+	_mon_masuk(player, wild)
 	_update_bars()
 	# ganti menghabiskan giliran: lawan menyerang balik sekali
 	var mv := _move_acak_musuh()

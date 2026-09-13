@@ -41,9 +41,10 @@ static func execute_move(
 		move: Dictionary, chart: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 	var hasil := {"damage": 0, "eff": 1.0, "stab": false, "kritis": false, "missed": false}
 
-	# 1) akurasi
+	# 1) akurasi (Mata Elang: selalu kena — roll akurasi dilewati)
 	var akurasi := float(move.get("akurasi", 100.0))
-	if akurasi > 0.0 and rng.randf() * 100.0 > akurasi:
+	if akurasi > 0.0 and not AbilityEngine.akurasi_selalu(penyerang) \
+			and rng.randf() * 100.0 > akurasi:
 		hasil["missed"] = true
 		return hasil
 
@@ -56,7 +57,8 @@ static func execute_move(
 	var kategori := String(move.get("kategori", "fisik"))
 	var atk_key := "atk" if kategori == "fisik" else "spa"
 	var def_key := "def" if kategori == "fisik" else "spd"
-	var atk := float(penyerang.stats[atk_key]) * faktor_tahap(int(penyerang.stat_stages.get(atk_key, 0)))
+	var atk := float(penyerang.stats[atk_key]) * faktor_tahap(int(penyerang.stat_stages.get(atk_key, 0))) \
+		* AbilityEngine.faktor_setengah(penyerang, kategori)
 	var defn := float(bertahan.stats[def_key]) * faktor_tahap(int(bertahan.stat_stages.get(def_key, 0)))
 	# luka bakar memotong serangan fisik
 	if kategori == "fisik" and penyerang.status == "luka_bakar":
@@ -84,7 +86,13 @@ static func execute_move(
 
 	var modifier: float = eff * (STAB_BONUS if stab else 1.0) \
 		* (BONUS_KRITIS if kritis else 1.0) * faktor
-	hasil["damage"] = 0 if eff == 0.0 else int(floor(dasar * modifier))
+	var dmg := 0
+	if eff != 0.0:
+		dmg = int(floor(dasar * modifier))
+		# Kulit Tebal: damage fisik yang diterima −10%
+		if kategori == "fisik":
+			dmg = int(floor(float(dmg) * AbilityEngine.faktor_kulit_tebal(bertahan)))
+	hasil["damage"] = dmg
 	return hasil
 
 

@@ -93,6 +93,7 @@ func _mulai() -> void:
 	# ---------- 5. tangkap pasti (Amukan Nusantara) → masuk tim
 	# bangun battle liar "baru" secara terkontrol (log & giliran direset)
 	var tim_sebelum := Tim.jumlah()
+	var tangkap_sebelum := Nusadex.jumlah_tangkap()
 	scene.log_label.text = ""
 	scene.turn_aktif = false
 	var id_baru := 28  # Ikan Badut (Common, single-stage)
@@ -111,7 +112,7 @@ func _mulai() -> void:
 	cek("battle berakhir setelah tangkap", scene.log_label.text.contains("Battle selesai"))
 	cek("tambah ulang wild yang sama ditolak", not Tim.tambah(scene.wild))
 	cek("nusadex: tangkap tercatat",
-		Nusadex.sudah_tangkap(28) and Nusadex.jumlah_tangkap() == 1)
+		Nusadex.sudah_tangkap(28) and Nusadex.jumlah_tangkap() == tangkap_sebelum + 1)
 
 	# ---------- 6. switch/tukar mon saat battle (GDD §4.1)
 	scene.log_label.text = ""

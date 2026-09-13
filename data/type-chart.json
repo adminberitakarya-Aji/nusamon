@@ -1,0 +1,18 @@
+{
+  "versi": "0.1",
+  "keterangan": "Data efektivitas tipe NUSAMON. efektivitas[penyerang][pertahanan]; 1 = netral.",
+  "tipeList": ["Api", "Air", "Daun", "Tanah", "Udara", "Normal", "Listrik", "Racun", "Petarung", "Naga", "Baja"],
+  "efektivitas": {
+    "Api":      { "Api": 0.5, "Air": 0.5, "Daun": 2, "Tanah": 0.5, "Udara": 1, "Normal": 1, "Listrik": 1, "Racun": 1, "Petarung": 1, "Naga": 0.5, "Baja": 2 },
+    "Air":      { "Api": 2, "Air": 0.5, "Daun": 1, "Tanah": 2, "Udara": 1, "Normal": 1, "Listrik": 1, "Racun": 1, "Petarung": 1, "Naga": 0.5, "Baja": 1 },
+    "Daun":     { "Api": 1, "Air": 2, "Daun": 0.5, "Tanah": 2, "Udara": 0.5, "Normal": 1, "Listrik": 1, "Racun": 0.5, "Petarung": 1, "Naga": 0.5, "Baja": 0.5 },
+    "Tanah":    { "Api": 2, "Air": 1, "Daun": 0.5, "Tanah": 1, "Udara": 0, "Normal": 1, "Listrik": 2, "Racun": 2, "Petarung": 1, "Naga": 1, "Baja": 2 },
+    "Udara":    { "Api": 1, "Air": 1, "Daun": 2, "Tanah": 1, "Udara": 0.5, "Normal": 1, "Listrik": 0.5, "Racun": 1, "Petarung": 2, "Naga": 0.5, "Baja": 0.5 },
+    "Normal":   { "Api": 1, "Air": 1, "Daun": 1, "Tanah": 1, "Udara": 1, "Normal": 1, "Listrik": 1, "Racun": 1, "Petarung": 1, "Naga": 1, "Baja": 0.5 },
+    "Listrik":  { "Api": 1, "Air": 2, "Daun": 0.5, "Tanah": 0, "Udara": 2, "Normal": 1, "Listrik": 0.5, "Racun": 1, "Petarung": 1, "Naga": 0.5, "Baja": 1 },
+    "Racun":    { "Api": 1, "Air": 1, "Daun": 2, "Tanah": 0.5, "Udara": 1, "Normal": 2, "Listrik": 1, "Racun": 0.5, "Petarung": 1, "Naga": 1, "Baja": 0 },
+    "Petarung": { "Api": 1, "Air": 1, "Daun": 1, "Tanah": 1, "Udara": 0.5, "Normal": 2, "Listrik": 1, "Racun": 1, "Petarung": 0.5, "Naga": 0.5, "Baja": 2 },
+    "Naga":     { "Api": 1, "Air": 1, "Daun": 1, "Tanah": 1, "Udara": 1, "Normal": 1, "Listrik": 1, "Racun": 1, "Petarung": 1, "Naga": 2, "Baja": 0.5 },
+    "Baja":     { "Api": 0.5, "Air": 0.5, "Daun": 2, "Tanah": 1, "Udara": 1, "Normal": 1, "Listrik": 0.5, "Racun": 1, "Petarung": 1, "Naga": 2, "Baja": 0.5 }
+  }
+}

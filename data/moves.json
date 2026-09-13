@@ -1,0 +1,342 @@
+﻿{
+    "versi":  "0.1",
+    "keterangan":  "Move/skill awal NUSAMON. kategori: fisik | spesial | status. power = null untuk move status. prioritas = pengubah urutan giliran (default 0). efekData = data efek terstruktur untuk engine. efek = deskripsi teks untuk UI.",
+    "moves":  [
+                  {
+                      "id":  "cakaran",
+                      "nama":  "Cakaran",
+                      "tipe":  "Normal",
+                      "kategori":  "fisik",
+                      "power":  40,
+                      "akurasi":  100,
+                      "poin":  35,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "sekop",
+                      "nama":  "Sekop Pantai",
+                      "tipe":  "Tanah",
+                      "kategori":  "fisik",
+                      "power":  45,
+                      "akurasi":  100,
+                      "poin":  30,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "cakar_bara",
+                      "nama":  "Cakar Bara",
+                      "tipe":  "Api",
+                      "kategori":  "fisik",
+                      "power":  65,
+                      "akurasi":  100,
+                      "poin":  20,
+                      "efek":  "10% memberi Luka Bakar",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "luka_bakar",
+                                       "peluang":  0.1
+                                   }
+                  },
+                  {
+                      "id":  "napas_panas",
+                      "nama":  "Napas Panas",
+                      "tipe":  "Api",
+                      "kategori":  "spesial",
+                      "power":  90,
+                      "akurasi":  85,
+                      "poin":  12,
+                      "efek":  "10% memberi Luka Bakar",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "luka_bakar",
+                                       "peluang":  0.1
+                                   }
+                  },
+                  {
+                      "id":  "semburan_air",
+                      "nama":  "Semburan Air",
+                      "tipe":  "Air",
+                      "kategori":  "spesial",
+                      "power":  65,
+                      "akurasi":  100,
+                      "poin":  20,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "ombak_raksasa",
+                      "nama":  "Ombak Raksasa",
+                      "tipe":  "Air",
+                      "kategori":  "spesial",
+                      "power":  95,
+                      "akurasi":  85,
+                      "poin":  8,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "cabang_cambuk",
+                      "nama":  "Cabang Cambuk",
+                      "tipe":  "Daun",
+                      "kategori":  "fisik",
+                      "power":  65,
+                      "akurasi":  100,
+                      "poin":  20,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "sungut_akar",
+                      "nama":  "Sungut Akar",
+                      "tipe":  "Daun",
+                      "kategori":  "spesial",
+                      "power":  90,
+                      "akurasi":  85,
+                      "poin":  10,
+                      "efek":  "Menyerap 50% damage sebagai HP",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "hisap_hp",
+                                       "peluang":  1
+                                   }
+                  },
+                  {
+                      "id":  "serbuk_tidur",
+                      "nama":  "Serbuk Serebuk",
+                      "tipe":  "Daun",
+                      "kategori":  "status",
+                      "power":  null,
+                      "akurasi":  75,
+                      "poin":  15,
+                      "efek":  "Target tertidur",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "tidur",
+                                       "peluang":  1
+                                   }
+                  },
+                  {
+                      "id":  "gempa_kecil",
+                      "nama":  "Gempa Kecil",
+                      "tipe":  "Tanah",
+                      "kategori":  "fisik",
+                      "power":  55,
+                      "akurasi":  95,
+                      "poin":  25,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "gempa_bumi",
+                      "nama":  "Gempa Bumi",
+                      "tipe":  "Tanah",
+                      "kategori":  "fisik",
+                      "power":  95,
+                      "akurasi":  95,
+                      "poin":  8,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "tebangan_sayap",
+                      "nama":  "Tebangan Sayap",
+                      "tipe":  "Udara",
+                      "kategori":  "fisik",
+                      "power":  60,
+                      "akurasi":  100,
+                      "poin":  30,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "sulan_angin",
+                      "nama":  "Sulapan Angin",
+                      "tipe":  "Udara",
+                      "kategori":  "spesial",
+                      "power":  75,
+                      "akurasi":  95,
+                      "poin":  15,
+                      "efek":  "10% menaikkan SPE pengguna",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "buff_spe",
+                                       "peluang":  0.1
+                                   }
+                  },
+                  {
+                      "id":  "kejut_petir",
+                      "nama":  "Kejut Petir",
+                      "tipe":  "Listrik",
+                      "kategori":  "spesial",
+                      "power":  65,
+                      "akurasi":  95,
+                      "poin":  20,
+                      "efek":  "10% memberi Kelumpuhan",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "kelumpuhan",
+                                       "peluang":  0.1
+                                   }
+                  },
+                  {
+                      "id":  "tombak_petir",
+                      "nama":  "Tombak Petir",
+                      "tipe":  "Listrik",
+                      "kategori":  "spesial",
+                      "power":  90,
+                      "akurasi":  85,
+                      "poin":  10,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "ludah_racun",
+                      "nama":  "Ludah Racun",
+                      "tipe":  "Racun",
+                      "kategori":  "spesial",
+                      "power":  55,
+                      "akurasi":  100,
+                      "poin":  25,
+                      "efek":  "20% memberi Racun",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "racun",
+                                       "peluang":  0.2
+                                   }
+                  },
+                  {
+                      "id":  "asap_beracun",
+                      "nama":  "Asap Beracun",
+                      "tipe":  "Racun",
+                      "kategori":  "status",
+                      "power":  null,
+                      "akurasi":  90,
+                      "poin":  20,
+                      "efek":  "Memberi status Racun",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "racun",
+                                       "peluang":  1
+                                   }
+                  },
+                  {
+                      "id":  "pukul_silat",
+                      "nama":  "Pukul Silat",
+                      "tipe":  "Petarung",
+                      "kategori":  "fisik",
+                      "power":  70,
+                      "akurasi":  100,
+                      "poin":  20,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "tendang_kilat",
+                      "nama":  "Tendang Kilat",
+                      "tipe":  "Petarung",
+                      "kategori":  "fisik",
+                      "power":  85,
+                      "akurasi":  90,
+                      "poin":  12,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "napas_naga",
+                      "nama":  "Napas Naga",
+                      "tipe":  "Naga",
+                      "kategori":  "spesial",
+                      "power":  80,
+                      "akurasi":  95,
+                      "poin":  12,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "kepala_baja",
+                      "nama":  "Kepala Baja",
+                      "tipe":  "Baja",
+                      "kategori":  "fisik",
+                      "power":  75,
+                      "akurasi":  95,
+                      "poin":  15,
+                      "efek":  null,
+                      "prioritas":  0,
+                      "efekData":  null
+                  },
+                  {
+                      "id":  "kikik",
+                      "nama":  "Kikik",
+                      "tipe":  "Normal",
+                      "kategori":  "status",
+                      "power":  null,
+                      "akurasi":  100,
+                      "poin":  30,
+                      "efek":  "Menurunkan ATK target",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "debuff_atk",
+                                       "peluang":  1
+                                   }
+                  },
+                  {
+                      "id":  "fokus",
+                      "nama":  "Fokus",
+                      "tipe":  "Normal",
+                      "kategori":  "status",
+                      "power":  null,
+                      "akurasi":  null,
+                      "poin":  30,
+                      "efek":  "Menaikkan ATK pengguna",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "buff_atk",
+                                       "peluang":  1
+                                   }
+                  },
+                  {
+                      "id":  "istirahat",
+                      "nama":  "Istirahat",
+                      "tipe":  "Normal",
+                      "kategori":  "status",
+                      "power":  null,
+                      "akurasi":  null,
+                      "poin":  10,
+                      "efek":  "Memulihkan 50% HP pengguna",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "heal_50",
+                                       "peluang":  1
+                                   }
+                  },
+                  {
+                      "id":  "benteng_karang",
+                      "nama":  "Benteng Karang",
+                      "tipe":  "Tanah",
+                      "kategori":  "status",
+                      "power":  null,
+                      "akurasi":  null,
+                      "poin":  20,
+                      "efek":  "Menaikkan DEF pengguna",
+                      "prioritas":  0,
+                      "efekData":  {
+                                       "jenis":  "buff_def",
+                                       "peluang":  1
+                                   }
+                  }
+              ]
+}

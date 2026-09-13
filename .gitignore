@@ -1,0 +1,16 @@
+# NUSAMON - Git ignore
+# (proyek ini berisi dokumentasi & data; tidak ada build artifact)
+
+# File sistem
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# File editor
+.vscode/
+.idea/
+*.swp
+
+# Backup
+*.bak
+*~

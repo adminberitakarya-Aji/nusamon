@@ -94,7 +94,7 @@
 | Langkah | Status |
 |---------|:------:|
 | Inventori Amukan terbatas: uang (Rupiah, awal Rp 3.000) + stok (awal 5) + toko + pengurangan stok saat lempar — data `items.json` + kelas `Inventori` + UI toko | ✅ `9fd0a9c` |
-| Tim/partai (maks. 6) + hasil tangkap masuk tim | ⬜ |
+| Tim/partai (maks. 6) + hasil tangkap masuk tim — kelas `Tim`, mon aktif persisten (EXP/evolusi tersimpan), pemulihan awal battle, panel tim | ✅ `ea7b214` |
 | Switch/tukar Nusamon saat battle (GDD §4.1) | ⬜ |
 | Nusadex: record lihat/tangkap, layar daftar + detail (`docs/nusadex.md`) | ⬜ |
 | Ability engine: 12 ability dari `docs/gameplay-depth.md` | ⬜ |
@@ -177,6 +177,9 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | Fase 1 dinyatakan **selesai** — DoD terpenuhi (78 asersi hijau, 3 suite, simulasi battle penuh) | semua kriteria §1 terpenuhi; inspeksi visual editor tetap disarankan saat Fase 2 | `4629f5c` |
 | 2026-09-14 | Fase 2 dimulai: inventori & toko Amukan. **Harga baru didefinisikan**: Amukan Rp 200, Kuat Rp 600, Super Rp 900, Nusantara = hadiah event (tidak dijual); uang awal Rp 3.000; stok awal 5 Amukan | `gameplay-depth.md` §3 tidak menetapkan harga → diputuskan di sini + `data/items.json` (source of truth); bonus divalidasi `validate.ps1` agar = konstanta engine | `9fd0a9c` |
 | 2026-09-14 | Inventori memakai **static store** (bukan autoload) | bertahan saat scene dimuat ulang tanpa menambah dependensi; testable headless; save/load permanen menyusul | `9fd0a9c` |
+| 2026-09-14 | `Tim` memakai **referensi instance yang sama antar battle** (mon aktif = `Tim.aktif()`) | EXP/level/evolusi tidak hilang saat scene dimuat ulang — progresi pemain kini persisten per sesi | `ea7b214` |
+| 2026-09-14 | `Tim.tambah()` menolak **anggota ke-7 dan instance duplikat**; tim penuh saat tangkap → wild dilepas (PC-box menyusul) | mencegah state tidak valid; perilaku prototipe dicatat eksplisit | `ea7b214` |
+| 2026-09-14 | Mon pingsan otomatis dipulihkan di awal battle (`Tim.pulihkan_semua`) | placeholder pusat pemulihan — kualitas hidup prototipe sampai Fase 3 (pusat pemulihan sungguhan) | `ea7b214` |
 
 ## 5. Referensi
 

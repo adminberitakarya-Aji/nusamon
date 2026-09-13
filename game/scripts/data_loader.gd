@@ -60,7 +60,7 @@ static func stats_for_stage(species: Dictionary, stage_index: int) -> Dictionary
 	var final_stats: Dictionary = species.get("baseStatsFinal", {})
 	var hasil := {}
 	for k in final_stats:
-		hasil[k] = maxi(1, int(round(float(final_stats[k]) * skala)))
+		hasil[k] = maxi(1, ceili(float(final_stats[k]) * skala))
 	return hasil
 
 

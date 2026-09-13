@@ -68,6 +68,19 @@
 | Rimau Muda | ×0.80 | 64 | 96 | 60 | 52 | 56 | 88 |
 | Rimau Agung | ×1.00 | 80 | 120 | 75 | 65 | 70 | 110 |
 
+## Rumus Stat Runtime (Level → Stat Aktual)
+
+Dipakai saat battle (diimplementasikan di `game/scripts/core/nusamon_instance.gd`):
+
+```
+HP   = floor(2 * base * level / 100) + level + 10
+Lain = floor(2 * base * level / 100) + 5
+```
+
+- `base` = stat hasil skala tahap evolusi di atas.
+- Tanpa IV (keputusan GDD §4.4) — spesies sama selalu punya potensi sama.
+- Contoh: Anak Rimau (HP base 48) di Lv.5 → floor(2×48×5/100) + 5 + 10 = **19 HP**; ATK base 72 → floor(2×72×5/100) + 5 = **12 ATK**.
+
 ## Catatan Balance
 
 1. **Elang Garuda (SPE 145)** = monster tercepat; digantengi DEF moderat agar tidak mendominasi.

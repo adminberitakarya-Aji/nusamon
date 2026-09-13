@@ -10,8 +10,8 @@
 |------|--------|
 | Perencanaan & Desain (GDD) | ✅ Selesai v0.1 |
 | Keputusan Teknis | ✅ Godot 4 + 3D low-poly (`docs/tech-stack.md`) |
-| Tooling Generator Aset | 🔨 Berjalan (`tools/blender`) |
-| Fase 1 — Prototipe Battle | 🔜 Berikutnya |
+| Tooling Generator Aset | 🔨 Selesai (perlu uji headless — Blender belum terinstal) |
+| Fase 1 — Prototipe Battle | 🔨 Berjalan: battle core + tes headless selesai (perlu Godot untuk menjalankan) |
 | Prototipe World/Catch | ⬜ Belum mulai |
 
 ## Struktur Proyek

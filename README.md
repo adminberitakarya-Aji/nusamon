@@ -6,12 +6,14 @@
 
 ## Status Proyek
 
+> **Detail step-by-step per fase: lihat `ROADMAP.md`** (sumber tunggal status progres).
+
 | Fase | Status |
 |------|--------|
 | Perencanaan & Desain (GDD) | ✅ Selesai v0.1 |
 | Keputusan Teknis | ✅ Godot 4 + 3D low-poly (`docs/tech-stack.md`) |
-| Tooling Generator Aset | 🔨 Selesai (perlu uji headless — Blender belum terinstal) |
-| Fase 1 — Prototipe Battle | 🔨 Berjalan: battle core + tangkap + EXP/evolusi + UI scene selesai (perlu Godot untuk menjalankan) |
+| Tooling Generator Aset | 🔨 Selesai (6/15 model MVP; perlu Blender untuk eksekusi) |
+| Fase 1 — Prototipe Battle | 🔨 Berjalan (±85%): battle core + tangkap + EXP/evolusi + UI + **suite tes hijau 52 asersi (Godot 4.7.2)** — sisa: verifikasi UI di editor, keputusan move status/PP |
 | Prototipe World/Catch | ⬜ Belum mulai |
 
 ## Struktur Proyek
@@ -21,6 +23,7 @@ Root repo = root proyek Godot (`res://` = path repo) — data JSON terbaca langs
 ```
 NUSAMON/
 ├── README.md              # Dokumen ini
+├── ROADMAP.md             # Status progres granular step-by-step (sumber tunggal status)
 ├── project.godot          # Proyek Godot 4 (root)
 ├── docs/                  # Game Design Document
 │   ├── GDD.md             # GDD utama (visi, sistem, roadmap)

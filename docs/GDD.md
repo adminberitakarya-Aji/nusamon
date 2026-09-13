@@ -125,6 +125,8 @@ catch jika random(0..255) < a (dengan shake check)
 
 ## 9. Roadmap
 
+> **Rencana makro.** Status pengerjaan granular step-by-step (per langkah, per commit) ada di **`ROADMAP.md`** — sumber tunggal status progres; wajib diperbarui di setiap commit berfitur.
+
 1. **Fase 0 — Desain** ✅ (GDD, roster, type chart, stats)
 2. **Fase 1 — Prototipe Battle** (engine disipasi, pertarungan 1v1 berjalan)
 3. **Fase 2 — Catch & Nusadex**

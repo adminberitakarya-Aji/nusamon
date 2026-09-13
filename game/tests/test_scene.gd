@@ -25,6 +25,9 @@ func _init() -> void:
 
 func _mulai() -> void:
 	print("=== Tes Scene Battle NUSAMON ===")
+	# inventori sesi: kondisi awal deterministik untuk tes
+	Inventori.reset()
+	Inventori.tambah_item("amukan_super", 3)
 	var paket: PackedScene = load("res://game/battle/battle_scene.tscn")
 	cek("scene battle termuat", paket != null)
 	if paket == null:
@@ -41,10 +44,22 @@ func _mulai() -> void:
 	cek("wild dibuat", scene.wild != null)
 	cek("tahap stat awal 0", int(scene.player.stat_stages.get("atk", 99)) == 0)
 	cek("PP move terisi", int(scene.player.move_pp.get("cakaran", 0)) > 0)
+	cek("stok awal amukan = 5", Inventori.stok_item("amukan") == 5)
+	cek("label uang = Rp 3000", scene.uang_label.text == "Rp 3000",
+		"aktual " + scene.uang_label.text)
 
 	# ---------- 2. menu move menampilkan PP & men-disable yang habis
 	scene._buka_menu_move()
 	cek("menu move punya tombol", scene.menu_move.get_child_count() > 1)
+	scene._tutup_sub_menu()
+
+	# ---------- 2b. toko: beli Amukan memakai uang
+	scene._buka_menu_toko()
+	cek("menu toko terbuka", scene.menu_toko.visible)
+	scene._beli_item("amukan")
+	cek("uang setelah beli = 2800", Inventori.uang == 2800, "aktual " + str(Inventori.uang))
+	cek("stok amukan setelah beli = 6", Inventori.stok_item("amukan") == 6)
+	cek("beli item event ditolak", not Inventori.beli("amukan_nusantara"))
 	scene._tutup_sub_menu()
 
 	# ---------- 3. lempar Amukan (boleh gagal/berhasil — hasil tercatat di log)
@@ -54,6 +69,9 @@ func _mulai() -> void:
 		scene._lempar_amukan("amukan_super")
 	cek("percobaan tangkap tercatat di log",
 		scene.log_label.text.contains("Amukan") or scene.log_label.text.contains("tertangkap"))
+	cek("stok amukan_super berkurang saat lempar",
+		Inventori.stok_item("amukan_super") <= 2,
+		"aktual " + str(Inventori.stok_item("amukan_super")))
 
 	# ---------- 4. simulasi battle penuh sampai selesai
 	var iterasi := 0

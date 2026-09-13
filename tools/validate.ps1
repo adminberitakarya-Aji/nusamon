@@ -11,6 +11,7 @@ try {
     $j = Get-Content "$root\data\nusamons.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     $m = Get-Content "$root\data\moves.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     $t = Get-Content "$root\data\type-chart.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+    $it = Get-Content "$root\data\items.json" -Raw -Encoding UTF8 | ConvertFrom-Json
 } catch {
     Write-Host "GAGAL PARSE JSON: $_" -ForegroundColor Red
     exit 1
@@ -51,9 +52,26 @@ foreach ($n in $j.nusamons) {
     for ($i = 1; $i -lt $sk.Count; $i++) { if ($sk[$i] -le $sk[$i-1]) { Fail "id $($n.id): skala tidak menaik" } }
 }
 
+# --- items (Amukan) — bonus harus sama dengan CatchSystem.BALL_BONUS di engine
+$bonusHarus = @{ amukan = 1.0; amukan_kuat = 1.5; amukan_super = 2.0; amukan_nusantara = 3.0 }
+if (($it.items | Measure-Object).Count -ne 4) { Fail "items != 4 (aktual $(($it.items | Measure-Object).Count))" }
+$dupItems = $it.items | Group-Object id | Where-Object { $_.Count -gt 1 }
+if ($dupItems) { Fail ("item id duplikat: " + ($dupItems.Name -join ', ')) }
+foreach ($objek in $it.items) {
+    $harus = $bonusHarus[$objek.id]
+    if ($null -eq $harus) { Fail "item $($objek.id): id tidak dikenal" }
+    elseif ([math]::Abs([double]$objek.bonus - [double]$harus) -gt 0.0001) { Fail "item $($objek.id): bonus $($objek.bonus) != engine $harus" }
+    if ($objek.id -eq 'amukan_nusantara') {
+        if ($objek.toko) { Fail "amukan_nusantara tidak boleh dijual di toko" }
+    } else {
+        if (-not $objek.toko) { Fail "item $($objek.id): harus tersedia di toko" }
+        if ([int]$objek.harga -le 0) { Fail "item $($objek.id): harga harus > 0" }
+    }
+}
+
 # --- hasil
 if ($errs.Count -eq 0) {
-    Write-Host "VALIDASI LOLOS: data NUSAMON konsisten (30 spesies / 25 move / 11 tipe)" -ForegroundColor Green
+    Write-Host "VALIDASI LOLOS: data NUSAMON konsisten (30 spesies / 25 move / 11 tipe / 4 item)" -ForegroundColor Green
     exit 0
 } else {
     Write-Host "VALIDASI GAGAL:" -ForegroundColor Red

@@ -8,6 +8,7 @@ extends RefCounted
 const TYPE_CHART_PATH := "res://data/type-chart.json"
 const NUSAMONS_PATH := "res://data/nusamons.json"
 const MOVES_PATH := "res://data/moves.json"
+const ITEMS_PATH := "res://data/items.json"
 
 
 static func _read_json(path: String) -> Dictionary:
@@ -33,6 +34,10 @@ static func load_nusamons() -> Dictionary:
 
 static func load_moves() -> Dictionary:
 	return _read_json(MOVES_PATH)
+
+
+static func load_items() -> Dictionary:
+	return _read_json(ITEMS_PATH)
 
 
 ## Efektivitas tipe penyerang -> pertahanan (default 1.0 jika tidak ada di chart).

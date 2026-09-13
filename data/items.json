@@ -1,0 +1,47 @@
+{
+    "versi": "0.1",
+    "keterangan": "Item NUSAMON. Mata uang: Rupiah. Bonus Amukan HARUS sama dengan CatchSystem.BALL_BONUS di engine (divalidasi tools/validate.ps1). tokoDariGym = lencana minimal agar muncul di toko (0 = sejak awal).",
+    "mataUang": "Rupiah",
+    "items": [
+        {
+            "id": "amukan",
+            "nama": "Amukan",
+            "jenis": "amukan",
+            "bonus": 1.0,
+            "harga": 200,
+            "toko": true,
+            "tokoDariGym": 0,
+            "ket": "Amukan standar; murah, tersedia sejak awal."
+        },
+        {
+            "id": "amukan_kuat",
+            "nama": "Amukan Kuat",
+            "jenis": "amukan",
+            "bonus": 1.5,
+            "harga": 600,
+            "toko": true,
+            "tokoDariGym": 1,
+            "ket": "Tersedia di toko setelah lencana G1."
+        },
+        {
+            "id": "amukan_super",
+            "nama": "Amukan Super",
+            "jenis": "amukan",
+            "bonus": 2.0,
+            "harga": 900,
+            "toko": true,
+            "tokoDariGym": 3,
+            "ket": "Tersedia di toko setelah lencana G3."
+        },
+        {
+            "id": "amukan_nusantara",
+            "nama": "Amukan Nusantara",
+            "jenis": "amukan",
+            "bonus": 3.0,
+            "harga": null,
+            "toko": false,
+            "tokoDariGym": null,
+            "ket": "Hadiah event/rahasia — tidak dijual di toko."
+        }
+    ]
+}

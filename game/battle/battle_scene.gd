@@ -34,6 +34,8 @@ var log_label: RichTextLabel
 var menu_utama: VBoxContainer
 var menu_move: VBoxContainer
 var menu_ball: VBoxContainer
+var menu_toko: VBoxContainer
+var uang_label: Label
 
 
 func _ready() -> void:
@@ -151,6 +153,7 @@ func _bangun_ui() -> void:
 	_tombol_menu("⚔ SERANG", menu_utama, _buka_menu_move)
 	_tombol_menu("🎒 AMUKAN", menu_utama, _buka_menu_ball)
 	_tombol_menu("🏃 KABUR", menu_utama, _kabur)
+	_tombol_menu("🛒 TOKO", menu_utama, _buka_menu_toko)
 
 	# menu move (muncul saat serang)
 	menu_move = VBoxContainer.new()
@@ -165,6 +168,19 @@ func _bangun_ui() -> void:
 	menu_ball.custom_minimum_size = Vector2(150, 160)
 	menu_ball.visible = false
 	add_child(menu_ball)
+
+	# menu Toko
+	menu_toko = VBoxContainer.new()
+	menu_toko.position = Vector2(900, 300)
+	menu_toko.custom_minimum_size = Vector2(210, 170)
+	menu_toko.visible = false
+	add_child(menu_toko)
+
+	# panel uang (kanan-atas)
+	var panel_uang := _panel(Vector2(930, 30), Vector2(150, 50))
+	uang_label = _label("Rp ?", 15, Color(1.0, 0.9, 0.5))
+	panel_uang.add_child(uang_label)
+	_update_uang()
 
 
 # ------------------------------------------------------------ alur battle
@@ -209,7 +225,7 @@ func _update_bars() -> void:
 
 
 func _semua_menu(mati: bool) -> void:
-	for m in [menu_utama, menu_move, menu_ball]:
+	for m in [menu_utama, menu_move, menu_ball, menu_toko]:
 		for c in m.get_children():
 			if c is Button:
 				(c as Button).disabled = mati
@@ -420,6 +436,11 @@ func _lempar_amukan(ball_id: String) -> void:
 	turn_aktif = true
 	_semua_menu(true)
 	_tutup_sub_menu()
+	if not Inventori.pakai_item(ball_id):
+		_log("Stok %s habis! Beli di TOKO." % ball_id)
+		_semua_menu(false)
+		turn_aktif = false
+		return
 	var rate := int(wild_detail.get("catchRate", 100))
 	var hasil := CatchSystem.attempt_catch(wild, rate, ball_id, rng)
 	var getar := int(hasil["shakes"])
@@ -445,6 +466,47 @@ func _lempar_amukan(ball_id: String) -> void:
 	turn_aktif = false
 
 
+# ------------------------------------------------------------ toko
+
+func _update_uang() -> void:
+	uang_label.text = "Rp %d" % Inventori.uang
+
+
+func _buka_menu_toko() -> void:
+	if turn_aktif:
+		return
+	menu_utama.visible = false
+	menu_move.visible = false
+	menu_ball.visible = false
+	_bersihkan(menu_toko)
+	var info := _label("Uang: Rp %d" % Inventori.uang, 14, Color(1.0, 0.9, 0.5))
+	menu_toko.add_child(info)
+	for it in Inventori.daftar_amukan():
+		var iid: String = String(it.get("id", ""))
+		var dijual: bool = bool(it.get("toko", false))
+		var harga_item := Inventori.harga(iid)
+		var teks: String
+		if dijual:
+			teks = "%s — Rp %d (stok %d)" % [
+				String(it.get("nama", iid)), harga_item, Inventori.stok_item(iid)]
+		else:
+			teks = "%s — Hadiah Event" % String(it.get("nama", iid))
+		var b := _tombol_menu(teks, menu_toko, func() -> void: _beli_item(iid))
+		b.disabled = not dijual or Inventori.uang < harga_item
+	_tombol_menu("Kembali", menu_toko, _tutup_sub_menu)
+	menu_toko.visible = true
+
+
+func _beli_item(id: String) -> void:
+	if Inventori.beli(id):
+		_log("Dibeli 1 %s — stok %d, sisa Rp %d." % [
+			id, Inventori.stok_item(id), Inventori.uang])
+	else:
+		_log("Tidak bisa membeli %s (uang kurang / tak dijual)." % id)
+	_update_uang()
+	_buka_menu_toko()  # perbarui tampilan uang/stok/disabled
+
+
 func _bersihkan(n: Node) -> void:
 	for c in n.get_children():
 		c.queue_free()
@@ -455,6 +517,7 @@ func _buka_menu_move() -> void:
 		return
 	menu_utama.visible = false
 	menu_ball.visible = false
+	menu_toko.visible = false
 	_bersihkan(menu_move)
 	for i in player.move_ids.size():
 		var mv := BattleEngine.cari_move(moves_db, String(player.move_ids[i]))
@@ -472,11 +535,14 @@ func _buka_menu_ball() -> void:
 		return
 	menu_utama.visible = false
 	menu_move.visible = false
+	menu_toko.visible = false
 	_bersihkan(menu_ball)
-	for ball_id in CatchSystem.BALL_BONUS:
-		var bid: String = String(ball_id)
-		_tombol_menu(String(ball_id).capitalize(), menu_ball,
-			func() -> void: _lempar_amukan(bid))
+	for it in Inventori.daftar_amukan():
+		var bid: String = String(it.get("id", ""))
+		var sisa := Inventori.stok_item(bid)
+		var b := _tombol_menu("%s [stok %d]" % [String(it.get("nama", bid)), sisa],
+			menu_ball, func() -> void: _lempar_amukan(bid))
+		b.disabled = sisa <= 0
 	_tombol_menu("Kembali", menu_ball, _tutup_sub_menu)
 	menu_ball.visible = true
 
@@ -484,4 +550,5 @@ func _buka_menu_ball() -> void:
 func _tutup_sub_menu() -> void:
 	menu_move.visible = false
 	menu_ball.visible = false
+	menu_toko.visible = false
 	menu_utama.visible = true

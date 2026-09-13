@@ -95,8 +95,8 @@
 |---------|:------:|
 | Inventori Amukan terbatas: uang (Rupiah, awal Rp 3.000) + stok (awal 5) + toko + pengurangan stok saat lempar — data `items.json` + kelas `Inventori` + UI toko | ✅ `9fd0a9c` |
 | Tim/partai (maks. 6) + hasil tangkap masuk tim — kelas `Tim`, mon aktif persisten (EXP/evolusi tersimpan), pemulihan awal battle, panel tim | ✅ `ea7b214` |
-| Switch/tukar Nusamon saat battle (GDD §4.1) | ⬜ |
-| Nusadex: record lihat/tangkap, layar daftar + detail (`docs/nusadex.md`) | ⬜ |
+| Switch/tukar Nusamon saat battle (GDD §4.1) — menu ganti, ganti = 1 giliran (lawan menyerang balik), mon aktif/pingsan nonaktif | ✅ `40c3987` |
+| Nusadex: record lihat/tangkap, layar daftar + detail (`docs/nusadex.md`) — kelas `Nusadex`, overlay UI, field `deskripsi` 30 spesies kini terisi di `nusamons.json` | ✅ `40c3987` |
 | Ability engine: 12 ability dari `docs/gameplay-depth.md` | ⬜ |
 | Move status buff/debuff/heal + stat stage (naik/turun tahap) | ⬜ |
 | Sistem PP move (`poin` di `moves.json`) | ⬜ |
@@ -180,6 +180,9 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | `Tim` memakai **referensi instance yang sama antar battle** (mon aktif = `Tim.aktif()`) | EXP/level/evolusi tidak hilang saat scene dimuat ulang — progresi pemain kini persisten per sesi | `ea7b214` |
 | 2026-09-14 | `Tim.tambah()` menolak **anggota ke-7 dan instance duplikat**; tim penuh saat tangkap → wild dilepas (PC-box menyusul) | mencegah state tidak valid; perilaku prototipe dicatat eksplisit | `ea7b214` |
 | 2026-09-14 | Mon pingsan otomatis dipulihkan di awal battle (`Tim.pulihkan_semua`) | placeholder pusat pemulihan — kualitas hidup prototipe sampai Fase 3 (pusat pemulihan sungguhan) | `ea7b214` |
+| 2026-09-14 | Switch mon = **satu giliran**: lawan menyerang balik sekali (konvensi Pokémon); tombol mon aktif/pingsan nonaktif | sesuai GDD §4.1 (pilihan giliran Serang/Ganti/Item/Kabur) | `40c3987` |
+| 2026-09-14 | Field `deskripsi` 30 spesies diisi ke `nusamons.json` via script one-off Godot (**intify**: angka bulat dikembalikan ke int — JSON Godot mem-parse semua angka sebagai float) | `docs/nusadex.md` menargetkan field ini tapi belum terisi; teks UTF-8 bersih; `validate.ps1` kini wajibkan deskripsi terisi | `40c3987` |
+| 2026-09-14 | UI Nusadex = **overlay** di battle scene (bukan scene terpisah) — konsisten pola menu toko; `habitatPulau` ternyata **array pulau** → ditampilkan sebagai daftar dipisah koma | prototipe single-scene; dokumentasi nusadex.md §3.2 (daftar + detail) terpenuhi | `40c3987` |
 
 ## 5. Referensi
 

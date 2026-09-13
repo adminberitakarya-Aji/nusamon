@@ -209,6 +209,9 @@ func _update_bars() -> void:
 
 func _semua_menu(mati: bool) -> void:
 	for m in [menu_utama, menu_move, menu_ball]:
+		for c in m.get_children():
+			if c is Button:
+				(c as Button).disabled = mati
 
 
 # ------------------------------------------------------------ giliran & serangan
@@ -265,6 +268,14 @@ func _eksekusi_giliran_duo(
 	_fase_status(a)
 	_fase_status(b)
 	_update_bars()
+	# status (luka bakar/racun) bisa memaksa pingsan di fase ini —
+	# pastikan battle berakhir, jangan lanjut dengan mon yang sudah mati.
+	if a.is_fainted():
+		_akhir_battle(a == wild)
+		return
+	if b.is_fainted():
+		_akhir_battle(b == wild)
+		return
 
 
 func _eksekusi_serang(penyerang: NusamonInstance, bertahan: NusamonInstance, mv: Dictionary) -> void:
@@ -362,10 +373,37 @@ func _kabur() -> void:
 			return
 	_semua_menu(false)
 	turn_aktif = false
+
+
+func _lempar_amukan(ball_id: String) -> void:
+	if turn_aktif:
+		return
+	turn_aktif = true
+	_semua_menu(true)
 	_tutup_sub_menu()
-		for c in m.get_children():
-			if c is Button:
-				(c as Button).disabled = mati
+	var rate := int(wild_detail.get("catchRate", 100))
+	var hasil := CatchSystem.attempt_catch(wild, rate, ball_id, rng)
+	var getar := int(hasil["shakes"])
+	if bool(hasil["catch"]):
+		if getar > 0:
+			_log("Amukan bergetar %d kali..." % getar)
+		_log("Berhasil! %s tertangkap!" % wild.display_name)
+		_selesai(true)
+		return
+	if getar > 0:
+		_log("Amukan bergetar %d kali... tapi %s berhasil keluar!" % [
+			getar, wild.display_name])
+	else:
+		_log("Amukan langsung dilepas! %s berhasil keluar!" % wild.display_name)
+	# musuh menyerang balik setelah gagal ditangkap
+	_eksekusi_serang(wild, player, _move_acak_musuh())
+	_update_bars()
+	if player.is_fainted():
+		_log("%s pingsan! Pulang ke pusat pemulihan." % player.display_name)
+		_selesai(false)
+		return
+	_semua_menu(false)
+	turn_aktif = false
 
 
 func _bersihkan(n: Node) -> void:
@@ -395,7 +433,7 @@ func _buka_menu_ball() -> void:
 	menu_move.visible = false
 	_bersihkan(menu_ball)
 	for ball_id in CatchSystem.BALL_BONUS:
-		var bid := ball_id
+		var bid: String = String(ball_id)
 		_tombol_menu(String(ball_id).capitalize(), menu_ball,
 			func() -> void: _lempar_amukan(bid))
 	_tombol_menu("Kembali", menu_ball, _tutup_sub_menu)

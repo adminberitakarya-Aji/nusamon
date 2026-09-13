@@ -106,18 +106,22 @@ catch jika random(0..255) < a (dengan shake check)
 
 ## 7. Art & Audio
 
-- **Art:** pixel art 2D gaya GBA (rekomendasi MVP) atau 3D low-poly. Palet warna tropis.
-- **Musik:** nuansa instrumen Nusantara (gamelan, angklung, kolintang) yang diaransemen modern/chip-tune.
-- **UI:** bilingual-ramah, ikon tipe berwarna, font yang mendukung bahasa Indonesia.
+- **Art (terkunci — ADR-02):** **3D low-poly stylized**. Model monster dibuat **terprogram** via script Python Blender headless (`tools/blender`) → export glTF → Godot (lihat `docs/tech-stack.md`).
+- **Palet warna tropis** Indonesia (hijau rimba, biru samudra, oranye senja).
+- **Environment:** disusun dari pustaka aset CC0 (Kenney/Quaternius) di fase awal; monster dibuat custom via generator.
+- **Musik:** nuansa instrumen Nusantara (gamelan, angklung, kolintang) yang diaransemen modern.
+- **UI:** ikon tipe berwarna, font yang mendukung bahasa Indonesia.
 
 ## 8. Scope MVP (Prototipe Pertama)
 
 | Item | Isi |
 |------|-----|
-| Wilayah | 1 pulau kecil (Jawa ringkas): 2 kota + 1 gym |
-| Spesies | ~15 spesies dari roster (starter 3 + common/uncommon + 1 rare) |
+| Wilayah | Jawa ringkas: Desa Sumberrejo → Rute 1 → Kota Harapan (G1) → Rute 2 → Kota Arunika (G2) |
+| Spesies | **15 spesies**: 3 starter line (9 model) + Monyet (2) + Ayam (2) + Rusa (2) |
+| Platform | **PC + Web** (ADR-04; Android menyusul) |
 | Sistem | Battle, tangkap, Nusadex, EXP/level, evolusi |
-| Konten | 1 gym leader + 1 rival + cutscene sederhana |
+| Konten | 2 gym leader (Bu Sari–Normal, Pak Lesto–Api) + 1 rival + cutscene sederhana |
+| Aset | Model low-poly dibuat via `tools/blender` (ADR-03) |
 
 ## 9. Roadmap
 
@@ -132,7 +136,7 @@ catch jika random(0..255) < a (dengan shake check)
 
 - **IP:** semua konten original berbasis fauna — aman dari klaim. Hindari nama/visual yang terlalu mirip Pokémon.
 - **Scope creep:** disiplin pada MVP; 30 spesies itu sudah ramping dibanding Pokémon (100+).
-- **Art asset:** batch produksi sprite per tahap evolusi — pertimbangkan konsisten gaya sejak awal.
+- **Art asset:** model dibuat terprogram via script Blender (konsisten & murah di ±70 tahap evolusi); gaya dievaluasi sejak MVP.
 
 ---
 *Versi 0.1 — disusun dari diskusi desain. Data teknis terkait: `data/*.json`.*

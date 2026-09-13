@@ -1,0 +1,14 @@
+; Engine configuration file.
+; Proyek NUSAMON — root repo = root proyek (res:// = path repo)
+
+config_version=5
+
+[application]
+
+config/name="NUSAMON"
+config/version="0.1"
+config/features=PackedStringArray("4.3")
+
+[rendering]
+
+renderer/rendering_method="mobile"

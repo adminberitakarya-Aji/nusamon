@@ -14,3 +14,12 @@ desktop.ini
 # Backup
 *.bak
 *~
+
+# Godot 4
+.godot/
+*.tmp
+export_presets.cfg.bak
+
+# Python
+__pycache__/
+*.pyc

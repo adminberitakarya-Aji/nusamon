@@ -35,6 +35,21 @@
         { "spesies": 14, "level": 14 },
         { "spesies": 24, "level": 16, "tahap": 1 }
       ]
+    },
+    {
+      "id": "rival_raka",
+      "jenis": "rival",
+      "nama": "Raka",
+      "profesi": "Penjelajah muda — rival lamamu",
+      "dialog": {
+        "intro": "Kabar dari Prof. Candri sampai kepadaku! Aku Raka — sainganmu sejak kecil. Ayo uji startermu melawanku!",
+        "menang_pemain": "Kalah juga... Oke, kamu menang kali ini! Terus latih timmu — nanti aku tantang lagi!",
+        "kalah_pemain": "Haha! Raka unggul! Latihan lagi, ya — sampai battle gym berikutnya!"
+      },
+      "hadiah_uang": 500,
+      "tim": [
+        { "counter_starter": true, "level": 6 }
+      ]
     }
   ]
 }

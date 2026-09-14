@@ -668,10 +668,12 @@ func _trainer_kalah() -> void:
 	if hadiah > 0:
 		_log("Hadiah: Rp %d!" % hadiah)
 	var lencana: Dictionary = trainer_data.get("lencana", {})
-	Progres.tambah_lencana(int(lencana.get("id", 0)))
+	if not lencana.is_empty():
+		# hanya gym — rival tidak memberi lencana
+		Progres.tambah_lencana(int(lencana.get("id", 0)))
+		_log("Mendapat %s! (Lencana G%d — jalan berikutnya terbuka)" % [
+			String(lencana.get("nama", "?")), int(lencana.get("id", 0))])
 	Progres.tandai_kalah_trainer(String(trainer_data.get("id", "")))
-	_log("Mendapat %s! (Lencana G%d — jalan berikutnya terbuka)" % [
-		String(lencana.get("nama", "?")), int(lencana.get("id", 0))])
 	_selesai(true, "menang vs trainer")
 
 

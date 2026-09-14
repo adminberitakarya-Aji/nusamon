@@ -83,7 +83,7 @@ func _mulai() -> void:
 	dunia_scene._cari_encounter()
 	cek("encounter ditolak tanpa starter",
 		dunia_scene.log_label.text.contains("Pilih Nusamon pertamamu"))
-	dunia_scene._tantang_gym("bu_sari")
+	dunia_scene._tantang_trainer("bu_sari")
 	cek("gym ditolak tanpa starter",
 		dunia_scene.log_label.text.contains("Pilih Nusamon pertamamu"))
 	# cutscene: buka → lanjut melewati dialog → muncul pilihan → pilih Orangkici (2)

@@ -31,7 +31,9 @@
       "jenis": "rute",
       "peluang_encounter": 0.4,
       "deskripsi": "Sawah bertingkat dan peternakan di sepanjang jalan ke Kota Harapan.",
-      "tempat": [],
+      "tempat": [
+        { "id": "rival_raka", "nama": "Raka — Rivalmu", "status": "aktif", "catatan": "Sahabat lamamu ingin menguji startermu!", "aksi": "rival" }
+      ],
       "encounters": [
         { "spesies": 23, "bobot": 40, "level_min": 2, "level_max": 4 },
         { "spesies": 22, "bobot": 35, "level_min": 2, "level_max": 4 },

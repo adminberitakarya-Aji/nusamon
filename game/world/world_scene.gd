@@ -194,6 +194,15 @@ func _perbarui() -> void:
 		# POI dengan aksi (Fase 4): lab starter — hanya bila belum memilih
 		if String(t.get("aksi", "")) == "pilih_starter" and not Progres.sudah_pilih_starter():
 			_tombol("🔬 MASUK LABORATORIUM", daftar_tempat, _buka_cutscene_starter)
+		elif String(t.get("aksi", "")) == "rival":
+			# rival (Fase 4): battle sekali — tim counter-starter, tanpa lencana
+			var rid := String(t.get("id", ""))
+			if Progres.sudah_kalah_trainer(rid):
+				daftar_tempat.add_child(_label("   ✓ Rival sudah dikalahkan", 12,
+					Color(0.6, 0.9, 0.6)))
+			else:
+				_tombol("⚔ LAWAN %s" % String(t.get("nama", "RIVAL")).to_upper(),
+					daftar_tempat, func() -> void: _tantang_trainer(rid))
 
 	# panel gym (Fase 3 langkah 3): leader, tim, hadiah — battle = langkah 4
 	if not trainer_gym.is_empty():
@@ -210,7 +219,7 @@ func _perbarui() -> void:
 			String(lencana.get("nama", "?")), int(trainer_gym.get("hadiah_uang", 0))],
 			12, Color(0.95, 0.75, 0.4)))
 		var b_tantang := _tombol("⚔ TANTANG %s" % String(trainer_gym.get("nama", "?")).to_upper(),
-			daftar_tempat, func() -> void: _tantang_gym(tid))
+			daftar_tempat, func() -> void: _tantang_trainer(tid))
 		if Progres.sudah_kalah_trainer(tid):
 			b_tantang.disabled = true
 			b_tantang.tooltip_text = "%s sudah dikalahkan (rematch menyusul)" % String(trainer_gym.get("nama", "?"))
@@ -378,8 +387,8 @@ func _tutup_cutscene() -> void:
 		cutscene_overlay = null
 
 
-## Tantang gym leader → antrean battle → scene battle (Fase 3 langkah 4).
-func _tantang_gym(trainer_id: String) -> void:
+## Tantang trainer (gym/rival) → antrean battle → scene battle.
+func _tantang_trainer(trainer_id: String) -> void:
 	if Tim.jumlah() == 0:
 		_catatan("Pilih Nusamon pertamamu di Laboratorium Prof. Candri dulu!")
 		return
@@ -387,6 +396,6 @@ func _tantang_gym(trainer_id: String) -> void:
 		_catatan("%s sudah dikalahkan — rematch menyusul." % trainer_id)
 		return
 	TrainerEngine.set_antrean(trainer_id)
-	_catatan("Kamu melangkah maju menantang gym!")
+	_catatan("Kamu maju menerima tantangan!")
 	Simpanan.simpan()  # battle scene auto-load → state sesi tetap segar
 	get_tree().change_scene_to_file(SCENE_BATTLE)

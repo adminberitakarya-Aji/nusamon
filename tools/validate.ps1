@@ -112,7 +112,7 @@ foreach ($l in $w.lokasi) {
         elseif ([double]$l.peluang_encounter -le 0 -or [double]$l.peluang_encounter -gt 1) { Fail "world $($l.id): peluang_encounter harus 0..1 (aktual $($l.peluang_encounter))" }
     }
     foreach ($poi in $l.tempat) {
-        if ($null -ne $poi.aksi -and $poi.aksi -ne 'pilih_starter') { Fail "world $($l.id): aksi POI tidak dikenal ($($poi.aksi))" }
+        if ($null -ne $poi.aksi -and @('pilih_starter', 'rival') -notcontains $poi.aksi) { Fail "world $($l.id): aksi POI tidak dikenal ($($poi.aksi))" }
         if ($null -ne $poi.dialog -and ($poi.dialog | Measure-Object).Count -lt 1) { Fail "world $($l.id): dialog POI kosong" }
         if ($null -ne $poi.dialog -and (($poi.dialog | ForEach-Object { $_.Trim() }) -contains '')) { Fail "world $($l.id): ada baris dialog kosong" }
     }
@@ -122,24 +122,35 @@ foreach ($l in $w.lokasi) {
 $dupTr = $tr.trainers | Group-Object id | Where-Object { $_.Count -gt 1 }
 if ($dupTr) { Fail ("trainer id duplikat: " + ($dupTr.Name -join ', ')) }
 $badgeIds = @()
-foreach ($t in $tr.trainers) {
-    if ($locIds -notcontains $t.gym.kota) { Fail "trainer $($t.id): gym.kota tidak valid ($($t.gym.kota))" }
-    if ([int]$t.gym.id -lt 1 -or [int]$t.gym.id -gt 8) { Fail "trainer $($t.id): gym.id di luar 1..8" }
-    $badgeIds += [int]$t.gym.id
+	foreach ($t in $tr.trainers) {
+    $jenis = if ($null -ne $t.jenis) { $t.jenis } else { 'gym' }
+    if ($jenis -eq 'gym') {
+        if ($locIds -notcontains $t.gym.kota) { Fail "trainer $($t.id): gym.kota tidak valid ($($t.gym.kota))" }
+        if ([int]$t.gym.id -lt 1 -or [int]$t.gym.id -gt 8) { Fail "trainer $($t.id): gym.id di luar 1..8" }
+        $badgeIds += [int]$t.gym.id
+    } elseif ($jenis -eq 'rival') {
+        if ($null -ne $t.gym) { Fail "trainer $($t.id): rival tidak boleh punya gym" }
+        if ($null -ne $t.lencana) { Fail "trainer $($t.id): rival tidak boleh punya lencana" }
+    } else { Fail "trainer $($t.id): jenis tidak dikenal ($jenis)" }
     if (($t.tim | Measure-Object).Count -lt 1 -or ($t.tim | Measure-Object).Count -gt 6) { Fail "trainer $($t.id): tim harus 1..6 mon" }
     $spSeen = @()
     foreach ($m in $t.tim) {
-        if ($spIds -notcontains [int]$m.spesies) { Fail "trainer $($t.id): spesies tidak valid ($($m.spesies))" }
+        $isCounter = ($null -ne $m.counter_starter -and $m.counter_starter)
+        if ($isCounter) {
+            if ([int]$m.spesies -ne 0) { Fail "trainer $($t.id): counter_starter harus spesies=0" }
+        } else {
+            if ($spIds -notcontains [int]$m.spesies) { Fail "trainer $($t.id): spesies tidak valid ($($m.spesies))" }
+            if ($spSeen -contains [int]$m.spesies) { Fail "trainer $($t.id): spesies duplikat di tim ($($m.spesies))" }
+            $spSeen += [int]$m.spesies
+        }
         if ([int]$m.level -lt 1 -or [int]$m.level -gt 100) { Fail "trainer $($t.id): level di luar 1..100" }
         if ($null -ne $m.tahap -and ([int]$m.tahap -lt 0 -or [int]$m.tahap -gt 2)) { Fail "trainer $($t.id): tahap di luar 0..2" }
-        if ($spSeen -contains [int]$m.spesies) { Fail "trainer $($t.id): spesies duplikat di tim ($($m.spesies))" }
-        $spSeen += [int]$m.spesies
     }
     if ([string]::IsNullOrWhiteSpace($t.dialog.intro)) { Fail "trainer $($t.id): dialog.intro kosong" }
     if ([string]::IsNullOrWhiteSpace($t.dialog.menang_pemain)) { Fail "trainer $($t.id): dialog.menang_pemain kosong" }
     if ([string]::IsNullOrWhiteSpace($t.dialog.kalah_pemain)) { Fail "trainer $($t.id): dialog.kalah_pemain kosong" }
     if ([int]$t.hadiah_uang -lt 0) { Fail "trainer $($t.id): hadiah_uang negatif" }
-    if ([string]::IsNullOrWhiteSpace($t.lencana.nama)) { Fail "trainer $($t.id): lencana.nama kosong" }
+    if ($jenis -eq 'gym' -and [string]::IsNullOrWhiteSpace($t.lencana.nama)) { Fail "trainer $($t.id): lencana.nama kosong" }
 }
 if ($badgeIds.Count -ne ($badgeIds | Sort-Object -Unique).Count) { Fail "trainers: id gym/lencana duplikat antar trainer" }
 

@@ -92,22 +92,27 @@ func _init() -> void:
 	var badge_seen := {}
 	for t in db.get("trainers", []):
 		var g: Dictionary = t.get("gym", {})
-		var kota_valid := false
-		for l in dunia.get("lokasi", []):
-			if String(l.get("id", "")) == String(g.get("kota", "")):
-				kota_valid = true
-		if not kota_valid:
-			semua_ok = false
+		var jenis := String(t.get("jenis", "gym"))
+		if jenis == "gym":
+			var kota_valid := false
+			for l in dunia.get("lokasi", []):
+				if String(l.get("id", "")) == String(g.get("kota", "")):
+					kota_valid = true
+			if not kota_valid:
+				semua_ok = false
 		var n_tim: Array = t.get("tim", [])
 		if n_tim.is_empty() or n_tim.size() > 6:
 			semua_ok = false
 		for e in n_tim:
+			if bool(e.get("counter_starter", false)):
+				continue   # spesies di-resolve engine dari starter pemain
 			if NusamonData.find_species(nusamons, int(e.get("spesies", 0))).is_empty():
 				semua_ok = false
-		if badge_seen.has(int(g.get("id", 0))):
-			semua_ok = false
-		badge_seen[int(g.get("id", 0))] = true
-	cek("semua trainer: kota valid, tim 1..6, spesies valid, lencana unik", semua_ok)
+		if jenis == "gym":
+			if badge_seen.has(int(g.get("id", 0))):
+				semua_ok = false
+			badge_seen[int(g.get("id", 0))] = true
+	cek("semua trainer: gym valid, tim 1..6, spesies valid, lencana unik", semua_ok)
 
 	# gate lencana di world.json merujuk gym yang benar
 	var gate_ok := false

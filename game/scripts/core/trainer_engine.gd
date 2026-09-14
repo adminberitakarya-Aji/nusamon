@@ -25,8 +25,10 @@ static func trainer_di_kota(db: Dictionary, kota_id: String) -> Dictionary:
 
 
 ## Bangun tim NusamonInstance sesuai urutan data (orde dikirim saat battle).
-## Entri tim: {spesies, level, tahap?} — tahap 0 (default) atau evolusi berikutnya
-## (mis. Ayam Satria = tahap 1). Bila trainer/spesies tidak dikenal → array kosong.
+## Entri tim: {spesies, level, tahap?, counter_starter?}.
+## - counter_starter: true → spesies = starter lawan tipe (rival), di-resolve
+##   dari Progres.starter_id (Api→Air, Daun→Api, Air→Daun — konvensi genre).
+## Bila trainer/spesies tidak dikenal → array kosong.
 static func buat_tim(db: Dictionary, id: String, nusamons: Dictionary) -> Array:
 	var t := cari(db, id)
 	if t.is_empty():
@@ -34,16 +36,28 @@ static func buat_tim(db: Dictionary, id: String, nusamons: Dictionary) -> Array:
 	var hasil: Array = []
 	for e in t.get("tim", []):
 		var sid := int(e.get("spesies", 0))
+		var tahap := int(e.get("tahap", 0))
+		if bool(e.get("counter_starter", false)):
+			sid = starter_lawan(Progres.starter_id)
 		var spesies := NusamonData.find_species(nusamons, sid)
 		if spesies.is_empty():
 			push_error("TrainerEngine: spesies %d tidak dikenal (trainer %s)" % [sid, id])
 			continue
 		var detail: Dictionary = nusamons.get("detailSpesies", {}).get(str(sid), {})
 		var mon := NusamonInstance.create(
-			spesies, detail, int(e.get("tahap", 0)), int(e.get("level", 1)))
+			spesies, detail, tahap, int(e.get("level", 1)))
 		if mon != null:
 			hasil.append(mon)
 	return hasil
+
+
+## Starter yang unggul tipe atas starter pemain (konvensi genre):
+## Rimau (Api) → Penyuci (Air); Orangutan (Daun) → Rimau (Api); Penyu (Air) → Orangutan (Daun).
+const STARTER_COUNTER := {1: 3, 2: 1, 3: 2}
+
+
+static func starter_lawan(starter_id: int) -> int:
+	return int(STARTER_COUNTER.get(starter_id, 3))   # fallback aman: Penyuci (Air)
 
 
 ## Teks pratinjau tim untuk UI: "Monyet Kecil Lv.8 · Ayam Satria Lv.16"

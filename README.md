@@ -15,7 +15,7 @@
 | Tooling Generator Aset | 🔨 Selesai (6/15 model MVP; perlu Blender untuk eksekusi) |
 | Fase 1 — Prototipe Battle | ✅ **Selesai** — battle core + tangkap + EXP/evolusi + PP + tahap stat (buff/debuff/heal) + UI; **78 asersi hijau (3 suite, Godot 4.7.2)**. Detail: `ROADMAP.md` |
 | Prototipe World/Catch (Fase 2) | ✅ **Selesai** — inventori & toko + tim/partai + switch + Nusadex + 12 ability + Latihan EV-lite + save/load (JSON `user://`) aktif; catatan: pratinjau model 3D menunggu aset Blender (D-1) |
-| Fase 3 — World & Gym pertama | 🔨 **Berjalan** — peta Jawa + encounter liar + kabur speed-based + **battle trainer Bu Sari lengkap (menang → Lencana Harapan → Rute 2 terbuka)**; sisa: model environment CC0. Detail: `ROADMAP.md` |
+| Fase 3 — World & Gym pertama | ✅ **Selesai** — peta Jawa + encounter liar (habitatPulau × rarity) + kabur speed-based + battle trainer Bu Sari (menang → Lencana Harapan, Rute 2 terbuka) + **simpanan v2 (progres persisten)** + environment CC0/placeholder; catatan: aset .glb env menunggu unduhan (lihat `assets/env/README.md`). Berikutnya: **Fase 4 — Vertical Slice**. Detail: `ROADMAP.md` |
 
 ## Struktur Proyek
 

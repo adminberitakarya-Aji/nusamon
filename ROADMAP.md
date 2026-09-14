@@ -16,7 +16,7 @@
 | 0 — Desain | ✅ **Selesai** | GDD, roster 30 spesies, type chart 11×11, base stats, data JSON tervalidasi | 9 dokumen desain + 3 file data JSON + `validate.ps1` lolos |
 | 1 — Prototipe Battle | ✅ **Selesai** | Battle 1v1, tangkap, EXP/evolusi, UI scene, PP, tahap stat, tes headless | Battle end-to-end (serang/tangkap/kabur) + EXP + evolusi + **78 asersi hijau (3 suite)** + UI terverifikasi (simulasi headless; inspeksi visual disarankan saat mulai Fase 2) |
 | 2 — Catch & Nusadex | ✅ **Selesai** (catatan: pratinjau model butuh aset Blender — D-1) | Inventori, tim/partai, switch, Nusadex, ability, Latihan, save/load | Tangkap masuk tim, Nusadex terisi, ability & PP aktif, Latihan & save/load aktif |
-| 3 — World & Gym pertama | 🔨 **Berjalan** | World map Jawa, G1 Normal (Bu Sari) | Battle trainer + lencana G1 |
+| 3 — World & Gym pertama | ✅ **Selesai** | World map Jawa + encounter + G1 Normal (Bu Sari) + lencana + env CC0/placeholder | Battle trainer + lencana G1 |
 | 4 — Vertical Slice | ⬜ Belum mulai | MVP end-to-end: Jawa + G1 + G2 + rival + Nusadex | Main dari Desa Sumberrejo sampai lencana G2 tanpa jebol (GDD §8) |
 | 5 — Produksi konten penuh | ⬜ Belum mulai | 30 spesies, 6 pulau, 8 gym, Liga Nusantara, story | Tamat end-to-end + Nusadex 100% |
 
@@ -104,7 +104,7 @@
 | Penyimpanan (save/load) — format **JSON v1** `user://simpanan.json`: uang, stok, tim (level/HP/status/exp/latihan), nusadex; tombol 💾/📂 + auto-load & auto-save | ✅ `2a6dd71` |
 | Impor model tahap 2/3 + tampil di battle — runtime selesai (`path_model`, pratinjau SubViewport, fallback diam); **aset .glb menunggu Blender** (D-1) | 🔨 runtime `2a6dd71` |
 
-### Fase 3 — World & Gym pertama 🔨 (Berjalan)
+### Fase 3 — World & Gym pertama ✅ (Selesai — aset env .glb CC0 menunggu unduhan)
 
 | Langkah | Status |
 |---------|:------:|
@@ -112,8 +112,8 @@
 | Sistem encounter liar per rute (`habitatPulau` + bobot rarity) | ✅ `EncounterSystem` (pool tabel khas + pool turunan habitat × bobot rarity gameplay-depth §4; starter/legendary tidak liar) · `peluang_encounter` per rute di `world.json` (0.4/0.45) · tombol 🔍 JELAJAHI di rute → antrean → battle liar · 49 asersi hijau (`test_encounter`) `9da1b3d` |
 | Gym G1 Normal — Bu Sari (Monyet Kecil Lv.8, Ayam Jantan Lv.10) | ✅ `data/trainers.json` (tim 2 mon, dialog intro/menang/kalah, hadiah Rp 1.200, Lencana Harapan) · `TrainerEngine` (cari/trainer_di_kota/buat_tim/tim_teks/lencana) · panel gym di world scene (⌛ tantang = langkah 4) · 29 asersi hijau (`test_trainer`) `9da1b3d` |
 | Battle trainer (multiplikator EXP ×1.5 sudah siap di engine) | ✅ dispatch antrean (`TrainerEngine.set_antrean/ambil_antrean`) · `_mulai_battle_trainer` (tim multi-mon, intro dialog, Nusadex.lihat per mon) · kabur & tangkap diblokir (tanpa konsumsi item) · mon berikutnya maju otomatis · EXP ×1.5 aktif · hadiah Rp 1.200 + Lencana Harapan → `Progres.lencana` + `trainer_kalah` (TANTANG nonaktif setelah menang; gate Rute 2 terbuka) · 33 asersi hijau (`test_battle_trainer`) `050a07e` |
-| Lencana + progresi | ⬜ |
-| Model environment dari pustaka CC0 (Kenney/Quaternius) | ⬜ |
+| Lencana + progresi | ✅ **Simpanan v2** (`user://simpanan.json`): blok `progres` (lokasi, lencana, trainer_kalah); migrasi v1 → progres direset kosong (fresh start); world scene auto-save (pindah lokasi / masuk battle) + tombol 💾/📂 → lencana & posisi bertahan lintas restart · 45 asersi hijau (`test_latihan_simpan` diperluas) `dcf254b` |
+| Model environment dari pustaka CC0 (Kenney/Quaternius) | ✅ `EnvBuilder` — runtime memakai `assets/env/<id_lokasi>.glb` bila ada (`ResourceLoader.exists`), fallback placeholder low-poly programatik per tema (tanah berwarna + rumah/petak sawah/gedung/Gunung Kapi/pohon; deterministik) · latar 3D world scene (SubViewport) berganti per lokasi · panduan pemasangan aset CC0: `assets/env/README.md` · 23 asersi hijau (`test_env`) `dcf254b` |
 
 ### Fase 4 — Vertical Slice ⬜
 
@@ -201,6 +201,8 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | POI gym di world scene: bila kota punya trainer, POI `gym_*` digantikan panel khusus (leader/profesi/tim/hadiah + tombol TANTANG, dinonaktifkan sampai langkah 4) | hindari duplikasi UI; integritas data tetap satu sumber | — |
 | 2026-09-14 | Battle trainer = mode scene (`mode_trainer`): handoff via antrean static (`TrainerEngine.antrean_battle`, dikonsumsi sekali di `_mulai_battle`); kabur/tangkap diblokir (lempar Amukan TIDAK mengonsumsi stok); `_siapkan_pemain()` direfactor dari blok liar (dipakai dua jalur) | satu scene, dua mode — konvensi prototipe; cegah eksploit item | — |
 | 2026-09-14 | Mon leader kalah → mon berikutnya maju otomatis (Nusadex.lihat per mon masuk, EXP ×1.5 via `exp_gain(..., mode_trainer)`); menang semua → dialog + hadiah + `Progres.tambah_lencana` + `tandai_kalah_trainer` → tombol TANTANG nonaktif (anti-farm uang) & gate Rute 2 terbuka; kalah → dialog kalah_pemain | DoD Fase 3 "battle trainer + lencana G1" terpenuhi secara loop; progresi dunia terhubung | — |
+| 2026-09-14 | **Simpanan v2** (langkah 5): blok `progres` (lokasi/lencana/trainer_kalah) masuk `simpanan.json`; muat menerima v1–v2 — **v1 → progres direset kosong** (fresh start, bukan pertahankan sesi); world scene auto-save sebelum masuk battle (antrean auto-load battle scene tidak lagi me-rollback lokasi) + 💾/📂 di dunia | progresi lintas restart; bug rollback tersirat dari interaksi auto-load × progres sesi | — |
+| 2026-09-14 | Environment (langkah 6): **`EnvBuilder`** — `.glb` CC0 dari `assets/env/<id>.glb` dipakai bila ada, selain itu placeholder programatik per tema (konvensi fallback model monster/D-1); latar 3D SubViewport world scene berganti tiap pindah lokasi; panduan pemasangan: `assets/env/README.md` (Kenney/Quaternius, lisensi CC0) | repo tidak membundel binari pihak ketiga — runtime siap, aset dipasang kapan saja tanpa ubah kode; placeholder deterministik & headless-testable | — |
 
 ## 5. Referensi
 

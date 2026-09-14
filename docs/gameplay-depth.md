@@ -72,6 +72,21 @@ Rumus tangkap (GDD §4.3): `a = ((3*MaxHP - 2*CurHP) * CatchRate * BallBonus) / 
 - Lokasi encounter ditentukan field `habitatPulau` di `data/nusamons.json`.
 - Detail per spesies (catchRate, ability, learnset): `data/nusamons.json` → `detailSpesies`.
 
+### 4.1 Peluang Kabur (Battle Liar) — Fase 3
+
+Menggantikan peluang flat 60% (backlog C-3). Formula berbasis SPEED (basis Gen-III+):
+
+```
+penyebut = floor(SPE_lawan / 4) mod 256   # 0 → pasti berhasil kabur
+F = floor(SPE_pemain × 32 / penyebut) + 30 × percobaan_ke
+berhasil bila F > 255 atau rand(0..255) < F
+```
+
+- SPE = stat runtime efektif × faktor tahap stat (konsisten urutan giliran).
+- Tiap percobaan gagal menaikkan peluang (+30); penghitung di-reset tiap battle baru.
+- Ability **Cengkeraman Kuat** (lawan) tetap memblokir kabur sepenuhnya.
+- Implementasi: `BattleEngine.coba_kabur()` (battle liar saja — battle trainer tidak bisa dikaburi).
+
 ## 5. Kurva EXP — Medium-Fast
 
 - Total EXP untuk mencapai level `L`: **L³** (medium-fast, standar dan mudah dipahami).

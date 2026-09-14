@@ -116,6 +116,28 @@ static func urutan_giliran(
 	return [a, b] if spe_a > spe_b else [b, a]
 
 
+## Coba kabur dari battle liar (backlog C-3 — Fase 3): formula Gen-III+
+## berbasis SPEED, menggantikan peluang flat 60% lama:
+##   penyebut = floor(SPE_lawan / 4) mod 256   (0 → pasti kabur)
+##   F = floor(SPE_pemain × 32 / penyebut) + 30 × percobaan_ke
+##   berhasil bila F > 255 atau rand(0..255) < F.
+## SPE = stats_efektif × faktor tahap (konsisten urutan_giliran).
+## Hasil: {berhasil: bool, f: int}.
+static func coba_kabur(pemain: NusamonInstance, lawan: NusamonInstance,
+		percobaan: int, rng: RandomNumberGenerator) -> Dictionary:
+	var spe_p := int(float(pemain.stats_efektif.get("spe", pemain.stats.get("spe", 0))) \
+		* faktor_tahap(int(pemain.stat_stages.get("spe", 0))))
+	var spe_l := int(float(lawan.stats_efektif.get("spe", lawan.stats.get("spe", 0))) \
+		* faktor_tahap(int(lawan.stat_stages.get("spe", 0))))
+	var penyebut := int(floor(float(spe_l) / 4.0)) % 256
+	if penyebut <= 0:
+		return {"berhasil": true, "f": 256}
+	var f := int(floor(float(spe_p) * 32.0 / float(penyebut))) + 30 * maxi(1, percobaan)
+	if f > 255 or rng.randi_range(0, 255) < f:
+		return {"berhasil": true, "f": f}
+	return {"berhasil": false, "f": f}
+
+
 ## Terapkan status baru. Tidur berlangsung 2-4 giliran.
 static func terapkan_status(mon: NusamonInstance, jenis: String, rng: RandomNumberGenerator) -> void:
 	mon.status = jenis

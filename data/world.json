@@ -1,0 +1,74 @@
+{
+  "versi": "0.1",
+  "keterangan": "Peta dunia NUSAMON — Jawa MVP (GDD §8, docs/world-region.md §2.1 & §8). Koneksi eksplisit dua arah; gate hanya di arah MASUK (jalan pulang bebas). Lencana = id gym (1..8). Encounter = tabel khas per rute (spesies = id di nusamons.json; wajib berhabitat di pulau, dicek validate.ps1) + peluang_encounter 0..1 per rute (rol EncounterSystem).",
+  "pulau": "Jawa",
+  "lokasi_awal": "desa_sumberrejo",
+  "lokasi": [
+    {
+      "id": "desa_sumberrejo",
+      "nama": "Desa Sumberrejo",
+      "jenis": "desa",
+      "deskripsi": "Desa pemula di kaki pegunungan; berdiri megah Laboratorium Prof. Candri.",
+      "tempat": [
+        { "id": "lab_candri", "nama": "Laboratorium Prof. Candri", "status": "menyusul", "catatan": "Pemilihan starter — Fase 4" }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "rute_1",
+      "nama": "Rute 1 (Sawah)",
+      "jenis": "rute",
+      "peluang_encounter": 0.4,
+      "deskripsi": "Sawah bertingkat dan peternakan di sepanjang jalan ke Kota Harapan.",
+      "tempat": [],
+      "encounters": [
+        { "spesies": 23, "bobot": 40, "level_min": 2, "level_max": 4 },
+        { "spesies": 22, "bobot": 35, "level_min": 2, "level_max": 4 },
+        { "spesies": 24, "bobot": 25, "level_min": 3, "level_max": 5 }
+      ]
+    },
+    {
+      "id": "kota_harapan",
+      "nama": "Kota Harapan",
+      "jenis": "kota",
+      "deskripsi": "Kota pertama di Jawa; gym Normal menjadi ujian bagi penantang baru.",
+      "tempat": [
+        { "id": "gym_g1", "nama": "Gym G1 Normal — Bu Sari", "status": "aktif", "catatan": "Tantang Bu Sari untuk Lencana Harapan" }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "rute_2",
+      "nama": "Rute 2 (Kaki Gunung)",
+      "jenis": "rute",
+      "peluang_encounter": 0.45,
+      "deskripsi": "Jalur menanjak menuju kaki Gunung Kapi; udara mulai terasa hangat.",
+      "tempat": [],
+      "encounters": [
+        { "spesies": 21, "bobot": 40, "level_min": 5, "level_max": 8 },
+        { "spesies": 25, "bobot": 30, "level_min": 5, "level_max": 8 },
+        { "spesies": 23, "bobot": 30, "level_min": 6, "level_max": 9 }
+      ]
+    },
+    {
+      "id": "kota_arunika",
+      "nama": "Kota Arunika",
+      "jenis": "kota",
+      "deskripsi": "Kota senja di kaki Gunung Kapi; gym Api menunggu penantang dengan dua lencana.",
+      "tempat": [
+        { "id": "gym_g2", "nama": "Gym G2 Api — Pak Lesto", "status": "terkunci", "catatan": "Konten Fase 4 (vertical slice)" }
+      ],
+      "encounters": []
+    }
+  ],
+  "koneksi": [
+    { "dari": "desa_sumberrejo", "ke": "rute_1" },
+    { "dari": "rute_1", "ke": "desa_sumberrejo" },
+    { "dari": "rute_1", "ke": "kota_harapan" },
+    { "dari": "kota_harapan", "ke": "rute_1" },
+    { "dari": "kota_harapan", "ke": "rute_2", "gate": { "jenis": "lencana", "id": 1 } },
+    { "dari": "rute_2", "ke": "kota_harapan" },
+    { "dari": "rute_2", "ke": "kota_arunika" },
+    { "dari": "kota_arunika", "ke": "rute_2" }
+  ]
+}

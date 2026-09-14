@@ -1,0 +1,23 @@
+{
+  "versi": "0.1",
+  "keterangan": "Data trainer/gym NUSAMON (Fase 3 langkah 3). Tim = entri {spesies: id nusamons.json, level}. Lencana = id gym 1..8 (gate dunia di world.json merujuk id ini). Orde tim = orde dikirim. Battle trainer (orkestrasi) = langkah 4 Fase 3. Sumber desain: docs/world-region.md §3.",
+  "trainers": [
+    {
+      "id": "bu_sari",
+      "nama": "Bu Sari",
+      "profesi": "Peternak",
+      "gym": { "id": 1, "tipe": "Normal", "kota": "kota_harapan" },
+      "dialog": {
+        "intro": "Selamat datang di Gym Harapan! Aku Bu Sari, peternak ayam dan monyet. Ayo lihat hasil asuhanku!",
+        "menang_pemain": "Hebat! Asuhanmu lebih baik daripada punyaku. Ini Lencana Harapan — pantas kamu mendapatkannya!",
+        "kalah_pemain": "Terima kasih sudah berkunjung! Latih timmu dulu, nanti tantang aku lagi ya."
+      },
+      "hadiah_uang": 1200,
+      "lencana": { "id": 1, "nama": "Lencana Harapan" },
+      "tim": [
+        { "spesies": 23, "level": 8 },
+        { "spesies": 24, "level": 10 }
+      ]
+    }
+  ]
+}

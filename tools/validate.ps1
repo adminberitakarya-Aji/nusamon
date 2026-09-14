@@ -12,6 +12,8 @@ try {
     $m = Get-Content "$root\data\moves.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     $t = Get-Content "$root\data\type-chart.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     $it = Get-Content "$root\data\items.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+    $w = Get-Content "$root\data\world.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+    $tr = Get-Content "$root\data\trainers.json" -Raw -Encoding UTF8 | ConvertFrom-Json
 } catch {
     Write-Host "GAGAL PARSE JSON: $_" -ForegroundColor Red
     exit 1
@@ -78,9 +80,66 @@ foreach ($objek in $it.items) {
     }
 }
 
+# --- world (peta Jawa MVP — Fase 3 langkah 1)
+$locIds = $w.lokasi.id
+if ($w.lokasi.Count -ne 5) { Fail "world: lokasi != 5 (aktual $($w.lokasi.Count))" }
+if ($locIds -notcontains $w.lokasi_awal) { Fail "world: lokasi_awal tidak valid ($($w.lokasi_awal))" }
+$dupLoc = $w.lokasi | Group-Object id | Where-Object { $_.Count -gt 1 }
+if ($dupLoc) { Fail ("world: id lokasi duplikat: " + ($dupLoc.Name -join ', ')) }
+$spIds = $j.nusamons.id
+foreach ($k in $w.koneksi) {
+    if ($locIds -notcontains $k.dari) { Fail "world: koneksi.dari tidak valid ($($k.dari))" }
+    if ($locIds -notcontains $k.ke) { Fail "world: koneksi.ke tidak valid ($($k.ke))" }
+    $balik = $w.koneksi | Where-Object { $_.dari -eq $k.ke -and $_.ke -eq $k.dari }
+    if (-not $balik) { Fail "world: koneksi $($k.dari)->$($k.ke) tidak simetris" }
+    if ($null -ne $k.gate) {
+        if ($k.gate.jenis -ne 'lencana') { Fail "world: gate jenis tidak dikenal ($($k.gate.jenis))" }
+        elseif ([int]$k.gate.id -lt 1 -or [int]$k.gate.id -gt 8) { Fail "world: gate lencana id di luar 1..8" }
+    }
+}
+foreach ($l in $w.lokasi) {
+    if ($l.jenis -eq 'rute' -and ($l.encounters | Measure-Object).Count -eq 0) { Fail "world $($l.id): rute tanpa encounter" }
+    if ($l.jenis -ne 'rute' -and ($l.encounters | Measure-Object).Count -gt 0) { Fail "world $($l.id): kota/desa tidak boleh punya encounter" }
+    foreach ($e in $l.encounters) {
+        if ($spIds -notcontains [int]$e.spesies) { Fail "world $($l.id): spesies encounter tidak valid ($($e.spesies))" }
+        if (($j.habitatPulau."$([int]$e.spesies)") -notcontains $w.pulau) { Fail "world $($l.id): spesies $($e.spesies) tidak berhabitat di $($w.pulau)" }
+        if ([double]$e.bobot -le 0) { Fail "world $($l.id): bobot encounter harus > 0" }
+        if ([int]$e.level_min -gt [int]$e.level_max) { Fail "world $($l.id): level_min > level_max" }
+        if ([int]$e.level_max -gt 15) { Fail "world $($l.id): level_max terlalu tinggi untuk MVP" }
+    }
+    if ($l.jenis -eq 'rute') {
+        if ($null -eq $l.peluang_encounter) { Fail "world $($l.id): rute tanpa peluang_encounter" }
+        elseif ([double]$l.peluang_encounter -le 0 -or [double]$l.peluang_encounter -gt 1) { Fail "world $($l.id): peluang_encounter harus 0..1 (aktual $($l.peluang_encounter))" }
+    }
+}
+
+# --- trainers (gym — Fase 3 langkah 3)
+$dupTr = $tr.trainers | Group-Object id | Where-Object { $_.Count -gt 1 }
+if ($dupTr) { Fail ("trainer id duplikat: " + ($dupTr.Name -join ', ')) }
+$badgeIds = @()
+foreach ($t in $tr.trainers) {
+    if ($locIds -notcontains $t.gym.kota) { Fail "trainer $($t.id): gym.kota tidak valid ($($t.gym.kota))" }
+    if ([int]$t.gym.id -lt 1 -or [int]$t.gym.id -gt 8) { Fail "trainer $($t.id): gym.id di luar 1..8" }
+    $badgeIds += [int]$t.gym.id
+    if (($t.tim | Measure-Object).Count -lt 1 -or ($t.tim | Measure-Object).Count -gt 6) { Fail "trainer $($t.id): tim harus 1..6 mon" }
+    $spSeen = @()
+    foreach ($m in $t.tim) {
+        if ($spIds -notcontains [int]$m.spesies) { Fail "trainer $($t.id): spesies tidak valid ($($m.spesies))" }
+        if ([int]$m.level -lt 1 -or [int]$m.level -gt 100) { Fail "trainer $($t.id): level di luar 1..100" }
+        if ($spSeen -contains [int]$m.spesies) { Fail "trainer $($t.id): spesies duplikat di tim ($($m.spesies))" }
+        $spSeen += [int]$m.spesies
+    }
+    if ([string]::IsNullOrWhiteSpace($t.dialog.intro)) { Fail "trainer $($t.id): dialog.intro kosong" }
+    if ([string]::IsNullOrWhiteSpace($t.dialog.menang_pemain)) { Fail "trainer $($t.id): dialog.menang_pemain kosong" }
+    if ([string]::IsNullOrWhiteSpace($t.dialog.kalah_pemain)) { Fail "trainer $($t.id): dialog.kalah_pemain kosong" }
+    if ([int]$t.hadiah_uang -lt 0) { Fail "trainer $($t.id): hadiah_uang negatif" }
+    if ([string]::IsNullOrWhiteSpace($t.lencana.nama)) { Fail "trainer $($t.id): lencana.nama kosong" }
+}
+if ($badgeIds.Count -ne ($badgeIds | Sort-Object -Unique).Count) { Fail "trainers: id gym/lencana duplikat antar trainer" }
+
 # --- hasil
 if ($errs.Count -eq 0) {
-    Write-Host "VALIDASI LOLOS: data NUSAMON konsisten (30 spesies / 25 move / 11 tipe / 5 item)" -ForegroundColor Green
+    Write-Host "VALIDASI LOLOS: data NUSAMON konsisten (30 spesies / 25 move / 11 tipe / 5 item / world 5 lokasi / trainer 1 gym)" -ForegroundColor Green
     exit 0
 } else {
     Write-Host "VALIDASI GAGAL:" -ForegroundColor Red

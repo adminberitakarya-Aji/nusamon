@@ -45,6 +45,7 @@ var dex_detail: RichTextLabel
 var p_latihan: Label
 var pratinjau_wild: Node = null
 var pratinjau_player: Node = null
+var percobaan_kabur := 0                 # kabur: +30 tiap percobaan (C-3)
 
 
 func _ready() -> void:
@@ -168,6 +169,7 @@ func _bangun_ui() -> void:
 	_tombol_menu("🏃 KABUR", menu_utama, _kabur)
 	_tombol_menu("📖 NU SADEX", menu_utama, _buka_nusadex)
 	_tombol_menu("🛒 TOKO", menu_utama, _buka_menu_toko)
+	_tombol_menu("🌍 DUNIA", menu_utama, _ke_dunia)
 	_tombol_menu("💾 SIMPAN", menu_utama, _tombol_simpan)
 	_tombol_menu("📂 MUAT", menu_utama, _tombol_muat)
 
@@ -246,12 +248,24 @@ func _log(tek: String) -> void:
 
 
 func _mulai_battle_liar() -> void:
-	var id: int = WILD_IDS[rng.randi_range(0, WILD_IDS.size() - 1)]
+	# wild dari antrean encounter dunia (Fase 3 langkah 2) bila ada,
+	# selain itu rol acak prototipe (battle langsung dari menu).
+	var antrean := EncounterSystem.ambil_antrean()
+	var id: int
+	if not antrean.is_empty():
+		id = int(antrean.get("spesies", 0))
+	else:
+		id = WILD_IDS[rng.randi_range(0, WILD_IDS.size() - 1)]
 	var spesies := NusamonData.find_species(data, id)
 	wild_detail = data["detailSpesies"][str(id)]
-	var lv := rng.randi_range(WILD_LEVEL_RANGE[0], WILD_LEVEL_RANGE[1])
+	var lv: int
+	if not antrean.is_empty():
+		lv = maxi(1, int(antrean.get("level", WILD_LEVEL_RANGE[0])))
+	else:
+		lv = rng.randi_range(WILD_LEVEL_RANGE[0], WILD_LEVEL_RANGE[1])
 	wild = NusamonInstance.create(spesies, wild_detail, 0, lv)
 	Nusadex.lihat(id)  # melihat wild → entri Nusadex (siluet + nama)
+	percobaan_kabur = 0
 
 	# tim: buat mon awal bila kosong (prototipe: anak rimau lv5)
 	if Tim.jumlah() == 0:
@@ -590,7 +604,9 @@ func _kabur() -> void:
 		return
 	turn_aktif = true
 	_semua_menu(true)
-	var berhasil := rng.randf() < 0.6
+	percobaan_kabur += 1
+	var hk := BattleEngine.coba_kabur(player, wild, percobaan_kabur, rng)
+	var berhasil := bool(hk.get("berhasil", false))
 	if berhasil:
 		_log("Berhasil kabur dari %s!" % wild.display_name)
 	else:
@@ -929,3 +945,9 @@ func _tutup_sub_menu() -> void:
 	menu_toko.visible = false
 	menu_ganti.visible = false
 	menu_utama.visible = true
+
+
+## Buka peta dunia Jawa (Fase 3 langkah 1). State sesi (Tim/Inventori/Nusadex/
+## Progres) bertahan karena static store — konvensi prototipe.
+func _ke_dunia() -> void:
+	get_tree().change_scene_to_file("res://game/world/world_scene.tscn")

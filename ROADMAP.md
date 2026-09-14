@@ -111,7 +111,7 @@
 | World map Jawa ringkas (GDD §8): Desa Sumberrejo → Rute 1 → Kota Harapan → Rute 2 → Kota Arunika | ✅ `data/world.json` (5 lokasi + koneksi dua arah + gate Lencana G1 + tabel encounter) · `WorldEngine` (traversal/gate, static headless) · `Progres` (lokasi + lencana, static store) · `world_scene.tscn` (UI programatik) · tombol 🌍 DUNIA di battle scene · 46 asersi hijau (`test_world`) `9da1b3d` |
 | Sistem encounter liar per rute (`habitatPulau` + bobot rarity) | ✅ `EncounterSystem` (pool tabel khas + pool turunan habitat × bobot rarity gameplay-depth §4; starter/legendary tidak liar) · `peluang_encounter` per rute di `world.json` (0.4/0.45) · tombol 🔍 JELAJAHI di rute → antrean → battle liar · 49 asersi hijau (`test_encounter`) `9da1b3d` |
 | Gym G1 Normal — Bu Sari (Monyet Kecil Lv.8, Ayam Jantan Lv.10) | ✅ `data/trainers.json` (tim 2 mon, dialog intro/menang/kalah, hadiah Rp 1.200, Lencana Harapan) · `TrainerEngine` (cari/trainer_di_kota/buat_tim/tim_teks/lencana) · panel gym di world scene (⌛ tantang = langkah 4) · 29 asersi hijau (`test_trainer`) `9da1b3d` |
-| Battle trainer (multiplikator EXP ×1.5 sudah siap di engine) | ⬜ |
+| Battle trainer (multiplikator EXP ×1.5 sudah siap di engine) | ✅ dispatch antrean (`TrainerEngine.set_antrean/ambil_antrean`) · `_mulai_battle_trainer` (tim multi-mon, intro dialog, Nusadex.lihat per mon) · kabur & tangkap diblokir (tanpa konsumsi item) · mon berikutnya maju otomatis · EXP ×1.5 aktif · hadiah Rp 1.200 + Lencana Harapan → `Progres.lencana` + `trainer_kalah` (TANTANG nonaktif setelah menang; gate Rute 2 terbuka) · 33 asersi hijau (`test_battle_trainer`) `050a07e` |
 | Lencana + progresi | ⬜ |
 | Model environment dari pustaka CC0 (Kenney/Quaternius) | ⬜ |
 
@@ -199,6 +199,8 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | Trainer/gym = **data-driven** `data/trainers.json` (tim {spesies,level} berurutan = orde dikirim; dialog intro/menang/kalah; hadiah_uang; lencana {id,nama}); `TrainerEngine.buat_tim()` menghasilkan NusamonInstance stage 0; `trainer_di_kota()` menghubungkan gym ke lokasi via `gym.kota` | ADR-06 (data JSON = source of truth); gym tanpa trainer (mis. Arunika) otomatis "terkunci" — tidak perlu flag manual | — |
 | 2026-09-14 | Hadiah gym G1 = **Rp 1.200 + Lencana Harapan**; nama lencana diambil dari nama kota (Kota Harapan); harga tidak ditetapkan docs → diputuskan di sini (pola sama dengan harga Amukan di Fase 2) | single source of truth = data + catatan keputusan | — |
 | 2026-09-14 | POI gym di world scene: bila kota punya trainer, POI `gym_*` digantikan panel khusus (leader/profesi/tim/hadiah + tombol TANTANG, dinonaktifkan sampai langkah 4) | hindari duplikasi UI; integritas data tetap satu sumber | — |
+| 2026-09-14 | Battle trainer = mode scene (`mode_trainer`): handoff via antrean static (`TrainerEngine.antrean_battle`, dikonsumsi sekali di `_mulai_battle`); kabur/tangkap diblokir (lempar Amukan TIDAK mengonsumsi stok); `_siapkan_pemain()` direfactor dari blok liar (dipakai dua jalur) | satu scene, dua mode — konvensi prototipe; cegah eksploit item | — |
+| 2026-09-14 | Mon leader kalah → mon berikutnya maju otomatis (Nusadex.lihat per mon masuk, EXP ×1.5 via `exp_gain(..., mode_trainer)`); menang semua → dialog + hadiah + `Progres.tambah_lencana` + `tandai_kalah_trainer` → tombol TANTANG nonaktif (anti-farm uang) & gate Rute 2 terbuka; kalah → dialog kalah_pemain | DoD Fase 3 "battle trainer + lencana G1" terpenuhi secara loop; progresi dunia terhubung | — |
 
 ## 5. Referensi
 

@@ -52,6 +52,46 @@
             "toko": true,
             "tokoDariGym": 0,
             "ket": "Menghapus semua poin Latihan satu Nusamon (strategi bisa diubah ulang)."
+        },
+        {
+            "id": "tiket_kapal",
+            "nama": "Tiket Kapal",
+            "jenis": "kunci",
+            "bonus": null,
+            "harga": null,
+            "toko": false,
+            "tokoDariGym": null,
+            "ket": "Tiket kapal antarpulau — diberikan POI pelabuhan setelah 2 lencana (Fase 5)."
+        },
+        {
+            "id": "perahu_selat",
+            "nama": "Perahu Selat",
+            "jenis": "kunci",
+            "bonus": null,
+            "harga": null,
+            "toko": false,
+            "tokoDariGym": null,
+            "ket": "Perahu menyeberangi selat ke Kalimantan — setelah 5 lencana (Fase 5)."
+        },
+        {
+            "id": "perahu",
+            "nama": "Perahu",
+            "jenis": "kunci",
+            "bonus": null,
+            "harga": null,
+            "toko": false,
+            "tokoDariGym": null,
+            "ket": "Perahu biasa menuju Bali & Nusa Tenggara — setelah 6 lencana (Fase 5)."
+        },
+        {
+            "id": "perahu_laut_dalam",
+            "nama": "Perahu Laut Dalam",
+            "jenis": "kunci",
+            "bonus": null,
+            "harga": null,
+            "toko": false,
+            "tokoDariGym": null,
+            "ket": "Perahu kuat untuk Laut Nusantara & Papua — setelah 7 lencana (Fase 5)."
         }
     ]
 }

@@ -1,11 +1,12 @@
-{
-  "versi": "0.1",
-  "keterangan": "Peta dunia NUSAMON — Jawa MVP (GDD §8, docs/world-region.md §2.1 & §8). Koneksi eksplisit dua arah; gate hanya di arah MASUK (jalan pulang bebas). Lencana = id gym (1..8). Encounter = tabel khas per rute (spesies = id di nusamons.json; wajib berhabitat di pulau, dicek validate.ps1) + peluang_encounter 0..1 per rute (rol EncounterSystem).",
-  "pulau": "Jawa",
+﻿{
+  "versi": "0.2",
+  "keterangan": "Peta dunia NUSAMON Fase 5 — 6 pulau + Laut Nusantara (docs/world-region.md §1-2). Koneksi eksplisit dua arah; gate hanya di arah MASUK (jalan pulang bebas). Gate jenis: lencana (id gym 1..8) & item (id items.json jenis kunci, field nama = teks UI). Encounter = tabel khas per rute (spesies = id nusamons.json; wajib berhabitat di pulau, dicek validate.ps1); starter & legendary bobot 0 (tidak liar). POI aksi Fase 5: tiket (terima item kunci sekali per save), legendary (encounter 1x per save), liga (Elite Empat + Juara).",
+  "pulau": ["Jawa", "Sumatra", "Kalimantan", "Sulawesi", "Bali & Nusa Tenggara", "Maluku & Papua", "Laut Nusantara"],
   "lokasi_awal": "desa_sumberrejo",
   "lokasi": [
     {
       "id": "desa_sumberrejo",
+      "pulau": "Jawa",
       "nama": "Desa Sumberrejo",
       "jenis": "desa",
       "deskripsi": "Desa pemula di kaki pegunungan; berdiri megah Laboratorium Prof. Candri.",
@@ -27,6 +28,7 @@
     },
     {
       "id": "rute_1",
+      "pulau": "Jawa",
       "nama": "Rute 1 (Sawah)",
       "jenis": "rute",
       "peluang_encounter": 0.4,
@@ -42,6 +44,7 @@
     },
     {
       "id": "kota_harapan",
+      "pulau": "Jawa",
       "nama": "Kota Harapan",
       "jenis": "kota",
       "deskripsi": "Kota pertama di Jawa; gym Normal menjadi ujian bagi penantang baru.",
@@ -54,6 +57,7 @@
     },
     {
       "id": "rute_2",
+      "pulau": "Jawa",
       "nama": "Rute 2 (Kaki Gunung)",
       "jenis": "rute",
       "peluang_encounter": 0.45,
@@ -67,13 +71,330 @@
     },
     {
       "id": "kota_arunika",
+      "pulau": "Jawa",
       "nama": "Kota Arunika",
       "jenis": "kota",
       "deskripsi": "Kota senja di kaki Gunung Kapi; gym Api menunggu penantang dengan dua lencana.",
       "tempat": [
         { "id": "gym_g2", "nama": "Gym G2 Api — Pak Lesto", "status": "aktif", "catatan": "Tantang Pak Lesto untuk Lencana Arunika" },
         { "id": "pusat_arunika", "nama": "Pusat Pemulihan Arunika", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
-        { "id": "toko_arunika", "nama": "Toko Arunika", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" }
+        { "id": "toko_arunika", "nama": "Toko Arunika", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" },
+        { "id": "pelabuhan_arunika", "nama": "Pelabuhan Arunika", "status": "aktif", "catatan": "Kapal antarpulau — butuh 2 lencana", "aksi": "tiket", "item": "tiket_kapal", "syarat_lencana": 2 }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "laut_nusantara",
+      "pulau": "Laut Nusantara",
+      "nama": "Laut Nusantara",
+      "jenis": "rute",
+      "peluang_encounter": 0.5,
+      "deskripsi": "Rute laut transisi antarpulau; terumbu karang berkilau di sekitar kapal.",
+      "tempat": [
+        { "id": "palung_nusantara", "nama": "Palung Nusantara", "status": "aktif", "catatan": "Titik terdalam laut — sesuatu yang raksasa bersembunyi", "aksi": "legendary", "spesies": 6, "level": 50, "item": "perahu_laut_dalam" }
+      ],
+      "encounters": [
+        { "spesies": 10, "bobot": 25, "level_min": 24, "level_max": 30 },
+        { "spesies": 17, "bobot": 20, "level_min": 24, "level_max": 30 },
+        { "spesies": 26, "bobot": 20, "level_min": 22, "level_max": 28 },
+        { "spesies": 28, "bobot": 15, "level_min": 22, "level_max": 28 },
+        { "spesies": 29, "bobot": 12, "level_min": 24, "level_max": 30 },
+        { "spesies": 19, "bobot": 8, "level_min": 26, "level_max": 32 }
+      ]
+    },
+    {
+      "id": "pelabuhan_bakau",
+      "pulau": "Sumatra",
+      "nama": "Pelabuhan Bakau",
+      "jenis": "kota",
+      "deskripsi": "Gerbang kapal dari Jawa; pepohon bakau rimbun di tepi muara.",
+      "tempat": [
+        { "id": "pusat_bakau", "nama": "Pusat Pemulihan Bakau", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
+        { "id": "toko_bakau", "nama": "Toko Bakau", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "hutan_rimba",
+      "pulau": "Sumatra",
+      "nama": "Hutan Rimba",
+      "jenis": "rute",
+      "peluang_encounter": 0.5,
+      "deskripsi": "Hutan hujan lebat; kanopi hijau menutup langit Sumatra.",
+      "tempat": [],
+      "encounters": [
+        { "spesies": 14, "bobot": 30, "level_min": 15, "level_max": 19 },
+        { "spesies": 15, "bobot": 25, "level_min": 15, "level_max": 19 },
+        { "spesies": 21, "bobot": 25, "level_min": 15, "level_max": 19 },
+        { "spesies": 23, "bobot": 20, "level_min": 15, "level_max": 19 }
+      ]
+    },
+    {
+      "id": "kota_rimba",
+      "pulau": "Sumatra",
+      "nama": "Kota Rimba",
+      "jenis": "kota",
+      "deskripsi": "Kota penjaga hutan; gym Daun memakmurkan tumbuhan di sekitarnya.",
+      "tempat": [
+        { "id": "gym_g3", "nama": "Gym G3 Daun — Pak Rimba", "status": "aktif", "catatan": "Tantang Pak Rimba untuk Lencana Rimba" },
+        { "id": "pusat_rimba", "nama": "Pusat Pemulihan Rimba", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
+        { "id": "toko_rimba", "nama": "Toko Rimba", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "rute_3",
+      "pulau": "Sumatra",
+      "nama": "Rute 3 (Pesisir Timur)",
+      "jenis": "rute",
+      "peluang_encounter": 0.45,
+      "deskripsi": "Rawa dan perairan payau di sepanjang pesisir timur Sumatra.",
+      "tempat": [],
+      "encounters": [
+        { "spesies": 11, "bobot": 35, "level_min": 16, "level_max": 20 },
+        { "spesies": 14, "bobot": 35, "level_min": 16, "level_max": 20 },
+        { "spesies": 21, "bobot": 30, "level_min": 16, "level_max": 21 }
+      ]
+    },
+    {
+      "id": "kota_toba",
+      "pulau": "Sumatra",
+      "nama": "Kota Toba",
+      "jenis": "kota",
+      "deskripsi": "Kota tepi Danau Toba; gym Racun menjaga kelestarian danau purba.",
+      "tempat": [
+        { "id": "gym_g4", "nama": "Gym G4 Racun — Bu Tarra", "status": "aktif", "catatan": "Tantang Bu Tarra untuk Lencana Toba" },
+        { "id": "pusat_toba", "nama": "Pusat Pemulihan Toba", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
+        { "id": "toko_toba", "nama": "Toko Toba", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "muara_kapuas",
+      "pulau": "Kalimantan",
+      "nama": "Muara Kapuas",
+      "jenis": "kota",
+      "deskripsi": "Gerbang dari Sumatra; muara raksasa tempat sungai bertemu laut.",
+      "tempat": [
+        { "id": "pusat_kapuas", "nama": "Pusat Pemulihan Kapuas", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
+        { "id": "toko_kapuas", "nama": "Toko Kapuas", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "rute_4",
+      "pulau": "Kalimantan",
+      "nama": "Rute 4 (Sungai Kapuas)",
+      "jenis": "rute",
+      "peluang_encounter": 0.5,
+      "deskripsi": "Rute air panjang berkelok menyusuri sungai terbesar di Nusantara.",
+      "tempat": [],
+      "encounters": [
+        { "spesies": 18, "bobot": 30, "level_min": 20, "level_max": 25 },
+        { "spesies": 26, "bobot": 30, "level_min": 19, "level_max": 24 },
+        { "spesies": 11, "bobot": 25, "level_min": 21, "level_max": 26 },
+        { "spesies": 12, "bobot": 15, "level_min": 20, "level_max": 25 }
+      ]
+    },
+    {
+      "id": "hutan_gambut",
+      "pulau": "Kalimantan",
+      "nama": "Hutan Gambut",
+      "jenis": "rute",
+      "peluang_encounter": 0.45,
+      "deskripsi": "Gambut lembap dan gelap alami; tanah berlapis lumut pekat.",
+      "tempat": [],
+      "encounters": [
+        { "spesies": 30, "bobot": 30, "level_min": 20, "level_max": 25 },
+        { "spesies": 14, "bobot": 25, "level_min": 20, "level_max": 25 },
+        { "spesies": 15, "bobot": 25, "level_min": 20, "level_max": 25 },
+        { "spesies": 12, "bobot": 20, "level_min": 19, "level_max": 24 }
+      ]
+    },
+    {
+      "id": "kota_kapuas",
+      "pulau": "Kalimantan",
+      "nama": "Kota Kapuas",
+      "jenis": "kota",
+      "deskripsi": "Kota nakhoda; gym Air dan galangan perahu selat berdampingan.",
+      "tempat": [
+        { "id": "gym_g5", "nama": "Gym G5 Air — Bang Riang", "status": "aktif", "catatan": "Tantang Bang Riang untuk Lencana Kapuas" },
+        { "id": "pusat_kotakapuas", "nama": "Pusat Pemulihan Kota Kapuas", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
+        { "id": "toko_kotakapuas", "nama": "Toko Kota Kapuas", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" },
+        { "id": "dermaga_selat", "nama": "Dermaga Perahu Selat", "status": "aktif", "catatan": "Perahu menuju Sulawesi — butuh 5 lencana", "aksi": "tiket", "item": "perahu_selat", "syarat_lencana": 5 }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "pelabuhan_anoa",
+      "pulau": "Sulawesi",
+      "nama": "Pelabuhan Anoa",
+      "jenis": "kota",
+      "deskripsi": "Gerbang dari Kalimantan; dermaga ramai pelaut dan pedagang bumbu.",
+      "tempat": [
+        { "id": "pusat_anoa", "nama": "Pusat Pemulihan Anoa", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
+        { "id": "toko_anoa", "nama": "Toko Anoa", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "rute_5",
+      "pulau": "Sulawesi",
+      "nama": "Rute 5 (Pegunungan)",
+      "jenis": "rute",
+      "peluang_encounter": 0.45,
+      "deskripsi": "Bukit dan lembah pegunungan Sulawesi dengan udara sejuk.",
+      "tempat": [],
+      "encounters": [
+        { "spesies": 13, "bobot": 35, "level_min": 24, "level_max": 29 },
+        { "spesies": 22, "bobot": 35, "level_min": 23, "level_max": 28 },
+        { "spesies": 19, "bobot": 30, "level_min": 24, "level_max": 29 }
+      ]
+    },
+    {
+      "id": "kota_maroso",
+      "pulau": "Sulawesi",
+      "nama": "Kota Maroso",
+      "jenis": "kota",
+      "deskripsi": "Kota pencak silat; gym Petarung melatih disiplin tubuh dan pikiran.",
+      "tempat": [
+        { "id": "gym_g6", "nama": "Gym G6 Petarung — Guru Rahman", "status": "aktif", "catatan": "Tantang Guru Rahman untuk Lencana Maroso" },
+        { "id": "pusat_maroso", "nama": "Pusat Pemulihan Maroso", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
+        { "id": "toko_maroso", "nama": "Toko Maroso", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" },
+        { "id": "dermaga_maroso", "nama": "Dermaga Perahu", "status": "aktif", "catatan": "Perahu menuju Bali & Nusa Tenggara — butuh 6 lencana", "aksi": "tiket", "item": "perahu", "syarat_lencana": 6 }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "teluk_karang",
+      "pulau": "Sulawesi",
+      "nama": "Teluk Karang",
+      "jenis": "rute",
+      "peluang_encounter": 0.5,
+      "deskripsi": "Teluk biru berterumbu; air jernih memperlihatkan kehidupan karang.",
+      "tempat": [],
+      "encounters": [
+        { "spesies": 19, "bobot": 30, "level_min": 25, "level_max": 30 },
+        { "spesies": 27, "bobot": 35, "level_min": 24, "level_max": 29 },
+        { "spesies": 22, "bobot": 35, "level_min": 23, "level_max": 28 }
+      ]
+    },
+    {
+      "id": "kota_pura",
+      "pulau": "Bali & Nusa Tenggara",
+      "nama": "Kota Pura",
+      "jenis": "kota",
+      "deskripsi": "Gerbang dari Sulawesi; gerbang batu kuno melindungi jalan masuk sabana.",
+      "tempat": [
+        { "id": "pusat_pura", "nama": "Pusat Pemulihan Pura", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
+        { "id": "toko_pura", "nama": "Toko Pura", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "rute_6",
+      "pulau": "Bali & Nusa Tenggara",
+      "nama": "Rute 6 (Sabana Nipah)",
+      "jenis": "rute",
+      "peluang_encounter": 0.45,
+      "deskripsi": "Padang kering luas dengan pohon nipah berserakan di ufuk timur.",
+      "tempat": [],
+      "encounters": [
+        { "spesies": 20, "bobot": 35, "level_min": 28, "level_max": 33 },
+        { "spesies": 22, "bobot": 35, "level_min": 27, "level_max": 32 },
+        { "spesies": 23, "bobot": 30, "level_min": 28, "level_max": 33 }
+      ]
+    },
+    {
+      "id": "kota_sabana",
+      "pulau": "Bali & Nusa Tenggara",
+      "nama": "Kota Sabana",
+      "jenis": "kota",
+      "deskripsi": "Kota konservasionis; gym Tanah di kawasan suaka satwa Komodo.",
+      "tempat": [
+        { "id": "gym_g7", "nama": "Gym G7 Tanah — Pak Rida", "status": "aktif", "catatan": "Tantang Pak Rida untuk Lencana Sabana" },
+        { "id": "pusat_sabana", "nama": "Pusat Pemulihan Sabana", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
+        { "id": "toko_sabana", "nama": "Toko Sabana", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" },
+        { "id": "dermaga_laut_dalam", "nama": "Dermaga Perahu Laut Dalam", "status": "aktif", "catatan": "Perahu menuju Maluku & Papua — butuh 7 lencana", "aksi": "tiket", "item": "perahu_laut_dalam", "syarat_lencana": 7 }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "pulau_komodo",
+      "pulau": "Bali & Nusa Tenggara",
+      "nama": "Pulau Komodo",
+      "jenis": "rute",
+      "peluang_encounter": 0.4,
+      "deskripsi": "Suaka satwa legendaris — habitat asli line Komodo.",
+      "tempat": [],
+      "encounters": [
+        { "spesies": 7, "bobot": 30, "level_min": 29, "level_max": 34 },
+        { "spesies": 20, "bobot": 35, "level_min": 28, "level_max": 33 },
+        { "spesies": 23, "bobot": 35, "level_min": 28, "level_max": 33 }
+      ]
+    },
+    {
+      "id": "pelabuhan_cendana",
+      "pulau": "Maluku & Papua",
+      "nama": "Pelabuhan Cendana",
+      "jenis": "kota",
+      "deskripsi": "Gerbang kapal laut dalam; bau kayu cendana menguar dari dermaga.",
+      "tempat": [
+        { "id": "pusat_cendana", "nama": "Pusat Pemulihan Cendana", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
+        { "id": "toko_cendana", "nama": "Toko Cendana", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "hutan_cendana",
+      "pulau": "Maluku & Papua",
+      "nama": "Hutan Cendana",
+      "jenis": "rute",
+      "peluang_encounter": 0.5,
+      "deskripsi": "Hutan hujan Papua; ada lorong rahasia yang dijaga kawanan burung.",
+      "tempat": [
+        { "id": "lorong_rahasia", "nama": "Lorong Rahasia", "status": "aktif", "catatan": "Suaranya indah sekali — seperti penguasa hutan", "aksi": "legendary", "spesies": 5, "level": 50, "syarat_lencana": 8 }
+      ],
+      "encounters": [
+        { "spesies": 25, "bobot": 60, "level_min": 32, "level_max": 37 },
+        { "spesies": 30, "bobot": 40, "level_min": 31, "level_max": 36 }
+      ]
+    },
+    {
+      "id": "rute_7",
+      "pulau": "Maluku & Papua",
+      "nama": "Rute 7 (Pendakian)",
+      "jenis": "rute",
+      "peluang_encounter": 0.45,
+      "deskripsi": "Jalur pendakian dari hutan ke kabut, lalu ke reruntuhan salju abadi.",
+      "tempat": [],
+      "encounters": [
+        { "spesies": 25, "bobot": 55, "level_min": 32, "level_max": 37 },
+        { "spesies": 30, "bobot": 45, "level_min": 31, "level_max": 36 }
+      ]
+    },
+    {
+      "id": "kota_puncak",
+      "pulau": "Maluku & Papua",
+      "nama": "Kota Puncak",
+      "jenis": "kota",
+      "deskripsi": "Kota paling timur Nusantara; gym Udara dan Liga Nusantara menunggu penantang.",
+      "tempat": [
+        { "id": "gym_g8", "nama": "Gym G8 Udara — Ibu Waigeo", "status": "aktif", "catatan": "Tantang Ibu Waigeo untuk Lencana Puncak" },
+        { "id": "liga_nusantara", "nama": "Liga Nusantara", "status": "aktif", "catatan": "Elite Empat + Juara — butuh 8 lencana", "aksi": "liga" },
+        { "id": "pusat_puncak", "nama": "Pusat Pemulihan Puncak", "status": "aktif", "catatan": "Pulihkan tim gratis", "aksi": "pulihkan" },
+        { "id": "toko_puncak", "nama": "Toko Puncak", "status": "aktif", "catatan": "Amukan semua tier", "aksi": "toko" }
+      ],
+      "encounters": []
+    },
+    {
+      "id": "puncak_salju",
+      "pulau": "Maluku & Papua",
+      "nama": "Puncak Salju",
+      "jenis": "landmark",
+      "deskripsi": "Puncak tertinggi Nusantara; salju abadi menyelimuti langit di sini.",
+      "tempat": [
+        { "id": "sarang_langit", "nama": "Sarang Langit", "status": "aktif", "catatan": "Siluet raksasa melambung di antara salju", "aksi": "legendary", "spesies": 4, "level": 50, "syarat_lencana": 8 }
       ],
       "encounters": []
     }
@@ -86,6 +407,52 @@
     { "dari": "kota_harapan", "ke": "rute_2", "gate": { "jenis": "lencana", "id": 1 } },
     { "dari": "rute_2", "ke": "kota_harapan" },
     { "dari": "rute_2", "ke": "kota_arunika" },
-    { "dari": "kota_arunika", "ke": "rute_2" }
+    { "dari": "kota_arunika", "ke": "rute_2" },
+    { "dari": "kota_arunika", "ke": "laut_nusantara", "gate": { "jenis": "item", "id": "tiket_kapal", "nama": "Tiket Kapal" } },
+    { "dari": "laut_nusantara", "ke": "kota_arunika" },
+    { "dari": "laut_nusantara", "ke": "pelabuhan_bakau" },
+    { "dari": "pelabuhan_bakau", "ke": "laut_nusantara", "gate": { "jenis": "item", "id": "tiket_kapal", "nama": "Tiket Kapal" } },
+    { "dari": "pelabuhan_bakau", "ke": "hutan_rimba" },
+    { "dari": "hutan_rimba", "ke": "pelabuhan_bakau" },
+    { "dari": "hutan_rimba", "ke": "kota_rimba" },
+    { "dari": "kota_rimba", "ke": "hutan_rimba" },
+    { "dari": "kota_rimba", "ke": "rute_3" },
+    { "dari": "rute_3", "ke": "kota_rimba" },
+    { "dari": "rute_3", "ke": "kota_toba" },
+    { "dari": "kota_toba", "ke": "rute_3" },
+    { "dari": "laut_nusantara", "ke": "muara_kapuas", "gate": { "jenis": "item", "id": "perahu_selat", "nama": "Perahu Selat" } },
+    { "dari": "muara_kapuas", "ke": "laut_nusantara", "gate": { "jenis": "item", "id": "perahu_selat", "nama": "Perahu Selat" } },
+    { "dari": "muara_kapuas", "ke": "rute_4" },
+    { "dari": "rute_4", "ke": "muara_kapuas" },
+    { "dari": "rute_4", "ke": "hutan_gambut" },
+    { "dari": "hutan_gambut", "ke": "rute_4" },
+    { "dari": "hutan_gambut", "ke": "kota_kapuas" },
+    { "dari": "kota_kapuas", "ke": "hutan_gambut" },
+    { "dari": "laut_nusantara", "ke": "pelabuhan_anoa", "gate": { "jenis": "item", "id": "perahu", "nama": "Perahu" } },
+    { "dari": "pelabuhan_anoa", "ke": "laut_nusantara", "gate": { "jenis": "item", "id": "perahu", "nama": "Perahu" } },
+    { "dari": "pelabuhan_anoa", "ke": "rute_5" },
+    { "dari": "rute_5", "ke": "pelabuhan_anoa" },
+    { "dari": "rute_5", "ke": "kota_maroso" },
+    { "dari": "kota_maroso", "ke": "rute_5" },
+    { "dari": "kota_maroso", "ke": "teluk_karang" },
+    { "dari": "teluk_karang", "ke": "kota_maroso" },
+    { "dari": "laut_nusantara", "ke": "kota_pura", "gate": { "jenis": "item", "id": "perahu_laut_dalam", "nama": "Perahu Laut Dalam" } },
+    { "dari": "kota_pura", "ke": "laut_nusantara", "gate": { "jenis": "item", "id": "perahu_laut_dalam", "nama": "Perahu Laut Dalam" } },
+    { "dari": "kota_pura", "ke": "rute_6" },
+    { "dari": "rute_6", "ke": "kota_pura" },
+    { "dari": "rute_6", "ke": "kota_sabana" },
+    { "dari": "kota_sabana", "ke": "rute_6" },
+    { "dari": "kota_sabana", "ke": "pulau_komodo" },
+    { "dari": "pulau_komodo", "ke": "kota_sabana" },
+    { "dari": "laut_nusantara", "ke": "pelabuhan_cendana", "gate": { "jenis": "item", "id": "perahu_laut_dalam", "nama": "Perahu Laut Dalam" } },
+    { "dari": "pelabuhan_cendana", "ke": "laut_nusantara", "gate": { "jenis": "item", "id": "perahu_laut_dalam", "nama": "Perahu Laut Dalam" } },
+    { "dari": "pelabuhan_cendana", "ke": "hutan_cendana" },
+    { "dari": "hutan_cendana", "ke": "pelabuhan_cendana" },
+    { "dari": "hutan_cendana", "ke": "rute_7" },
+    { "dari": "rute_7", "ke": "hutan_cendana" },
+    { "dari": "rute_7", "ke": "kota_puncak" },
+    { "dari": "kota_puncak", "ke": "rute_7" },
+    { "dari": "kota_puncak", "ke": "puncak_salju" },
+    { "dari": "puncak_salju", "ke": "kota_puncak" }
   ]
 }

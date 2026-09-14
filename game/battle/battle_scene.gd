@@ -690,6 +690,8 @@ func _trainer_kalah() -> void:
 		_log("Mendapat %s! (Lencana G%d — jalan berikutnya terbuka)" % [
 			String(lencana.get("nama", "?")), int(lencana.get("id", 0))])
 	Progres.tandai_kalah_trainer(String(trainer_data.get("id", "")))
+	if String(trainer_data.get("jenis", "gym")) == "juara":
+		_log("🏆 TAMAT — Kamu adalah Juara Nusantara! Petualangan end-to-end selesai; Nusadex 100% menantimu!")
 	_selesai(true, "menang vs trainer")
 
 

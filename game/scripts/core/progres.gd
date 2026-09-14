@@ -15,6 +15,7 @@ static func reset() -> void:
 	lokasi = ""
 	lencana = []
 	trainer_kalah = []
+	legendary_dijumpai = []
 	starter_id = 0
 
 
@@ -46,6 +47,21 @@ static func jumlah_lencana() -> int:
 # ------------------------------------------------------------ battle trainer
 
 static var trainer_kalah: Array = []   # id trainer gym yang sudah dikalahkan
+
+# ------------------------------------------------------------ legendary (Fase 5)
+
+static var legendary_dijumpai: Array = []   # id spesies legendary yang sudah ditemui
+
+
+## Legendary (id spesies) sudah ditemui di save ini? (aturan: 1 encounter per save)
+static func sudah_jumpai_legendary(id: int) -> bool:
+	return legendary_dijumpai.has(id)
+
+
+## Catat legendary yang baru ditemui (idempoten) — dipanggil saat event dimulai.
+static func tandai_legendary(id: int) -> void:
+	if not sudah_jumpai_legendary(id):
+		legendary_dijumpai.append(id)
 
 
 ## Trainer gym sudah dikalahkan pemain?

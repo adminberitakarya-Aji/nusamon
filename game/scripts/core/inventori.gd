@@ -65,6 +65,25 @@ static func pakai_item(id: String) -> bool:
 	return true
 
 
+## Nama tampilan item dari data/items.json; kembalikan id bila tak dikenal.
+static func nama_item(id: String) -> String:
+	for it in _items_db().get("items", []):
+		if String(it.get("id", "")) == id:
+			return String(it.get("nama", id))
+	return id
+
+
+## Daftar id item kunci (jenis "kunci") yang sedang dimiliki (stok > 0).
+## Dipakai komposisi progres untuk gate dunia (WorldEngine jenis "item").
+static func kunci_dimiliki() -> Array:
+	var hasil: Array = []
+	for it in items_jenis("kunci"):
+		var iid := String(it.get("id", ""))
+		if stok_item(iid) > 0:
+			hasil.append(iid)
+	return hasil
+
+
 ## Beli 1 item dari toko; false bila tak dijual / uang kurang.
 static func beli(id: String) -> bool:
 	var h := harga(id)

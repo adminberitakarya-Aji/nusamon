@@ -16,6 +16,7 @@ static func lokasi(db: Dictionary, id: String) -> Dictionary:
 
 
 ## Cek satu syarat gate terhadap progres pemain. Syarat kosong = bebas.
+## progres: {"lencana": [id...], "item": [id item yang dimiliki...]}.
 static func syarat_terpenuhi(syarat: Dictionary, progres: Dictionary) -> bool:
 	if syarat.is_empty():
 		return true
@@ -23,6 +24,9 @@ static func syarat_terpenuhi(syarat: Dictionary, progres: Dictionary) -> bool:
 		"lencana":
 			var daftar: Array = progres.get("lencana", [])
 			return daftar.has(int(syarat.get("id", 0)))
+		"item":
+			var barang: Array = progres.get("item", [])
+			return barang.has(String(syarat.get("id", "")))
 		_:
 			return false   # jenis gate tak dikenal → gagal aman (terkunci)
 
@@ -43,6 +47,9 @@ static func alasan_terkunci(db: Dictionary, dari: String, ke: String, progres: D
 			var nama_t := String(tujuan.get("nama", ke))
 			if String(syarat.get("jenis", "")) == "lencana":
 				return "Jalan menuju %s terkunci — butuh Lencana G%d." % [nama_t, int(syarat.get("id", 0))]
+			if String(syarat.get("jenis", "")) == "item":
+				return "Jalan menuju %s terkunci — butuh %s." % [
+					nama_t, String(syarat.get("nama", "item khusus"))]
 			return "Jalan menuju %s terkunci." % nama_t
 	return "%s dan %s tidak terhubung." % [String(sumber.get("nama", dari)), String(tujuan.get("nama", ke))]
 

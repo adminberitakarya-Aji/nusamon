@@ -33,8 +33,8 @@ func _ready() -> void:
 	if Progres.lokasi == "":
 		Progres.lokasi = String(db.get("lokasi_awal", ""))
 	_bangun_ui()
-	_catatan("Selamat datang di Pulau Jawa!")
-	_catatan("Jelajahi rute (🔍) untuk battle liar; kalahkan Bu Sari untuk membuka Rute 2.")
+	_catatan("Selamat datang di Nusantara!")
+	_catatan("Jelajahi rute (🔍) untuk battle liar; kumpulkan 8 lencana untuk Liga Nusantara!")
 	_perbarui()
 
 
@@ -102,7 +102,7 @@ func _bangun_ui() -> void:
 	var judul := _panel(Vector2(40, 16), Vector2(420, 50), Color(0.08, 0.1, 0.08, 0.92))
 	var vj := VBoxContainer.new()
 	judul.add_child(vj)
-	vj.add_child(_label("🗺 NUSAMON — Pulau Jawa", 20, Color(1.0, 0.92, 0.6)))
+	vj.add_child(_label("🗺 NUSAMON — Nusantara", 20, Color(1.0, 0.92, 0.6)))
 
 	# panel lokasi sekarang (kiri-atas)
 	var pl := _panel(Vector2(40, 80), Vector2(420, 170))
@@ -165,7 +165,9 @@ func _catatan(tek: String) -> void:
 # ------------------------------------------------------------ alur dunia
 
 func _progres() -> Dictionary:
-	return {"lokasi": Progres.lokasi, "lencana": Progres.lencana}
+	# item kunci disertakan agar gate dunia jenis "item" bisa dievaluasi (Fase 5)
+	return {"lokasi": Progres.lokasi, "lencana": Progres.lencana,
+		"item": Inventori.kunci_dimiliki()}
 
 
 func _perbarui() -> void:
@@ -207,6 +209,12 @@ func _perbarui() -> void:
 			_tombol("💤 PULIHKAN TIM", daftar_tempat, _pulihkan_tim)
 		elif String(t.get("aksi", "")) == "toko":
 			_tombol("🛒 BUKA TOKO", daftar_tempat, _buka_toko_dunia)
+		elif String(t.get("aksi", "")) == "tiket":
+			_tampilkan_poi_tiket(t)
+		elif String(t.get("aksi", "")) == "legendary":
+			_tampilkan_poi_legendary(t)
+		elif String(t.get("aksi", "")) == "liga":
+			_tampilkan_poi_liga(t)
 
 	# panel gym (Fase 3 langkah 3): leader, tim, hadiah — battle = langkah 4
 	if not trainer_gym.is_empty():
@@ -284,6 +292,85 @@ func _cari_encounter() -> void:
 	_catatan("Sesuatu bergerak di rumput! (masuk battle liar)")
 	Simpanan.simpan()  # battle scene auto-load → state sesi tetap segar
 	get_tree().change_scene_to_file(SCENE_BATTLE)
+
+
+# ------------------------------------------------------------ POI Fase 5 (tiket / legendary / liga)
+
+const LIGA_URUTAN := ["kak_dinda", "pak_nandra", "bu_waja", "kapten_samudra", "nara"]
+const LIGA_NAMA := {"kak_dinda": "Kak Dinda (E1 — Listrik)", "pak_nandra": "Pak Nandra (E2 — Naga)",
+	"bu_waja": "Bu Waja (E3 — Baja)", "kapten_samudra": "Kapten Samudra (E4 — Air)",
+	"nara": "Juara Nara (Campuran)"}
+
+
+## POI aksi "tiket": beri item kunci sekali per save bila syarat lencana terpenuhi.
+func _tampilkan_poi_tiket(t: Dictionary) -> void:
+	var iid := String(t.get("item", ""))
+	var syarat := int(t.get("syarat_lencana", 0))
+	var nama := Inventori.nama_item(iid)
+	if Inventori.stok_item(iid) > 0:
+		daftar_tempat.add_child(_label("   ✓ %s sudah di tanganmu" % nama, 12, Color(0.6, 0.9, 0.6)))
+		return
+	if Progres.jumlah_lencana() < syarat:
+		daftar_tempat.add_child(_label("   🔒 Butuh %d lencana (punya %d)" % [
+			syarat, Progres.jumlah_lencana()], 12, Color(0.95, 0.6, 0.4)))
+		return
+	_tombol("🎫 TERIMA %s" % nama.to_upper(), daftar_tempat, func() -> void:
+		Inventori.tambah_item(iid, 1)
+		_catatan("Kamu menerima %s — jalur laut terbuka!" % nama)
+		Simpanan.simpan()
+		_perbarui())
+
+
+## POI aksi "legendary": 1 encounter per save (world-region §5), cek syarat.
+func _tampilkan_poi_legendary(t: Dictionary) -> void:
+	var sid := int(t.get("spesies", 0))
+	if Progres.sudah_jumpai_legendary(sid):
+		daftar_tempat.add_child(_label("   ✓ Jejaknya sudah hilang (1× per petualangan)",
+			12, Color(0.6, 0.9, 0.6)))
+		return
+	var syarat_l := int(t.get("syarat_lencana", 0))
+	var butuh_item := String(t.get("item", ""))
+	if syarat_l > 0 and Progres.jumlah_lencana() < syarat_l:
+		daftar_tempat.add_child(_label("   🔒 Butuh %d lencana untuk mendekat" % syarat_l,
+			12, Color(0.95, 0.6, 0.4)))
+		return
+	if butuh_item != "" and Inventori.stok_item(butuh_item) <= 0:
+		daftar_tempat.add_child(_label("   🔒 Butuh %s untuk mendekat" % Inventori.nama_item(butuh_item),
+			12, Color(0.95, 0.6, 0.4)))
+		return
+	_tombol("✨ DEKATI", daftar_tempat, func() -> void: _event_legendary(sid, int(t.get("level", 50))))
+
+
+## Event legendary: tandai sekali-jumpai lalu battle liar (bisa ditangkap).
+func _event_legendary(sid: int, level: int) -> void:
+	Progres.tandai_legendary(sid)
+	EncounterSystem.set_antrean(sid, level)
+	var sp := NusamonData.find_species(nusamons, sid)
+	_catatan("AURA RAKSASA MUNCUL — %s menjelma di hadapanmu!" % String(sp.get("nama", "?")))
+	Simpanan.simpan()  # penanda legendary persisten (1× per save)
+	get_tree().change_scene_to_file(SCENE_BATTLE)
+
+
+## POI aksi "liga": panel Elite Empat + Juara, urutan berantai E1→E4→Juara.
+func _tampilkan_poi_liga(t: Dictionary) -> void:
+	daftar_tempat.add_child(_label("🏆 LIGA NUSANTARA — syarat 8 lencana", 14, Color(1.0, 0.85, 0.5)))
+	if Progres.jumlah_lencana() < 8:
+		daftar_tempat.add_child(_label("   🔒 Butuh 8 lencana (punya %d)" % Progres.jumlah_lencana(),
+			12, Color(0.95, 0.6, 0.4)))
+		return
+	for i in LIGA_URUTAN.size():
+		var tid: String = LIGA_URUTAN[i]
+		if Progres.sudah_kalah_trainer(tid):
+			daftar_tempat.add_child(_label("   ✓ %s dikalahkan" % String(LIGA_NAMA[tid]),
+				12, Color(0.6, 0.9, 0.6)))
+			continue
+		# urutan berantai: anggota ke-i terbuka bila i == 0 atau sebelumnya dikalahkan
+		if i > 0 and not Progres.sudah_kalah_trainer(LIGA_URUTAN[i - 1]):
+			daftar_tempat.add_child(_label("   ⌛ %s — kalahkan penantang sebelumnya dulu" %
+				String(LIGA_NAMA[tid]), 12, Color(0.95, 0.6, 0.4)))
+			continue
+		_tombol("⚔ TANTANG %s" % String(LIGA_NAMA[tid]).to_upper(), daftar_tempat,
+			func() -> void: _tantang_trainer(tid))
 
 
 # ------------------------------------------------------------ cutscene starter (Fase 4)

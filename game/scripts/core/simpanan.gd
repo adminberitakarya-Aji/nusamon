@@ -31,6 +31,7 @@ static func ambil_state() -> Dictionary:
 			"lokasi": Progres.lokasi,
 			"lencana": Progres.lencana.duplicate(),
 			"trainer_kalah": Progres.trainer_kalah.duplicate(),
+			"legendary": Progres.legendary_dijumpai.duplicate(),
 			"starter": Progres.starter_id,
 		}}
 
@@ -116,6 +117,10 @@ static func terapkan(data: Dictionary) -> void:
 		Progres.trainer_kalah = []
 		for t in p.get("trainer_kalah", []):
 			Progres.tandai_kalah_trainer(String(t))
+		# legendary (Fase 5, additive — save v2 lama tanpa field tetap terbaca)
+		Progres.legendary_dijumpai = []
+		for lg in p.get("legendary", []):
+			Progres.tandai_legendary(int(lg))
 		Progres.starter_id = maxi(0, int(p.get("starter", 0)))
 
 

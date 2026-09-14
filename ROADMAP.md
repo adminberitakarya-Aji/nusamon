@@ -17,7 +17,7 @@
 | 1 — Prototipe Battle | ✅ **Selesai** | Battle 1v1, tangkap, EXP/evolusi, UI scene, PP, tahap stat, tes headless | Battle end-to-end (serang/tangkap/kabur) + EXP + evolusi + **78 asersi hijau (3 suite)** + UI terverifikasi (simulasi headless; inspeksi visual disarankan saat mulai Fase 2) |
 | 2 — Catch & Nusadex | ✅ **Selesai** (catatan: pratinjau model butuh aset Blender — D-1) | Inventori, tim/partai, switch, Nusadex, ability, Latihan, save/load | Tangkap masuk tim, Nusadex terisi, ability & PP aktif, Latihan & save/load aktif |
 | 3 — World & Gym pertama | ✅ **Selesai** | World map Jawa + encounter + G1 Normal (Bu Sari) + lencana + env CC0/placeholder | Battle trainer + lencana G1 |
-| 4 — Vertical Slice | ⬜ Belum mulai | MVP end-to-end: Jawa + G1 + G2 + rival + Nusadex | Main dari Desa Sumberrejo sampai lencana G2 tanpa jebol (GDD §8) |
+| 4 — Vertical Slice | 🔨 **Berjalan** | MVP end-to-end: Jawa + G1 + G2 + rival + Nusadex | Main dari Desa Sumberrejo sampai lencana G2 tanpa jebol (GDD §8) |
 | 5 — Produksi konten penuh | ⬜ Belum mulai | 30 spesies, 6 pulau, 8 gym, Liga Nusantara, story | Tamat end-to-end + Nusadex 100% |
 
 ---
@@ -115,11 +115,11 @@
 | Lencana + progresi | ✅ **Simpanan v2** (`user://simpanan.json`): blok `progres` (lokasi, lencana, trainer_kalah); migrasi v1 → progres direset kosong (fresh start); world scene auto-save (pindah lokasi / masuk battle) + tombol 💾/📂 → lencana & posisi bertahan lintas restart · 45 asersi hijau (`test_latihan_simpan` diperluas) `dcf254b` |
 | Model environment dari pustaka CC0 (Kenney/Quaternius) | ✅ `EnvBuilder` — runtime memakai `assets/env/<id_lokasi>.glb` bila ada (`ResourceLoader.exists`), fallback placeholder low-poly programatik per tema (tanah berwarna + rumah/petak sawah/gedung/Gunung Kapi/pohon; deterministik) · latar 3D world scene (SubViewport) berganti per lokasi · panduan pemasangan aset CC0: `assets/env/README.md` · 23 asersi hijau (`test_env`) `dcf254b` |
 
-### Fase 4 — Vertical Slice ⬜
+### Fase 4 — Vertical Slice 🔨 (Berjalan)
 
 | Langkah | Status |
 |---------|:------:|
-| Starter selection (Harimau/Orangutan/Penyu) + cutscene sederhana | ⬜ |
+| Starter selection (Harimau/Orangutan/Penyu) + cutscene sederhana | ✅ cutscene Prof. Candri data-driven (`world.json` POI `aksi`+`dialog`) → pilih 1 dari 3 (Anak Rimau–Api / Orangkici–Daun / Penyuci–Air, Lv.5) → masuk tim + Nusadex; `Progres.starter_id` terkunci sekali & persisten (Simpanan v2); encounter/gym terkunci sampai starter dipilih; battle scene memakai starter (placeholder Anak Rimau bila belum) · 28 asersi hijau (`test_starter`) `8d61925` |
 | Gym G2 Api — Pak Lesto (Beruang Muda Lv.14, Ayam Satria Lv.16) | ⬜ |
 | Rival + 1 pertarungan rival | ⬜ |
 | Pusat pemulihan + toko (Amukan tersedia semua tier) | ⬜ |
@@ -203,6 +203,8 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | Mon leader kalah → mon berikutnya maju otomatis (Nusadex.lihat per mon masuk, EXP ×1.5 via `exp_gain(..., mode_trainer)`); menang semua → dialog + hadiah + `Progres.tambah_lencana` + `tandai_kalah_trainer` → tombol TANTANG nonaktif (anti-farm uang) & gate Rute 2 terbuka; kalah → dialog kalah_pemain | DoD Fase 3 "battle trainer + lencana G1" terpenuhi secara loop; progresi dunia terhubung | — |
 | 2026-09-14 | **Simpanan v2** (langkah 5): blok `progres` (lokasi/lencana/trainer_kalah) masuk `simpanan.json`; muat menerima v1–v2 — **v1 → progres direset kosong** (fresh start, bukan pertahankan sesi); world scene auto-save sebelum masuk battle (antrean auto-load battle scene tidak lagi me-rollback lokasi) + 💾/📂 di dunia | progresi lintas restart; bug rollback tersirat dari interaksi auto-load × progres sesi | — |
 | 2026-09-14 | Environment (langkah 6): **`EnvBuilder`** — `.glb` CC0 dari `assets/env/<id>.glb` dipakai bila ada, selain itu placeholder programatik per tema (konvensi fallback model monster/D-1); latar 3D SubViewport world scene berganti tiap pindah lokasi; panduan pemasangan: `assets/env/README.md` (Kenney/Quaternius, lisensi CC0) | repo tidak membundel binari pihak ketiga — runtime siap, aset dipasang kapan saja tanpa ubah kode; placeholder deterministik & headless-testable | — |
+| 2026-09-14 | Fase 4 dimulai — **starter selection**: POI lab data-driven (`aksi: "pilih_starter"` + dialog cutscene di `world.json`); `Progres.starter_id` sekali-pilih terkunci & masuk Simpanan v2 (field `starter`, additive — file v2 lama tanpa field tetap terbaca); starter masuk tim Lv.5 + Nusadex lihat+tangkap | ADR-06; cutscene MVP = dialog bertahap overlay (sistem story penuh = Fase 5); penamaan mengikuti data: spesies **Rimau** (bukan "Harimau" di README §keputusan) — Anak Rimau/Orangkici/Penyuci | — |
+| 2026-09-14 | Gating awal game: encounter (🔍) & gym (⚔) menolak tanpa mon ("Pilih Nusamon pertamamu di Lab…"); battle scene `_siapkan_pemain` memakai starter bila dipilih, placeholder Anak Rimau tetap untuk sesi prototipe langsung (tes lama tak terpengaruh) | alur baru-game utuh: Desa → Lab → pilih starter → jelajah; kompatibel retroaktif | — |
 
 ## 5. Referensi
 

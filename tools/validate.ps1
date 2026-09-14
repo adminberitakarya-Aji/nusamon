@@ -131,6 +131,7 @@ foreach ($t in $tr.trainers) {
     foreach ($m in $t.tim) {
         if ($spIds -notcontains [int]$m.spesies) { Fail "trainer $($t.id): spesies tidak valid ($($m.spesies))" }
         if ([int]$m.level -lt 1 -or [int]$m.level -gt 100) { Fail "trainer $($t.id): level di luar 1..100" }
+        if ($null -ne $m.tahap -and ([int]$m.tahap -lt 0 -or [int]$m.tahap -gt 2)) { Fail "trainer $($t.id): tahap di luar 0..2" }
         if ($spSeen -contains [int]$m.spesies) { Fail "trainer $($t.id): spesies duplikat di tim ($($m.spesies))" }
         $spSeen += [int]$m.spesies
     }

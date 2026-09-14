@@ -29,7 +29,7 @@ func _init() -> void:
 		return
 
 	# ---------- lookup trainer
-	cek("trainer tak dikenal → {}", TrainerEngine.cari(db, "pak_lesto").is_empty())
+	cek("trainer tak dikenal → {}", TrainerEngine.cari(db, "pak_palapa").is_empty())
 	var sari := TrainerEngine.cari(db, "bu_sari")
 	cek("Bu Sari ditemukan", not sari.is_empty())
 	cek("nama = Bu Sari", String(sari.get("nama", "")) == "Bu Sari")
@@ -42,8 +42,8 @@ func _init() -> void:
 	cek("trainer_di_kota(kota_harapan) = Bu Sari",
 		String(TrainerEngine.trainer_di_kota(db, "kota_harapan").get("id", "")) == "bu_sari")
 	cek("rute_1 tanpa trainer", TrainerEngine.trainer_di_kota(db, "rute_1").is_empty())
-	cek("kota_arunika tanpa trainer (G2 = Fase 4)",
-		TrainerEngine.trainer_di_kota(db, "kota_arunika").is_empty())
+	cek("kota_arunika punya trainer (Pak Lesto — G2 aktif)",
+		String(TrainerEngine.trainer_di_kota(db, "kota_arunika").get("id", "")) == "pak_lesto")
 
 	# ---------- data tim
 	var tim: Array = sari.get("tim", [])
@@ -118,6 +118,34 @@ func _init() -> void:
 					and int(gate.get("id", 0)) == int(gym.get("id", 0)):
 				gate_ok = true
 	cek("gate Rute 2 di world.json merujuk Lencana gym Bu Sari", gate_ok)
+
+	# ---------- Pak Lesto (G2 Api — Fase 4): tim dengan tahap evolusi
+	var lesto := TrainerEngine.cari(db, "pak_lesto")
+	cek("Pak Lesto ditemukan", not lesto.is_empty())
+	cek("profesi = Penjaga Gunung Kapi", String(lesto.get("profesi", "")) == "Penjaga Gunung Kapi")
+	cek("gym G2 Api di kota_arunika",
+		int(lesto.get("gym", {}).get("id", 0)) == 2
+		and String(lesto.get("gym", {}).get("tipe", "")) == "Api"
+		and String(lesto.get("gym", {}).get("kota", "")) == "kota_arunika")
+	cek("trainer_di_kota(kota_arunika) = Pak Lesto",
+		String(TrainerEngine.trainer_di_kota(db, "kota_arunika").get("id", "")) == "pak_lesto")
+	var tim_lesto := TrainerEngine.buat_tim(db, "pak_lesto", nusamons)
+	cek("tim Pak Lesto = 2 instans", tim_lesto.size() == 2, str(tim_lesto.size()))
+	if tim_lesto.size() == 2:
+		cek("mon 1 = Beruang Muda Lv.14 (tahap 0)",
+			String(tim_lesto[0].display_name) == "Beruang Muda" and int(tim_lesto[0].level) == 14)
+		cek("mon 2 = Ayam Satria Lv.16 (tahap 1)",
+			String(tim_lesto[1].display_name) == "Ayam Satria" and int(tim_lesto[1].level) == 16,
+			"aktual " + String(tim_lesto[1].display_name))
+	var teks_lesto := TrainerEngine.tim_teks(db, "pak_lesto", nusamons)
+	cek("tim_teks memakai nama tahap benar",
+		teks_lesto.contains("Beruang Muda Lv.14") and teks_lesto.contains("Ayam Satria Lv.16"),
+		teks_lesto)
+	var lencana_lesto := TrainerEngine.lencana(db, "pak_lesto")
+	cek("lencana G2 = Lencana Arunika",
+		int(lencana_lesto.get("id", 0)) == 2
+		and String(lencana_lesto.get("nama", "")) == "Lencana Arunika")
+	cek("hadiah Pak Lesto = Rp 2000", int(lesto.get("hadiah_uang", 0)) == 2000)
 
 	# ---------- ringkasan
 	print("=== Hasil: %d lulus, %d gagal ===" % [lulus, gagal])

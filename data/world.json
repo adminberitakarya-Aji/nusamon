@@ -67,7 +67,7 @@
       "jenis": "kota",
       "deskripsi": "Kota senja di kaki Gunung Kapi; gym Api menunggu penantang dengan dua lencana.",
       "tempat": [
-        { "id": "gym_g2", "nama": "Gym G2 Api — Pak Lesto", "status": "terkunci", "catatan": "Konten Fase 4 (vertical slice)" }
+        { "id": "gym_g2", "nama": "Gym G2 Api — Pak Lesto", "status": "aktif", "catatan": "Tantang Pak Lesto untuk Lencana Arunika" }
       ],
       "encounters": []
     }

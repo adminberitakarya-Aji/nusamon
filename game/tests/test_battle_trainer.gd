@@ -121,6 +121,30 @@ func _mulai() -> void:
 	root.add_child(scene3)
 	cek("antrean habis → scene berikut battle liar biasa", not scene3.mode_trainer)
 
+	# ---------- 8. Pak Lesto (G2 Api) — end-to-end menang → Lencana Arunika
+	TrainerEngine.set_antrean("pak_lesto")
+	var scene4: Control = paket.instantiate()
+	root.add_child(scene4)
+	cek("scene4: pak_lesto aktif", String(scene4.trainer_data.get("id", "")) == "pak_lesto"
+		and scene4.mode_trainer)
+	cek("scene4: mon pertama Beruang Muda Lv.14",
+		String(scene4.wild.display_name) == "Beruang Muda" and int(scene4.wild.level) == 14)
+	var uang_4 := int(Inventori.uang)
+	var lencana_sebelum := Progres.jumlah_lencana()
+	scene4.wild.take_damage(9999)
+	scene4._akhir_battle(true)
+	cek("scene4: Ayam Satria (tahap 1) maju",
+		String(scene4.wild.display_name) == "Ayam Satria" and int(scene4.wild.level) == 16)
+	cek("scene4: nusadex Ayam Satria terlihat", Nusadex.sudah_lihat(24))
+	scene4.wild.take_damage(9999)
+	scene4._akhir_battle(true)
+	cek("scene4: menang — Lencana Arunika diperoleh",
+		Progres.punya_lencana(2) and Progres.jumlah_lencana() == lencana_sebelum + 1)
+	cek("scene4: hadiah Rp 2000", int(Inventori.uang) == uang_4 + 2000,
+		"aktual " + str(Inventori.uang))
+	cek("scene4: battle selesai (menang vs trainer)",
+		scene4.log_label.text.contains("Battle selesai (menang vs trainer)"))
+
 	# ---------- ringkasan
 	print("=== Hasil: %d lulus, %d gagal ===" % [lulus, gagal])
 	quit(1 if gagal > 0 else 0)

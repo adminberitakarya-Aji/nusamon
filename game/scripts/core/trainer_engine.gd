@@ -25,7 +25,8 @@ static func trainer_di_kota(db: Dictionary, kota_id: String) -> Dictionary:
 
 
 ## Bangun tim NusamonInstance sesuai urutan data (orde dikirim saat battle).
-## Bila trainer/spesies tidak dikenal → array kosong.
+## Entri tim: {spesies, level, tahap?} — tahap 0 (default) atau evolusi berikutnya
+## (mis. Ayam Satria = tahap 1). Bila trainer/spesies tidak dikenal → array kosong.
 static func buat_tim(db: Dictionary, id: String, nusamons: Dictionary) -> Array:
 	var t := cari(db, id)
 	if t.is_empty():
@@ -38,13 +39,15 @@ static func buat_tim(db: Dictionary, id: String, nusamons: Dictionary) -> Array:
 			push_error("TrainerEngine: spesies %d tidak dikenal (trainer %s)" % [sid, id])
 			continue
 		var detail: Dictionary = nusamons.get("detailSpesies", {}).get(str(sid), {})
-		var mon := NusamonInstance.create(spesies, detail, 0, int(e.get("level", 1)))
+		var mon := NusamonInstance.create(
+			spesies, detail, int(e.get("tahap", 0)), int(e.get("level", 1)))
 		if mon != null:
 			hasil.append(mon)
 	return hasil
 
 
-## Teks pratinjau tim untuk UI: "Monyet Kecil Lv.8 · Ayam Jantan Lv.10".
+## Teks pratinjau tim untuk UI: "Monyet Kecil Lv.8 · Ayam Satria Lv.16"
+## (nama sesuai tahap entri tim — bukan selalu tahap 0).
 static func tim_teks(db: Dictionary, id: String, nusamons: Dictionary) -> String:
 	var t := cari(db, id)
 	if t.is_empty():
@@ -55,7 +58,8 @@ static func tim_teks(db: Dictionary, id: String, nusamons: Dictionary) -> String
 		var tahapan: Array = sp.get("tahapan", [])
 		var nama := "?"
 		if not tahapan.is_empty():
-			nama = String(tahapan[0].get("nama", "?"))
+			var tahap_idx := clampi(int(e.get("tahap", 0)), 0, tahapan.size() - 1)
+			nama = String(tahapan[tahap_idx].get("nama", "?"))
 		bagian.append("%s Lv.%d" % [nama, int(e.get("level", 0))])
 	return " · ".join(bagian)
 

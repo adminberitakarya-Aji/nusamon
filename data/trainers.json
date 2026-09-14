@@ -18,6 +18,23 @@
         { "spesies": 23, "level": 8 },
         { "spesies": 24, "level": 10 }
       ]
+    },
+    {
+      "id": "pak_lesto",
+      "nama": "Pak Lesto",
+      "profesi": "Penjaga Gunung Kapi",
+      "gym": { "id": 2, "tipe": "Api", "kota": "kota_arunika" },
+      "dialog": {
+        "intro": "Aku Pak Lesto, penjaga Gunung Kapi. Api bisa memberi kehidupan — atau menghanguskan. Tunjukkan padamu jika kamu siap!",
+        "menang_pemain": "Panasmu lebih kuat daripada gunungku! Terimalah Lencana Arunika.",
+        "kalah_pemain": "Api butuh waktu untuk menyala. Latih timmu, lalu kembali!"
+      },
+      "hadiah_uang": 2000,
+      "lencana": { "id": 2, "nama": "Lencana Arunika" },
+      "tim": [
+        { "spesies": 14, "level": 14 },
+        { "spesies": 24, "level": 16, "tahap": 1 }
+      ]
     }
   ]
 }

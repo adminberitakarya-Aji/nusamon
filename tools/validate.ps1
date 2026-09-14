@@ -55,9 +55,9 @@ foreach ($n in $j.nusamons) {
     for ($i = 1; $i -lt $sk.Count; $i++) { if ($sk[$i] -le $sk[$i-1]) { Fail "id $($n.id): skala tidak menaik" } }
 }
 
-# --- items (Amukan bonus = engine; Teh Herba jenis latihan)
+# --- items (Amukan bonus = engine; Teh Herba jenis latihan; kunci = gate dunia)
 $bonusHarus = @{ amukan = 1.0; amukan_kuat = 1.5; amukan_super = 2.0; amukan_nusantara = 3.0 }
-if (($it.items | Measure-Object).Count -ne 5) { Fail "items != 5 (aktual $(($it.items | Measure-Object).Count))" }
+if (($it.items | Measure-Object).Count -ne 9) { Fail "items != 9 (aktual $(($it.items | Measure-Object).Count))" }
 $dupItems = $it.items | Group-Object id | Where-Object { $_.Count -gt 1 }
 if ($dupItems) { Fail ("item id duplikat: " + ($dupItems.Name -join ', ')) }
 foreach ($objek in $it.items) {
@@ -75,44 +75,67 @@ foreach ($objek in $it.items) {
         if ($null -ne $objek.bonus) { Fail "item $($objek.id): bonus harus null" }
         if (-not $objek.toko) { Fail "item $($objek.id): harus dijual di toko" }
         if ([int]$objek.harga -le 0) { Fail "item $($objek.id): harga harus > 0" }
+    } elseif ($objek.jenis -eq 'kunci') {
+        if ($objek.toko) { Fail "item $($objek.id): item kunci tidak boleh dijual di toko" }
+        if ($null -ne $objek.harga) { Fail "item $($objek.id): harga kunci harus null" }
+        if ([string]::IsNullOrWhiteSpace($objek.ket)) { Fail "item $($objek.id): ket kosong" }
     } else {
         Fail "item $($objek.id): jenis tidak dikenal ($($objek.jenis))"
     }
 }
 
-# --- world (peta Jawa MVP — Fase 3 langkah 1)
+# --- world (6 pulau + Laut Nusantara — Fase 5)
 $locIds = $w.lokasi.id
-if ($w.lokasi.Count -ne 5) { Fail "world: lokasi != 5 (aktual $($w.lokasi.Count))" }
+if ($w.lokasi.Count -ne 28) { Fail "world: lokasi != 28 (aktual $($w.lokasi.Count))" }
 if ($locIds -notcontains $w.lokasi_awal) { Fail "world: lokasi_awal tidak valid ($($w.lokasi_awal))" }
 $dupLoc = $w.lokasi | Group-Object id | Where-Object { $_.Count -gt 1 }
 if ($dupLoc) { Fail ("world: id lokasi duplikat: " + ($dupLoc.Name -join ', ')) }
+$namaPulau = @($w.pulau)
+if ($namaPulau.Count -ne 7) { Fail "world: daftar pulau != 7 (aktual $($namaPulau.Count))" }
+$kunciIds = @($it.items | Where-Object { $_.jenis -eq 'kunci' } | ForEach-Object { $_.id })
 $spIds = $j.nusamons.id
+$legendaryIds = @($j.nusamons | Where-Object { $_.rarity -eq 'legendary' } | ForEach-Object { $_.id })
 foreach ($k in $w.koneksi) {
     if ($locIds -notcontains $k.dari) { Fail "world: koneksi.dari tidak valid ($($k.dari))" }
     if ($locIds -notcontains $k.ke) { Fail "world: koneksi.ke tidak valid ($($k.ke))" }
     $balik = $w.koneksi | Where-Object { $_.dari -eq $k.ke -and $_.ke -eq $k.dari }
     if (-not $balik) { Fail "world: koneksi $($k.dari)->$($k.ke) tidak simetris" }
     if ($null -ne $k.gate) {
-        if ($k.gate.jenis -ne 'lencana') { Fail "world: gate jenis tidak dikenal ($($k.gate.jenis))" }
-        elseif ([int]$k.gate.id -lt 1 -or [int]$k.gate.id -gt 8) { Fail "world: gate lencana id di luar 1..8" }
+        if ($k.gate.jenis -eq 'lencana') {
+            if ([int]$k.gate.id -lt 1 -or [int]$k.gate.id -gt 8) { Fail "world: gate lencana id di luar 1..8" }
+        } elseif ($k.gate.jenis -eq 'item') {
+            if ($kunciIds -notcontains $k.gate.id) { Fail "world: gate item id tidak dikenal ($($k.gate.id))" }
+            if ([string]::IsNullOrWhiteSpace($k.gate.nama)) { Fail "world: gate item $($k.gate.id) tanpa nama (teks UI)" }
+        } else { Fail "world: gate jenis tidak dikenal ($($k.gate.jenis))" }
     }
 }
 foreach ($l in $w.lokasi) {
+    if ($namaPulau -notcontains $l.pulau) { Fail "world $($l.id): pulau tidak valid ($($l.pulau))" }
     if ($l.jenis -eq 'rute' -and ($l.encounters | Measure-Object).Count -eq 0) { Fail "world $($l.id): rute tanpa encounter" }
-    if ($l.jenis -ne 'rute' -and ($l.encounters | Measure-Object).Count -gt 0) { Fail "world $($l.id): kota/desa tidak boleh punya encounter" }
+    if ($l.jenis -ne 'rute' -and ($l.encounters | Measure-Object).Count -gt 0) { Fail "world $($l.id): kota/desa/landmark tidak boleh punya encounter" }
     foreach ($e in $l.encounters) {
         if ($spIds -notcontains [int]$e.spesies) { Fail "world $($l.id): spesies encounter tidak valid ($($e.spesies))" }
-        if (($j.habitatPulau."$([int]$e.spesies)") -notcontains $w.pulau) { Fail "world $($l.id): spesies $($e.spesies) tidak berhabitat di $($w.pulau)" }
+        if (($j.habitatPulau."$([int]$e.spesies)") -notcontains $l.pulau) { Fail "world $($l.id): spesies $($e.spesies) tidak berhabitat di $($l.pulau)" }
         if ([double]$e.bobot -le 0) { Fail "world $($l.id): bobot encounter harus > 0" }
         if ([int]$e.level_min -gt [int]$e.level_max) { Fail "world $($l.id): level_min > level_max" }
-        if ([int]$e.level_max -gt 15) { Fail "world $($l.id): level_max terlalu tinggi untuk MVP" }
+        if ([int]$e.level_max -gt 60) { Fail "world $($l.id): level_max di luar jangkauan game" }
     }
     if ($l.jenis -eq 'rute') {
         if ($null -eq $l.peluang_encounter) { Fail "world $($l.id): rute tanpa peluang_encounter" }
         elseif ([double]$l.peluang_encounter -le 0 -or [double]$l.peluang_encounter -gt 1) { Fail "world $($l.id): peluang_encounter harus 0..1 (aktual $($l.peluang_encounter))" }
     }
     foreach ($poi in $l.tempat) {
-        if ($null -ne $poi.aksi -and @('pilih_starter', 'rival', 'pulihkan', 'toko') -notcontains $poi.aksi) { Fail "world $($l.id): aksi POI tidak dikenal ($($poi.aksi))" }
+        if ($null -ne $poi.aksi -and @('pilih_starter', 'rival', 'pulihkan', 'toko', 'tiket', 'legendary', 'liga') -notcontains $poi.aksi) { Fail "world $($l.id): aksi POI tidak dikenal ($($poi.aksi))" }
+        if ($poi.aksi -eq 'tiket') {
+            if ($kunciIds -notcontains $poi.item) { Fail "world $($l.id): POI tiket item tidak valid ($($poi.item))" }
+            if ([int]$poi.syarat_lencana -lt 1 -or [int]$poi.syarat_lencana -gt 8) { Fail "world $($l.id): POI tiket syarat_lencana di luar 1..8" }
+        }
+        if ($poi.aksi -eq 'legendary') {
+            if ($legendaryIds -notcontains [int]$poi.spesies) { Fail "world $($l.id): POI legendary bukan spesies legendary ($($poi.spesies))" }
+            if ([int]$poi.level -lt 1 -or [int]$poi.level -gt 100) { Fail "world $($l.id): POI legendary level tidak valid" }
+            if ($null -ne $poi.item -and $kunciIds -notcontains $poi.item) { Fail "world $($l.id): POI legendary item tidak valid ($($poi.item))" }
+            if ($null -ne $poi.syarat_lencana -and ([int]$poi.syarat_lencana -lt 1 -or [int]$poi.syarat_lencana -gt 8)) { Fail "world $($l.id): POI legendary syarat_lencana di luar 1..8" }
+        }
         if ($null -ne $poi.dialog -and ($poi.dialog | Measure-Object).Count -lt 1) { Fail "world $($l.id): dialog POI kosong" }
         if ($null -ne $poi.dialog -and (($poi.dialog | ForEach-Object { $_.Trim() }) -contains '')) { Fail "world $($l.id): ada baris dialog kosong" }
     }
@@ -122,6 +145,8 @@ foreach ($l in $w.lokasi) {
 $dupTr = $tr.trainers | Group-Object id | Where-Object { $_.Count -gt 1 }
 if ($dupTr) { Fail ("trainer id duplikat: " + ($dupTr.Name -join ', ')) }
 $badgeIds = @()
+$ligaUrutan = @()
+$adaJuara = 0
 	foreach ($t in $tr.trainers) {
     $jenis = if ($null -ne $t.jenis) { $t.jenis } else { 'gym' }
     if ($jenis -eq 'gym') {
@@ -131,6 +156,16 @@ $badgeIds = @()
     } elseif ($jenis -eq 'rival') {
         if ($null -ne $t.gym) { Fail "trainer $($t.id): rival tidak boleh punya gym" }
         if ($null -ne $t.lencana) { Fail "trainer $($t.id): rival tidak boleh punya lencana" }
+    } elseif ($jenis -eq 'liga') {
+        if ($null -ne $t.gym) { Fail "trainer $($t.id): liga tidak boleh punya gym" }
+        if ($null -ne $t.lencana) { Fail "trainer $($t.id): liga tidak boleh punya lencana" }
+        if ([int]$t.urutan -lt 1 -or [int]$t.urutan -gt 4) { Fail "trainer $($t.id): liga urutan di luar 1..4" }
+        $ligaUrutan += [int]$t.urutan
+    } elseif ($jenis -eq 'juara') {
+        if ($null -ne $t.gym) { Fail "trainer $($t.id): juara tidak boleh punya gym" }
+        if ($null -ne $t.lencana) { Fail "trainer $($t.id): juara tidak boleh punya lencana" }
+        if ($null -ne $t.urutan) { Fail "trainer $($t.id): juara tidak boleh punya urutan" }
+        $adaJuara++
     } else { Fail "trainer $($t.id): jenis tidak dikenal ($jenis)" }
     if (($t.tim | Measure-Object).Count -lt 1 -or ($t.tim | Measure-Object).Count -gt 6) { Fail "trainer $($t.id): tim harus 1..6 mon" }
     $spSeen = @()
@@ -140,8 +175,10 @@ $badgeIds = @()
             if ([int]$m.spesies -ne 0) { Fail "trainer $($t.id): counter_starter harus spesies=0" }
         } else {
             if ($spIds -notcontains [int]$m.spesies) { Fail "trainer $($t.id): spesies tidak valid ($($m.spesies))" }
-            if ($spSeen -contains [int]$m.spesies) { Fail "trainer $($t.id): spesies duplikat di tim ($($m.spesies))" }
-            $spSeen += [int]$m.spesies
+            # duplikat spesies hanya dibolehkan bila tahapnya berbeda (mis. Ular Kecil + Ular Raksasa)
+            $kunciTim = "$([int]$m.spesies)@$(if ($null -ne $m.tahap) { [int]$m.tahap } else { 0 })"
+            if ($spSeen -contains $kunciTim) { Fail "trainer $($t.id): entri tim duplikat ($($m.spesies) tahap sama)" }
+            $spSeen += $kunciTim
         }
         if ([int]$m.level -lt 1 -or [int]$m.level -gt 100) { Fail "trainer $($t.id): level di luar 1..100" }
         if ($null -ne $m.tahap -and ([int]$m.tahap -lt 0 -or [int]$m.tahap -gt 2)) { Fail "trainer $($t.id): tahap di luar 0..2" }
@@ -153,10 +190,14 @@ $badgeIds = @()
     if ($jenis -eq 'gym' -and [string]::IsNullOrWhiteSpace($t.lencana.nama)) { Fail "trainer $($t.id): lencana.nama kosong" }
 }
 if ($badgeIds.Count -ne ($badgeIds | Sort-Object -Unique).Count) { Fail "trainers: id gym/lencana duplikat antar trainer" }
+if (($badgeIds | Sort-Object) -join ',' -ne (@(1..8) -join ',')) { Fail "trainers: lencana 1..8 tidak lengkap (ada $(($badgeIds | Sort-Object) -join ','))" }
+if ($ligaUrutan.Count -ne ($ligaUrutan | Sort-Object -Unique).Count) { Fail "trainers: urutan liga duplikat" }
+if (($ligaUrutan | Sort-Object) -join ',' -ne (@(1..4) -join ',')) { Fail "trainers: Elite Empat tidak lengkap (ada $(($ligaUrutan | Sort-Object) -join ','))" }
+if ($adaJuara -ne 1) { Fail "trainers: harus tepat 1 juara (ada $adaJuara)" }
 
 # --- hasil
 if ($errs.Count -eq 0) {
-    Write-Host "VALIDASI LOLOS: data NUSAMON konsisten (30 spesies / 25 move / 11 tipe / 5 item / world 5 lokasi / trainer 1 gym)" -ForegroundColor Green
+    Write-Host "VALIDASI LOLOS: data NUSAMON konsisten (30 spesies / 25 move / 11 tipe / 9 item / world 28 lokasi 6 pulau+laut / trainer 8 gym + liga + juara)" -ForegroundColor Green
     exit 0
 } else {
     Write-Host "VALIDASI GAGAL:" -ForegroundColor Red

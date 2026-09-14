@@ -115,8 +115,13 @@ func _init() -> void:
 		NusamonData.id_model("Kantong Semar Kecil") == "kantong_semar_kecil")
 	cek("path_model", NusamonData.path_model("Rimau Muda")
 		== "res://assets/models/rimau_muda.glb")
-	cek("model tahap 2/3 belum digenerate (Blender) → pratinjau diam",
-		not ResourceLoader.exists(NusamonData.path_model("Rimau Muda")))
+	# Fase 5: 62/62 model semua tahapan digenerate via Blender → pratinjau tampil
+	cek("model tahap 2/3 tersedia (Fase 5 — Blender)",
+		ResourceLoader.exists(NusamonData.path_model("Rimau Muda")))
+	cek("model starter evolusi akhir tersedia",
+		ResourceLoader.exists(NusamonData.path_model("Rimau Agung")))
+	cek("model legendary tersedia",
+		ResourceLoader.exists(NusamonData.path_model("Elang Garuda")))
 
 	# ---------- 9. progres dunia persisten (Simpanan v2 — Fase 3 langkah 5)
 	Progres.reset()

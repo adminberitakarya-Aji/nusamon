@@ -132,14 +132,15 @@ func _init() -> void:
 	cek("kakatua (20) TIDAK berhabitat Jawa", not EncounterSystem.habitat_valid(nusamons, "Jawa", 20))
 	cek("spesies tak dikenal → tidak valid", not EncounterSystem.habitat_valid(nusamons, "Jawa", 999))
 
-	# ---------- cross-check: tabel khas world.json konsisten habitat Jawa
+	# ---------- cross-check: tabel khas world.json konsisten habitatPulau per lokasi
 	var tabel_konsisten := true
 	for lok in db.get("lokasi", []):
+		var pl := String(lok.get("pulau", ""))
 		for e in lok.get("encounters", []):
-			if not EncounterSystem.habitat_valid(nusamons, String(db.get("pulau", "")),
+			if pl == "" or not EncounterSystem.habitat_valid(nusamons, pl,
 					int(e.get("spesies", 0))):
 				tabel_konsisten = false
-	cek("tabel khas world.json konsisten habitatPulau", tabel_konsisten)
+	cek("tabel khas world.json konsisten habitatPulau (semua lokasi)", tabel_konsisten)
 
 	# ---------- peluang per rute
 	cek("peluang 1.0 → selalu", EncounterSystem.terjadi({"peluang_encounter": 1.0}, rng))

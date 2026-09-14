@@ -35,15 +35,21 @@ func _init() -> void:
 
 	# ---------- struktur data
 	var lokasi: Array = db.get("lokasi", [])
-	cek("5 lokasi Jawa MVP", lokasi.size() == 5, "aktual " + str(lokasi.size()))
+	cek("28 lokasi (6 pulau + Laut Nusantara — Fase 5)", lokasi.size() == 28,
+		"aktual " + str(lokasi.size()))
 	cek("lokasi_awal = desa_sumberrejo", String(db.get("lokasi_awal", "")) == "desa_sumberrejo")
-	var id_harapan := ["desa_sumberrejo", "rute_1", "kota_harapan", "rute_2", "kota_arunika"]
+	var id_harapan := ["desa_sumberrejo", "rute_1", "kota_harapan", "rute_2", "kota_arunika",
+		"laut_nusantara", "pelabuhan_bakau", "hutan_rimba", "kota_rimba", "rute_3", "kota_toba",
+		"muara_kapuas", "rute_4", "hutan_gambut", "kota_kapuas", "pelabuhan_anoa", "rute_5",
+		"kota_maroso", "teluk_karang", "kota_pura", "rute_6", "kota_sabana", "pulau_komodo",
+		"pelabuhan_cendana", "hutan_cendana", "rute_7", "kota_puncak", "puncak_salju"]
 	var ids: Array = []
 	for l in lokasi:
 		ids.append(String(l.get("id", "")))
 	cek("id lokasi lengkap & berurutan", ids == id_harapan, str(ids))
 	var koneksi: Array = db.get("koneksi", [])
-	cek("8 koneksi (4 pasang dua arah)", koneksi.size() == 8, "aktual " + str(koneksi.size()))
+	cek("54 koneksi dua arah (gate hanya arah masuk)", koneksi.size() == 54,
+		"aktual " + str(koneksi.size()))
 
 	# ---------- lookup lokasi
 	var desa := WorldEngine.lokasi(db, "desa_sumberrejo")
@@ -124,17 +130,32 @@ func _init() -> void:
 	cek("gate tanpa syarat bebas", WorldEngine.syarat_terpenuhi({}, {}))
 	cek("gate jenis tak dikenal terkunci", not WorldEngine.syarat_terpenuhi({"jenis": "sihir"}, {}))
 
-	# ---------- graf terhubung (BFS dari lokasi awal)
+	# ---------- graf terhubung (BFS dari lokasi awal, semua gate terbuka)
 	var dicap := {"desa_sumberrejo": true}
 	var antrian: Array = ["desa_sumberrejo"]
+	var progres_bfs := {"lencana": [1, 2, 3, 4, 5, 6, 7, 8],
+		"item": ["tiket_kapal", "perahu_selat", "perahu", "perahu_laut_dalam"]}
 	while not antrian.is_empty():
 		var cur: String = antrian.pop_front()
-		for t in WorldEngine.daftar_tujuan(db, cur, {"lencana": [1, 2, 3, 4, 5, 6, 7, 8]}):
+		for t in WorldEngine.daftar_tujuan(db, cur, progres_bfs):
 			var nid := String(t.get("id", ""))
 			if not dicap.has(nid):
 				dicap[nid] = true
 				antrian.append(nid)
-	cek("graf terhubung: 5 lokasi dicapai dari awal", dicap.size() == 5, str(dicap.keys()))
+	cek("graf terhubung: 28 lokasi dicapai dari awal", dicap.size() == 28, str(dicap.keys()))
+	# tanpa progres apa pun, laut & pulau lain tak tercapai (terkunci)
+	var dicap_kunci := {"desa_sumberrejo": true}
+	var antrian2: Array = ["desa_sumberrejo"]
+	while not antrian2.is_empty():
+		var cur2: String = antrian2.pop_front()
+		for t in WorldEngine.daftar_tujuan(db, cur2, {}):
+			var nid2 := String(t.get("id", ""))
+			if bool(t.get("terkunci", true)) or dicap_kunci.has(nid2):
+				continue
+			dicap_kunci[nid2] = true
+			antrian2.append(nid2)
+	cek("tanpa progres: hanya 3 lokasi Jawa dicapai", dicap_kunci.size() == 3,
+		str(dicap_kunci.keys()))
 
 	# ---------- data encounter (langkah 2 memakai ini)
 	var nusamons := NusamonData.load_nusamons()

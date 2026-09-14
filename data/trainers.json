@@ -50,6 +50,202 @@
       "tim": [
         { "counter_starter": true, "level": 6 }
       ]
+    },
+    {
+      "id": "pak_rimba",
+      "nama": "Pak Rimba",
+      "profesi": "Penjaga Hutan Rimba",
+      "gym": { "id": 3, "tipe": "Daun", "kota": "kota_rimba" },
+      "dialog": {
+        "intro": "Selamat datang di rimba Sumatra! Aku Pak Rimba — hutan ini hidup karena perginya tumbuhan. Tunjukkan rasa hormatmu pada alam!",
+        "menang_pemain": "Akarku tertumbangkan juga! Terimalah Lencana Rimba — jagalah hutan, ya!",
+        "kalah_pemain": "Hutan selalu menyaring yang lemah. Latih dirimu, lalu kembali!"
+      },
+      "hadiah_uang": 2800,
+      "lencana": { "id": 3, "nama": "Lencana Rimba" },
+      "tim": [
+        { "spesies": 25, "level": 17 },
+        { "spesies": 30, "level": 18 },
+        { "spesies": 2, "level": 19 }
+      ]
+    },
+    {
+      "id": "bu_tarra",
+      "nama": "Bu Tarra",
+      "profesi": "Apoteker Herbal Danau Toba",
+      "gym": { "id": 4, "tipe": "Racun", "kota": "kota_toba" },
+      "dialog": {
+        "intro": "Aku Bu Tarra, peracik ramuan dari tumbuhan danau. Racun itu obat sekaligus senjata — bisakah kamu bertahan?",
+        "menang_pemain": "Imunmu luar biasa! Ini Lencana Toba — kamu pantas melanjutkan perjalanan.",
+        "kalah_pemain": "Racunku masih terlalu kuat untukmu. Belajar lagi, ya!"
+      },
+      "hadiah_uang": 3600,
+      "lencana": { "id": 4, "nama": "Lencana Toba" },
+      "tim": [
+        { "spesies": 29, "level": 20 },
+        { "spesies": 21, "level": 21 },
+        { "spesies": 21, "level": 23, "tahap": 1 }
+      ]
+    },
+    {
+      "id": "bang_riang",
+      "nama": "Bang Riang",
+      "profesi": "Nakhoda Perahu Selat",
+      "gym": { "id": 5, "tipe": "Air", "kota": "kota_kapuas" },
+      "dialog": {
+        "intro": "Ombak Kapuas tak pernah kalah! Aku Bang Riang, nakhoda yang mengarungi selat seumur hidup. Ayo, adu gelombang!",
+        "menang_pemain": "Kapalku karam oleh gelombangmu! Terimalah Lencana Kapuas — samudra menunggumu.",
+        "kalah_pemain": "Masih terombang-ambing, ya! Berlayar dulu, latih timmu!"
+      },
+      "hadiah_uang": 4400,
+      "lencana": { "id": 5, "nama": "Lencana Kapuas" },
+      "tim": [
+        { "spesies": 17, "level": 24 },
+        { "spesies": 18, "level": 25 },
+        { "spesies": 11, "level": 26 }
+      ]
+    },
+    {
+      "id": "guru_rahman",
+      "nama": "Guru Rahman",
+      "profesi": "Pelatih Pencak Silat",
+      "gym": { "id": 6, "tipe": "Petarung", "kota": "kota_maroso" },
+      "dialog": {
+        "intro": "Aku Guru Rahman. Silat mengajarkan: tubuh kuat, hati lebih kuat. Tunjukkan disiplinmu di gym Maroso!",
+        "menang_pemain": "Pukulanmu punya jiwa! Terimalah Lencana Maroso — terus berlatih dengan rendah hati.",
+        "kalah_pemain": "Kembali setelah jurumu matang. Gym ini tak pernah tutup."
+      },
+      "hadiah_uang": 5200,
+      "lencana": { "id": 6, "nama": "Lencana Maroso" },
+      "tim": [
+        { "spesies": 13, "level": 27 },
+        { "spesies": 19, "level": 28, "tahap": 1 },
+        { "spesies": 12, "level": 29, "tahap": 1 }
+      ]
+    },
+    {
+      "id": "pak_rida",
+      "nama": "Pak Rida",
+      "profesi": "Konservasionis Komodo",
+      "gym": { "id": 7, "tipe": "Tanah", "kota": "kota_sabana" },
+      "dialog": {
+        "intro": "Aku Pak Rida, penjaga suaka Komodo. Tanah di sini menyimpan kekuatan purba — buktikan kamu layak melangkah di atasnya!",
+        "menang_pemain": "Langkahmu kokoh seperti ibu pertiwi! Terimalah Lencana Sabana.",
+        "kalah_pemain": "Tanah ini menolakmu... pelajari lagi jalurmu, lalu kembali."
+      },
+      "hadiah_uang": 6000,
+      "lencana": { "id": 7, "nama": "Lencana Sabana" },
+      "tim": [
+        { "spesies": 27, "level": 31, "tahap": 1 },
+        { "spesies": 9, "level": 32 },
+        { "spesies": 7, "level": 33, "tahap": 1 }
+      ]
+    },
+    {
+      "id": "ibu_waigeo",
+      "nama": "Ibu Waigeo",
+      "profesi": "Pengamat Burung Papua",
+      "gym": { "id": 8, "tipe": "Udara", "kota": "kota_puncak" },
+      "dialog": {
+        "intro": "Aku Ibu Waigeo. Langit Papua adalah rumahku — dan sayap-sayap di gym ini tak pernah lelah. Tantangan terakhir sebelum Liga!",
+        "menang_pemain": "Terbangmu lebih tinggi dari jangkauanku! Lencana Puncak jadi milikmu — Liga menantimu.",
+        "kalah_pemain": "Angin Papua menolakmu hari ini. Latih sayapmu, penantang."
+      },
+      "hadiah_uang": 6800,
+      "lencana": { "id": 8, "nama": "Lencana Puncak" },
+      "tim": [
+        { "spesies": 20, "level": 35, "tahap": 1 },
+        { "spesies": 16, "level": 36, "tahap": 1 },
+        { "spesies": 15, "level": 37, "tahap": 1 }
+      ]
+    },
+    {
+      "id": "kak_dinda",
+      "jenis": "liga",
+      "urutan": 1,
+      "nama": "Kak Dinda",
+      "profesi": "Ahli Meteorologi — Elite Empat E1",
+      "dialog": {
+        "intro": "Selamat datang di Liga Nusantara! Aku Kak Dinda, pembaca langit. Cuacanya hari ini: badai listrik!",
+        "menang_pemain": "Badaimu lebih dahsyat dari prakiraanku! Menang bagus — E2 menunggu.",
+        "kalah_pemain": "Peramalku tepat: kamu belum siap. Kembali lagi nanti!"
+      },
+      "hadiah_uang": 8000,
+      "tim": [
+        { "spesies": 24, "level": 40, "tahap": 1 },
+        { "spesies": 17, "level": 42, "tahap": 1 }
+      ]
+    },
+    {
+      "id": "pak_nandra",
+      "jenis": "liga",
+      "urutan": 2,
+      "nama": "Pak Nandra",
+      "profesi": "Pembudidaya Arwana — Elite Empat E2",
+      "dialog": {
+        "intro": "Aku Pak Nandra. Arwana yang kubesarkan kini menjadi naga sungguhan. Lihat kebesaran mereka!",
+        "menang_pemain": "Gagahmu melampaui nagaku! Terus melangkah — E3 sudah menantimu.",
+        "kalah_pemain": "Nagaku masih di atas awan. Tumbuhkan dulu sayapmu!"
+      },
+      "hadiah_uang": 9000,
+      "tim": [
+        { "spesies": 10, "level": 42, "tahap": 1 },
+        { "spesies": 18, "level": 44, "tahap": 1 }
+      ]
+    },
+    {
+      "id": "bu_waja",
+      "jenis": "liga",
+      "urutan": 3,
+      "nama": "Bu Waja",
+      "profesi": "Pandai Besi — Elite Empat E3",
+      "dialog": {
+        "intro": "Aku Bu Waja, pandai besi Liga. Baja yang kupukul dari tungku tak akan patah. Bisakah kamu menggerusnya?",
+        "menang_pemain": "Pemukulmu lebih tajam dari paluku! Satu lagi sebelum Juara.",
+        "kalah_pemain": "Palu tidak patah oleh angin. Perkuat dirimu dulu!"
+      },
+      "hadiah_uang": 10000,
+      "tim": [
+        { "spesies": 27, "level": 43, "tahap": 1 },
+        { "spesies": 9, "level": 45, "tahap": 2 }
+      ]
+    },
+    {
+      "id": "kapten_samudra",
+      "jenis": "liga",
+      "urutan": 4,
+      "nama": "Kapten Samudra",
+      "profesi": "Kapal Penelitian Laut — Elite Empat E4",
+      "dialog": {
+        "intro": "Aku Kapten Samudra. Samudra menyimpan kekuatan tanpa dasar — dan timku adalah gelombangnya. Siapkan dirimu!",
+        "menang_pemain": "Gelombangku pecah oleh tekadmu! Pintu Juara terbuka untukmu.",
+        "kalah_pemain": "Ombakmu masih kecil di hadapan palung. Berlayar dulu, penantang!"
+      },
+      "hadiah_uang": 11000,
+      "tim": [
+        { "spesies": 19, "level": 44, "tahap": 1 },
+        { "spesies": 11, "level": 45, "tahap": 1 },
+        { "spesies": 10, "level": 46, "tahap": 1 }
+      ]
+    },
+    {
+      "id": "nara",
+      "jenis": "juara",
+      "nama": "Nara",
+      "profesi": "Penjelajah Samudra — Juara Liga Nusantara",
+      "dialog": {
+        "intro": "Jadi kamu yang mengalahkan Elite Empat! Aku Nara, penjelajah samudra dan Juara Nusantara. Aku bertarung dengan seluruh petualanganku — tunjukkan milikmu!",
+        "menang_pemain": "Luar biasa...! Kamu pantas menyandang gelar Juara Nusantara! Petualanganmu baru dimulai — kejar Nusadex 100%!",
+        "kalah_pemain": "Juara tak digulingkan oleh gelombang kecil. Kembali saat kamu siap!"
+      },
+      "hadiah_uang": 15000,
+      "tim": [
+        { "spesies": 16, "level": 47, "tahap": 1 },
+        { "spesies": 8, "level": 48, "tahap": 2 },
+        { "spesies": 18, "level": 48, "tahap": 1 },
+        { "spesies": 1, "level": 50, "tahap": 2 },
+        { "spesies": 7, "level": 50, "tahap": 2 }
+      ]
     }
   ]
 }

@@ -18,7 +18,7 @@
 | 2 — Catch & Nusadex | ✅ **Selesai** (catatan: pratinjau model butuh aset Blender — D-1) | Inventori, tim/partai, switch, Nusadex, ability, Latihan, save/load | Tangkap masuk tim, Nusadex terisi, ability & PP aktif, Latihan & save/load aktif |
 | 3 — World & Gym pertama | ✅ **Selesai** | World map Jawa + encounter + G1 Normal (Bu Sari) + lencana + env CC0/placeholder | Battle trainer + lencana G1 |
 | 4 — Vertical Slice | ✅ **Selesai** | Starter selection + G1 + G2 + rival + pusat pemulihan + toko + export Web | Main dari Desa Sumberrejo sampai lencana G2 tanpa jebol (GDD §8) |
-| 5 — Produksi konten penuh | ⬜ Belum mulai | 30 spesies, 6 pulau, 8 gym, Liga Nusantara, story | Tamat end-to-end + Nusadex 100% |
+| 5 — Produksi konten penuh | 🔨 **Berjalan** | 30 spesies (62 model .glb), 6 pulau + Laut Nusantara, 8 gym, Liga Nusantara + Juara, legendary trio | Tamat end-to-end + Nusadex 100% (audio & polish menyusul) |
 
 ---
 
@@ -126,16 +126,17 @@
 | Main end-to-end: mulai → G1 → G2, bisa dimainkan orang lain | ✅ semua tahap alur teruji headless per leg (starter → rival → Rute 1 → G1 → Rute 2 → G2) + guard anti-softlock; playtest visual oleh orang lain disarankan saat review (pola sama inspeksi Fase 2) `139138b` |
 | Export Web (ADR-04) | ✅ pipeline siap: `export_presets.cfg` (preset Web) + `tools/export_web.ps1` (deteksi templates, export `build/web/`, ringkasan ukuran); `build/` di-gitignore · catatan: artefak aktual menunggu install export templates di mesin build (script memandu) `139138b` |
 
-### Fase 5 — Produksi konten penuh ⬜
+### Fase 5 — Produksi konten penuh 🔨 (Berjalan)
 
 | Langkah | Status |
 |---------|:------:|
-| 15 spesies line sisanya (builder Blender + data sudah siap semua) | ⬜ |
-| 6 pulau lengkap (`docs/world-region.md`) | ⬜ |
-| 8 gym + Liga Nusantara + Juara Nara | ⬜ |
-| Trio legendary: lokasi, 1 encounter per save | ⬜ |
-| Musik/instrumen Nusantara + audio | ⬜ |
+| 15 spesies line sisanya (builder Blender + data sudah siap semua) | ✅ 62/62 model `.glb` semua tahapan 30 line dibangkitkan via Blender 5.2 headless (`tools/blender/nusamon_build.py` +30 builder family parameterized, registry 62 id konsisten `NusamonData.id_model`) — **D-1 TUTUP** |
+| 6 pulau lengkap (`docs/world-region.md`) | ✅ `data/world.json` v0.2 — 28 lokasi (Jawa 5 + Laut 1 + Sumatra 5 + Kalimantan 4 + Sulawesi 4 + Bali&NT 4 + Papua 5), field `pulau` per lokasi, tabel encounter per rute (habitat-divalidasi), 4 item kunci (`items.json` jenis `kunci`) + gate item di `WorldEngine` + POI `tiket` (pelabuhan/dermaga) |
+| 8 gym + Liga Nusantara + Juara Nara | ✅ `data/trainers.json` — G3 Pak Rimba·G4 Bu Tarra·G5 Bang Riang·G6 Guru Rahman·G7 Pak Rida·G8 Ibu Waigeo (tim + `tahap` evolusi) + Elite Empat `jenis: liga` (urutan 1-4, panel berantai E1→E4 di world scene) + Juara Nara `jenis: juara` (5 mon, log 🏆 TAMAT di battle scene); syarat Liga = 8 lencana |
+| Trio legendary: lokasi, 1 encounter per save | ✅ 3 POI aksi `legendary` (Paus Samudra/Palung — butuh Perahu Laut Dalam; Cenderawasih/Lorong Rahasia & Elang Garuda/Sarang Langit — butuh 8 lencana) + `Progres.legendary_dijumpai` (idempoten) + Simpanan v2 field `legendary` (aditif) + spawn battle liar (Lv.50, bisa ditangkap) |
+| Musik/instrumen Nusantara + audio | ⬜ menunggu pipeline aset audio (belum ada sumber CC0/produksi) |
 | Ekspansi (TCG/mobile) — **terkunci sampai Fase 5 tuntas** (`docs/expansion.md`) | 🧊 |
+| DoD: tamat end-to-end + Nusadex 100% | 🔨 alur data + tes hijau (lihat `test_fase5`); playtest visual menyeluruh menyusul setelah audio |
 
 ## 3. Backlog Teknis (hasil audit v0.1, 2026-09-13/14)
 
@@ -209,6 +210,12 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | **Rival Raka** — trainer `jenis: "rival"` (tanpa gym/lencana; validator + test menyesuaikan); tim `counter_starter: true` di-resolve engine dari starter pemain (Api→Air/Daun→Api/Air→Daun, fallback Penyuci bila belum pilih); battle scene: trainer tanpa lencana TIDAK menambah lencana (guard id-0); `_tantang_gym` → `_tantang_trainer` (dipakai gym & rival); rival dikalahkan sekali via `trainer_kalah` | konvensi genre (rival pilih starter unggul tipe); eksploit lencana-0 ditutup; nama Raka fiktif (docs tidak menetapkan) | — |
 | 2026-09-14 | **Pusat pemulihan & toko dunia** (langkah 4): POI aksi `pulihkan`/`toko` di kedua kota; toko = overlay world scene (semua tier Amukan; Nusantara hadiah event); auto-heal awal battle DIHAPUS → guard anti-softlock (aktif pingsan → anggota sehat maju; semua pingsan → pemulihan darurat) | pusat pemulihan jadi bermakna; game tetap tak bisa buntu; tes `test_pusat` (18 asersi) menjaga perilaku | — |
 | 2026-09-14 | **Export Web** (ADR-04): `export_presets.cfg` preset "Web" + `tools/export_web.ps1` (deteksi Godot & templates, export `build/web/index.html`, ringkasan ukuran); `build/` di-gitignore; artefak aktual menunggu install export templates (script memandu); pelajaran: `.ps1` tanpa BOM + karakter non-ASCII = parse error → script dibuat ASCII murni; Godot non-console tak menulis `--version` ke stdout → versi dari nama exe | distribusi Web = termudah (ADR-04); tool tahan kondisi templates belum terpasang | — |
+
+| 2026-09-14 | **Fase 5 dimulai — langkah 1 (aset)**: builder Blender diperluas +30 builder family parameterized (`build_rimau(tahap)` dsb.) → registry **62 id** (semua tahapan 30 line); 62 `.glb` dibangkitkan via Blender 5.2 LTS headless (2,9 MB total) — **D-1 TUTUP**; catatan: `id_model("Kupu-kupu Ekor Walet")` mempertahankan tanda hubung → key registry `kupu-kupu_ekor_walet` | runtime memuat model otomatis via `ResourceLoader.exists` — tanpa ubah kode; generator tetap deterministik | — |
+| 2026-09-14 | **Langkah 2 (dunia)**: `world.json` v0.2 — 28 lokasi 6 pulau + Laut Nusantara (hub laut; gate item per leg), field `pulau` per lokasi, tabel encounter per rute **disesuaikan habitat** (`habitatPulau` = SSOT; docs daftar spesies non-habitat diperbaiki, mis. Ulat Daun tidak di Sumatra); 4 item `jenis: kunci` (tiket_kapal, perahu_selat, perahu, perahu_laut_dalam) + `WorldEngine` gate `jenis: item` (nama → teks alasan UI) + POI `tiket` (diberikan sekali per save via stok, bukan flag) | gate = item, bukan lencana, sesuai docs §1 "Kunci Keluar"; item kunci tak dijual (fail-safe); shortcut bakau→rute_3 dihapus agar G3 wajib | — |
+| 2026-09-14 | **Langkah 3 (gym & liga)**: G3-G8 di `trainers.json` (tim memakai `tahap` evolusi, level per docs world-region §3); **Liga Nusantara** = trainer `jenis: liga` (urutan 1-4) + `jenis: juara` (Nara, 5 mon) — panel POI `liga` di Kota Puncak berantai E1→E4→Juara (syarat 8 lencana; kalah semua = TAMAT, log 🏆 di battle scene) | tanpa mesin battle baru — reuse jalur trainer; lencana 1..8 & urutan liga divalidasi `validate.ps1` | — |
+| 2026-09-14 | **Langkah 4 (legendary)**: 3 POI `aksi: legendary` (Paus/Palung — item perahu_laut_dalam; Cenderawasih & Elang — 8 lencana), `Progres.legendary_dijumpai` idempoten + field `legendary` Simpanan v2 (**aditif** — save lama tetap terbaca), tandai saat encounter dimulai (aturan "1 per save"), spawn via antrean liar (Lv.50, bisa ditangkap — tangkap legendary = bagian Nusadex 100%) | narasi positif konservasi (docs §5); legendary tetap dikecualikan dari encounter liar (bobot 0) | — |
+| 2026-09-14 | **Audio** ⬜: belum dikerjakan — butuh keputusan sourcing (CC0 vs produksi) sebelum integrasi; Fase 5 status 🔨 sampai itu | DoD penuh (tamat + Nusadex 100%) menunggu playtest visual menyeluruh | — |
 
 ## 5. Referensi
 

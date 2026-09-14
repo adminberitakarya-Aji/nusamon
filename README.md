@@ -12,11 +12,12 @@
 |------|--------|
 | Perencanaan & Desain (GDD) | ✅ Selesai v0.1 |
 | Keputusan Teknis | ✅ Godot 4 + 3D low-poly (`docs/tech-stack.md`) |
-| Tooling Generator Aset | 🔨 Selesai (6/15 model MVP; perlu Blender untuk eksekusi) |
+| Tooling Generator Aset | ✅ Selesai — 62/62 model (semua tahapan 30 line) dibangkitkan via Blender 5.2 headless; D-1 tutup |
 | Fase 1 — Prototipe Battle | ✅ **Selesai** — battle core + tangkap + EXP/evolusi + PP + tahap stat (buff/debuff/heal) + UI; **78 asersi hijau (3 suite, Godot 4.7.2)**. Detail: `ROADMAP.md` |
 | Prototipe World/Catch (Fase 2) | ✅ **Selesai** — inventori & toko + tim/partai + switch + Nusadex + 12 ability + Latihan EV-lite + save/load (JSON `user://`) aktif; catatan: pratinjau model 3D menunggu aset Blender (D-1) |
 | Fase 3 — World & Gym pertama | ✅ **Selesai** — peta Jawa + encounter liar (habitatPulau × rarity) + kabur speed-based + battle trainer Bu Sari (menang → Lencana Harapan, Rute 2 terbuka) + **simpanan v2 (progres persisten)** + environment CC0/placeholder; catatan: aset .glb env menunggu unduhan (lihat `assets/env/README.md`) |
-| Fase 4 — Vertical Slice | ✅ **Selesai** — starter selection + cutscene ✅ · rival Raka (counter-starter) ✅ · gym G2 Pak Lesto ✅ (Lencana Arunika) · pusat pemulihan + toko semua tier ✅ · main end-to-end (Desa → G1 → G2) ✅ · export Web (pipeline siap; templates menunggu install) ✅. Berikutnya: **Fase 5 — Produksi konten penuh**. Detail: `ROADMAP.md` |
+| Fase 4 — Vertical Slice | ✅ **Selesai** — starter selection + cutscene ✅ · rival Raka (counter-starter) ✅ · gym G2 Pak Lesto ✅ (Lencana Arunika) · pusat pemulihan + toko semua tier ✅ · main end-to-end (Desa → G1 → G2) ✅ · export Web (pipeline siap; templates menunggu install) ✅. Detail: `ROADMAP.md` |
+| Fase 5 — Produksi konten penuh | 🔨 **Berjalan** — 62 model semua tahapan ✅ · 6 pulau + Laut Nusantara (28 lokasi, gate item tiket/perahu) ✅ · 8 gym + Liga Nusantara (Elite Empat berantai) + Juara Nara (TAMAT) ✅ · legendary trio (1× per save) ✅ · audio ⬜ (menunggu sourcing). Detail: `ROADMAP.md` |
 
 ## Struktur Proyek
 

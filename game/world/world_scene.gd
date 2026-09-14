@@ -191,6 +191,9 @@ func _perbarui() -> void:
 			continue
 		daftar_tempat.add_child(_label("• %s" % String(t.get("nama", "?")), 14))
 		daftar_tempat.add_child(_label("   %s" % String(t.get("catatan", "")), 12, Color(0.95, 0.75, 0.4)))
+		# POI dengan aksi (Fase 4): lab starter — hanya bila belum memilih
+		if String(t.get("aksi", "")) == "pilih_starter" and not Progres.sudah_pilih_starter():
+			_tombol("🔬 MASUK LABORATORIUM", daftar_tempat, _buka_cutscene_starter)
 
 	# panel gym (Fase 3 langkah 3): leader, tim, hadiah — battle = langkah 4
 	if not trainer_gym.is_empty():
@@ -253,6 +256,9 @@ func _pergi(tujuan_id: String) -> void:
 
 ## Jelajahi rute → rol peluang encounter → battle liar (Fase 3 langkah 2).
 func _cari_encounter() -> void:
+	if Tim.jumlah() == 0:
+		_catatan("Pilih Nusamon pertamamu di Laboratorium Prof. Candri dulu!")
+		return
 	var cur := WorldEngine.lokasi(db, Progres.lokasi)
 	if not EncounterSystem.terjadi(cur, rng):
 		_catatan("Kamu menyusuri %s... tidak ada apa-apa." % String(cur.get("nama", "?")))
@@ -267,8 +273,116 @@ func _cari_encounter() -> void:
 	get_tree().change_scene_to_file(SCENE_BATTLE)
 
 
+# ------------------------------------------------------------ cutscene starter (Fase 4)
+
+const STARTER_LEVEL := 5
+const STARTER_IDS := [1, 2, 3]           # Rimau (Api) / Orangutan (Daun) / Penyu (Air)
+
+var cutscene_baris: Array = []
+var cutscene_idx := 0
+var cutscene_overlay: Control = null
+
+
+## Masuk laboratorium → cutscene Prof. Candri → pilih starter.
+func _buka_cutscene_starter() -> void:
+	var lab := WorldEngine.lokasi(db, Progres.lokasi)
+	var dialog: Array = []
+	for t in lab.get("tempat", []):
+		if String(t.get("id", "")) == "lab_candri":
+			dialog = t.get("dialog", [])
+	cutscene_baris = dialog
+	cutscene_idx = 0
+	_tampilkan_langkah_cutscene()
+
+
+func _tampilkan_langkah_cutscene() -> void:
+	if cutscene_overlay != null:
+		cutscene_overlay.queue_free()
+		cutscene_overlay = null
+	# overlay layar penuh — memblok interaksi panel di belakangnya
+	var overlay := ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0.65)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(overlay)
+	cutscene_overlay = overlay
+	var panel := PanelContainer.new()
+	var st := StyleBoxFlat.new()
+	st.bg_color = Color(0.08, 0.1, 0.08, 0.97)
+	st.set_corner_radius_all(10)
+	st.content_margin_left = 20
+	st.content_margin_right = 20
+	st.content_margin_top = 16
+	st.content_margin_bottom = 16
+	panel.add_theme_stylebox_override("panel", st)
+	panel.position = Vector2(170, 160)
+	panel.custom_minimum_size = Vector2(810, 330)
+	overlay.add_child(panel)
+	var v := VBoxContainer.new()
+	panel.add_child(v)
+	if cutscene_idx < cutscene_baris.size():
+		# langkah dialog: teks + tombol lanjut
+		v.add_child(_label("Prof. Candri:", 14, Color(0.6, 0.9, 0.6)))
+		v.add_child(_label(String(cutscene_baris[cutscene_idx]), 18))
+		var spasi := Control.new()
+		spasi.custom_minimum_size = Vector2(0, 14)
+		v.add_child(spasi)
+		_tombol_layar(v, "LANJUT ▶", func() -> void:
+			cutscene_idx += 1
+			_tampilkan_langkah_cutscene())
+	else:
+		# langkah akhir: pilihan starter (data nusamons.json: nama & tipe tahap 0)
+		v.add_child(_label("Pilih Nusamon pertamamu — sahabat petualanganmu!",
+			18, Color(1.0, 0.92, 0.6)))
+		var spasi := Control.new()
+		spasi.custom_minimum_size = Vector2(0, 10)
+		v.add_child(spasi)
+		for sid in STARTER_IDS:
+			var sp := NusamonData.find_species(nusamons, sid)
+			var tahap0: Dictionary = sp.get("tahapan", [{}])[0]
+			var tipe := " / ".join(tahap0.get("tipe", []))
+			var b := _tombol_layar(v, "%s — tipe %s" % [String(tahap0.get("nama", "?")), tipe],
+				func() -> void: _pilih_starter(sid))
+			b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+
+
+func _tombol_layar(induk: VBoxContainer, tek: String, cb: Callable) -> Button:
+	var b := Button.new()
+	b.text = tek
+	b.pressed.connect(cb)
+	induk.add_child(b)
+	return b
+
+
+## Terima starter: masuk tim Lv.%d, Nusadex terisi, progres terkunci & tersimpan.
+func _pilih_starter(sid: int) -> void:
+	if Progres.sudah_pilih_starter():
+		return
+	Progres.pilih_starter(sid)
+	var sp := NusamonData.find_species(nusamons, sid)
+	var mon := NusamonInstance.create(sp, nusamons["detailSpesies"][str(sid)], 0, STARTER_LEVEL)
+	Tim.tambah(mon)
+	Nusadex.lihat(sid)
+	Nusadex.tangkap(sid)
+	Simpanan.simpan()  # starter persisten (Simpanan v2)
+	_tutup_cutscene()
+	_catatan("Prof. Candri: Pilihan bagus! Jaga %s dengan baik, ya." % mon.display_name)
+	_catatan("Petualangan dari Desa Sumberrejo dimulai — %s menyertainya! (Lv.%d)" % [
+		mon.display_name, STARTER_LEVEL])
+	_perbarui()
+
+
+func _tutup_cutscene() -> void:
+	if cutscene_overlay != null:
+		cutscene_overlay.queue_free()
+		cutscene_overlay = null
+
+
 ## Tantang gym leader → antrean battle → scene battle (Fase 3 langkah 4).
 func _tantang_gym(trainer_id: String) -> void:
+	if Tim.jumlah() == 0:
+		_catatan("Pilih Nusamon pertamamu di Laboratorium Prof. Candri dulu!")
+		return
 	if Progres.sudah_kalah_trainer(trainer_id):
 		_catatan("%s sudah dikalahkan — rematch menyusul." % trainer_id)
 		return

@@ -6,7 +6,7 @@ extends Control
 
 const WILD_IDS := [22, 23, 24]          # rusa, monyet, ayam (Common — Jawa)
 const WILD_LEVEL_RANGE := [2, 6]
-const PLAYER_ID := 1                    # anak rimau (sebelum starter selection)
+const PLAYER_ID := 1                    # placeholder bila starter belum dipilih (Fase 4)
 const PLAYER_LEVEL := 5
 
 var data := {}
@@ -80,9 +80,11 @@ func _mulai_battle() -> void:
 ## (placeholder pusat pemulihan — Fase 2/3), lalu mon aktif jadi player.
 func _siapkan_pemain() -> void:
 	if Tim.jumlah() == 0:
-		var spesies_p := NusamonData.find_species(data, PLAYER_ID)
+		# starter hasil pemilihan di Lab (Fase 4) — placeholder anak rimau bila belum
+		var id_p := Progres.starter_id if Progres.sudah_pilih_starter() else PLAYER_ID
+		var spesies_p := NusamonData.find_species(data, id_p)
 		Tim.tambah(NusamonInstance.create(
-			spesies_p, data["detailSpesies"][str(PLAYER_ID)], 0, PLAYER_LEVEL))
+			spesies_p, data["detailSpesies"][str(id_p)], 0, PLAYER_LEVEL))
 	if Tim.pulihkan_semua() > 0:
 		_log("Tim dipulihkan di pusat pemulihan.")
 	player = Tim.aktif()  # EXP/level/evolusi tersimpan di anggota tim

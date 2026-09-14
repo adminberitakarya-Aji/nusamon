@@ -10,7 +10,18 @@
       "jenis": "desa",
       "deskripsi": "Desa pemula di kaki pegunungan; berdiri megah Laboratorium Prof. Candri.",
       "tempat": [
-        { "id": "lab_candri", "nama": "Laboratorium Prof. Candri", "status": "menyusul", "catatan": "Pemilihan starter — Fase 4" }
+        {
+          "id": "lab_candri",
+          "nama": "Laboratorium Prof. Candri",
+          "status": "aktif",
+          "catatan": "Pilih Nusamon pertamamu!",
+          "aksi": "pilih_starter",
+          "dialog": [
+            "Selamat datang, calon penjelajah! Aku Prof. Candri, peneliti Nusamon.",
+            "Alam Nusantara penuh Nusamon luar biasa — dan saatnya kamu punya sahabat pertama!",
+            "Pilih satu dari tiga Nusamon ini. Mereka akan menemanimu menjelajahi seluruh Indonesia!"
+          ]
+        }
       ],
       "encounters": []
     },

@@ -25,7 +25,7 @@ if (-not $exe) {
 
 Write-Host "Godot: $exe"
 $gagal = $false
-foreach ($tes in @('game\tests\test_battle.gd', 'game\tests\test_catch_exp.gd', 'game\tests\test_inventori.gd', 'game\tests\test_tim.gd', 'game\tests\test_nusadex.gd', 'game\tests\test_ability.gd', 'game\tests\test_latihan_simpan.gd', 'game\tests\test_world.gd', 'game\tests\test_encounter.gd', 'game\tests\test_trainer.gd', 'game\tests\test_battle_trainer.gd', 'game\tests\test_env.gd', 'game\tests\test_scene.gd')) {
+foreach ($tes in @('game\tests\test_battle.gd', 'game\tests\test_catch_exp.gd', 'game\tests\test_inventori.gd', 'game\tests\test_tim.gd', 'game\tests\test_nusadex.gd', 'game\tests\test_ability.gd', 'game\tests\test_latihan_simpan.gd', 'game\tests\test_world.gd', 'game\tests\test_encounter.gd', 'game\tests\test_trainer.gd', 'game\tests\test_battle_trainer.gd', 'game\tests\test_env.gd', 'game\tests\test_starter.gd', 'game\tests\test_scene.gd')) {
     Write-Host ""
     Write-Host "--- Menjalankan: $tes ---"
     # Start-Process dipakai agar ExitCode terbaca andal di semua lingkungan

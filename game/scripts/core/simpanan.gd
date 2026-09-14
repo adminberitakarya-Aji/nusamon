@@ -31,6 +31,7 @@ static func ambil_state() -> Dictionary:
 			"lokasi": Progres.lokasi,
 			"lencana": Progres.lencana.duplicate(),
 			"trainer_kalah": Progres.trainer_kalah.duplicate(),
+			"starter": Progres.starter_id,
 		}}
 
 
@@ -115,6 +116,7 @@ static func terapkan(data: Dictionary) -> void:
 		Progres.trainer_kalah = []
 		for t in p.get("trainer_kalah", []):
 			Progres.tandai_kalah_trainer(String(t))
+		Progres.starter_id = maxi(0, int(p.get("starter", 0)))
 
 
 ## Hapus save file (prototipe/tes); true bila tak ada file / berhasil dihapus.

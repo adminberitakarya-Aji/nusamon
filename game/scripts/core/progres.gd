@@ -7,6 +7,7 @@ extends RefCounted
 
 static var lokasi: String = ""   # id lokasi pemain; "" = belum mulai jelajah
 static var lencana: Array = []   # id lencana gym (int), urut perolehan
+static var starter_id := 0       # id spesies starter (1 Rimau/2 Orangutan/3 Penyu); 0 = belum
 
 
 ## Kembalikan ke kondisi awal (prototipe/tes).
@@ -14,6 +15,18 @@ static func reset() -> void:
 	lokasi = ""
 	lencana = []
 	trainer_kalah = []
+	starter_id = 0
+
+
+## Starter sudah dipilih di Lab Prof. Candri? (Fase 4)
+static func sudah_pilih_starter() -> bool:
+	return starter_id > 0
+
+
+## Tetapkan starter — sekali saja (tidak bisa diganti).
+static func pilih_starter(id: int) -> void:
+	if starter_id == 0:
+		starter_id = id
 
 
 static func punya_lencana(id: int) -> bool:

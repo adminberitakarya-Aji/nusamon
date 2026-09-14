@@ -111,6 +111,11 @@ foreach ($l in $w.lokasi) {
         if ($null -eq $l.peluang_encounter) { Fail "world $($l.id): rute tanpa peluang_encounter" }
         elseif ([double]$l.peluang_encounter -le 0 -or [double]$l.peluang_encounter -gt 1) { Fail "world $($l.id): peluang_encounter harus 0..1 (aktual $($l.peluang_encounter))" }
     }
+    foreach ($poi in $l.tempat) {
+        if ($null -ne $poi.aksi -and $poi.aksi -ne 'pilih_starter') { Fail "world $($l.id): aksi POI tidak dikenal ($($poi.aksi))" }
+        if ($null -ne $poi.dialog -and ($poi.dialog | Measure-Object).Count -lt 1) { Fail "world $($l.id): dialog POI kosong" }
+        if ($null -ne $poi.dialog -and (($poi.dialog | ForEach-Object { $_.Trim() }) -contains '')) { Fail "world $($l.id): ada baris dialog kosong" }
+    }
 }
 
 # --- trainers (gym — Fase 3 langkah 3)

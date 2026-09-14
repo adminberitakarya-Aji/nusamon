@@ -134,3 +134,13 @@ Mulai (Desa Sumberrejo)
 - Pulau lain: konten dikunci hingga vertical slice selesai (prevents scope creep).
 - Data habitat tiap spesies sudah tersedia di `data/nusamons.json` → field `habitatPulau`.
 
+## 8. Catatan: Peta Fiksi, Bukan Peta Asli
+
+Region game **menempel pada kerangka geografi Indonesia** (urutan & posisi relatif pulau sama; landmark nyata sebagai inspirasi nama/tema) tetapi memakai nama dan tata letak fiksi. Alasannya **kreatif & teknis, bukan legal-IP**:
+
+1. **Kontrol pacing & gating** — kompresi geografi (1 pulau = 2-3 kota + 2-3 rute, prinsip desain §2) menjaga densitas konten dan menjadikan batas laut gate progresi yang alami.
+2. **Kebebasan akurasi** — lokasi bisa dipindah/dikompres demi gameplay tanpa dibebani ekspektasi akurasi dari pemain yang hafal peta asli.
+3. **Lisensi data & performa** — data peta nyata tidak bebas dipakai (ToS Google Maps melarang ekstraksi data ke engine lain; OSM mewajibkan atribusi & share-alike ODbL), dan geometri peta asli berat untuk 3D low-poly di Web (ADR-02/ADR-04).
+
+> **Klarifikasi:** nama geografis nyata **tidak** menimbulkan risiko IP bila disebut dalam karya fiksi — pilihan nama fiktif murni keputusan kreatif (design pillar #1: originalitas konten), bukan mitigasi hukum.
+

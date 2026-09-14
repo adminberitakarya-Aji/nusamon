@@ -137,6 +137,8 @@ catch jika random(0..255) < a (dengan shake check)
 ## 10. Risiko & Catatan
 
 - **IP:** semua konten original berbasis fauna — aman dari klaim. Hindari nama/visual yang terlalu mirip Pokémon.
+  > **Klarifikasi cakupan:** risiko IP di sini *hanya* menyasar similarity dengan Pokémon. Nama lokasi/kota nyata (mis. "Jakarta", "Danau Toba") yang disebut dalam karya fiksi **bukan** risiko IP — nama geografis tidak dapat diprivasi. Pemakaian nama fiktif di dunia game adalah keputusan kreatif (lihat `docs/world-region.md` §8), bukan mitigasi hukum.
+- **Peta fiksi, bukan peta asli:** region game menempel pada kerangka geografi Indonesia tetapi memakai nama & tata letak fiksi. Alasannya: (1) kontrol pacing/gating geografi gameplay, (2) kebebasan akurasi tanpa beban ekspektasi pemain lokal, (3) lisensi data peta nyata (ToS Google Maps melarang ekstraksi data; OSM mewajibkan atribusi/share-alike ODbL) dan performa Web — **bukan** karena risiko IP nama lokasi.
 - **Scope creep:** disiplin pada MVP; 30 spesies itu sudah ramping dibanding Pokémon (100+).
 - **Art asset:** model dibuat terprogram via script Blender (konsisten & murah di ±70 tahap evolusi); gaya dievaluasi sejak MVP.
 

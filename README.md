@@ -14,7 +14,8 @@
 | Keputusan Teknis | ✅ Godot 4 + 3D low-poly (`docs/tech-stack.md`) |
 | Tooling Generator Aset | 🔨 Selesai (6/15 model MVP; perlu Blender untuk eksekusi) |
 | Fase 1 — Prototipe Battle | ✅ **Selesai** — battle core + tangkap + EXP/evolusi + PP + tahap stat (buff/debuff/heal) + UI; **78 asersi hijau (3 suite, Godot 4.7.2)**. Detail: `ROADMAP.md` |
-| Prototipe World/Catch (Fase 2) | ✅ **Selesai** — inventori & toko + tim/partai + switch + Nusadex + 12 ability + Latihan EV-lite + save/load (JSON `user://`) aktif; catatan: pratinjau model 3D menunggu aset Blender (D-1). Berikutnya: **Fase 3 — World & Gym pertama** |
+| Prototipe World/Catch (Fase 2) | ✅ **Selesai** — inventori & toko + tim/partai + switch + Nusadex + 12 ability + Latihan EV-lite + save/load (JSON `user://`) aktif; catatan: pratinjau model 3D menunggu aset Blender (D-1) |
+| Fase 3 — World & Gym pertama | 🔨 **Berjalan** — peta Jawa + encounter liar per rute + kabur speed-based + **gym G1 Bu Sari (data & UI, tantang menyusul langkah 4)**. Detail: `ROADMAP.md` |
 
 ## Struktur Proyek
 
@@ -38,8 +39,10 @@ NUSAMON/
 ├── data/                  # Data siap pakai untuk engine
 │   ├── type-chart.json    # Data efektivitas tipe (machine-readable)
 │   ├── nusamons.json      # Data 30 spesies + tahapan evolusi
-│   └── moves.json         # Data move/skill pertarungan
-├── game/                  # Kode GDScript (data loader, battle, dst.)
+│   ├── moves.json         # Data move/skill pertarungan
+│   ├── items.json         # Data item (Amukan, Teh Herba)
+│   └── world.json         # Peta dunia (lokasi, koneksi, gate, encounter)
+├── game/                  # Kode GDScript (data loader, battle, world, dst.)
 ├── assets/models/         # Model .glb hasil generator
 └── tools/
     ├── blender/           # Generator aset 3D low-poly (Python Blender)

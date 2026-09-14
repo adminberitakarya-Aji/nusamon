@@ -1,4 +1,4 @@
-# ROADMAP NUSAMON — Status Pengerjaan Detail (v0.1)
+﻿# ROADMAP NUSAMON — Status Pengerjaan Detail (v0.1)
 
 > **Dokumen ini = satu-satunya sumber status progres granular** (single source of truth).
 > Rencana makro ada di `docs/GDD.md` §9; dokumen ini menguraikannya menjadi langkah konkret,
@@ -16,7 +16,7 @@
 | 0 — Desain | ✅ **Selesai** | GDD, roster 30 spesies, type chart 11×11, base stats, data JSON tervalidasi | 9 dokumen desain + 3 file data JSON + `validate.ps1` lolos |
 | 1 — Prototipe Battle | ✅ **Selesai** | Battle 1v1, tangkap, EXP/evolusi, UI scene, PP, tahap stat, tes headless | Battle end-to-end (serang/tangkap/kabur) + EXP + evolusi + **78 asersi hijau (3 suite)** + UI terverifikasi (simulasi headless; inspeksi visual disarankan saat mulai Fase 2) |
 | 2 — Catch & Nusadex | ✅ **Selesai** (catatan: pratinjau model butuh aset Blender — D-1) | Inventori, tim/partai, switch, Nusadex, ability, Latihan, save/load | Tangkap masuk tim, Nusadex terisi, ability & PP aktif, Latihan & save/load aktif |
-| 3 — World & Gym pertama | ⬜ Belum mulai | World map Jawa, G1 Normal (Bu Sari) | Battle trainer + lencana G1 |
+| 3 — World & Gym pertama | 🔨 **Berjalan** | World map Jawa, G1 Normal (Bu Sari) | Battle trainer + lencana G1 |
 | 4 — Vertical Slice | ⬜ Belum mulai | MVP end-to-end: Jawa + G1 + G2 + rival + Nusadex | Main dari Desa Sumberrejo sampai lencana G2 tanpa jebol (GDD §8) |
 | 5 — Produksi konten penuh | ⬜ Belum mulai | 30 spesies, 6 pulau, 8 gym, Liga Nusantara, story | Tamat end-to-end + Nusadex 100% |
 
@@ -104,13 +104,13 @@
 | Penyimpanan (save/load) — format **JSON v1** `user://simpanan.json`: uang, stok, tim (level/HP/status/exp/latihan), nusadex; tombol 💾/📂 + auto-load & auto-save | ✅ `2a6dd71` |
 | Impor model tahap 2/3 + tampil di battle — runtime selesai (`path_model`, pratinjau SubViewport, fallback diam); **aset .glb menunggu Blender** (D-1) | 🔨 runtime `2a6dd71` |
 
-### Fase 3 — World & Gym pertama ⬜
+### Fase 3 — World & Gym pertama 🔨 (Berjalan)
 
 | Langkah | Status |
 |---------|:------:|
-| World map Jawa ringkas (GDD §8): Desa Sumberrejo → Rute 1 → Kota Harapan → Rute 2 → Kota Arunika | ⬜ |
-| Sistem encounter liar per rute (`habitatPulau` + bobot rarity) | ⬜ |
-| Gym G1 Normal — Bu Sari (Monyet Kecil Lv.8, Ayam Jantan Lv.10) | ⬜ |
+| World map Jawa ringkas (GDD §8): Desa Sumberrejo → Rute 1 → Kota Harapan → Rute 2 → Kota Arunika | ✅ `data/world.json` (5 lokasi + koneksi dua arah + gate Lencana G1 + tabel encounter) · `WorldEngine` (traversal/gate, static headless) · `Progres` (lokasi + lencana, static store) · `world_scene.tscn` (UI programatik) · tombol 🌍 DUNIA di battle scene · 46 asersi hijau (`test_world`) `9da1b3d` |
+| Sistem encounter liar per rute (`habitatPulau` + bobot rarity) | ✅ `EncounterSystem` (pool tabel khas + pool turunan habitat × bobot rarity gameplay-depth §4; starter/legendary tidak liar) · `peluang_encounter` per rute di `world.json` (0.4/0.45) · tombol 🔍 JELAJAHI di rute → antrean → battle liar · 49 asersi hijau (`test_encounter`) `9da1b3d` |
+| Gym G1 Normal — Bu Sari (Monyet Kecil Lv.8, Ayam Jantan Lv.10) | ✅ `data/trainers.json` (tim 2 mon, dialog intro/menang/kalah, hadiah Rp 1.200, Lencana Harapan) · `TrainerEngine` (cari/trainer_di_kota/buat_tim/tim_teks/lencana) · panel gym di world scene (⌛ tantang = langkah 4) · 29 asersi hijau (`test_trainer`) `9da1b3d` |
 | Battle trainer (multiplikator EXP ×1.5 sudah siap di engine) | ⬜ |
 | Lencana + progresi | ⬜ |
 | Model environment dari pustaka CC0 (Kenney/Quaternius) | ⬜ |
@@ -148,7 +148,7 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | B-3 | Status **kelumpuhan** unreachable: tak ada move dengan efekData kelumpuhan di `moves.json` (GDD §4.1 mendefinisikannya) | sedang | tambah move Listrik dengan efek kelumpuhan atau revisi GDD |
 | C-1 | Kontradiksi clamp stat: `data_loader.gd` min 1 vs `docs/base-stats.md` min 20 | rendah | tidak bermuara pada data saat ini (semua ≥23); samakan salah satu |
 | C-2 | Kelumpuhan di-rol 2× per giliran (cek serangan + pesan fase status) | sedang | ✅ SELESAI `4629f5c` — cek lumpuh hanya saat mon mencoba beraksi |
-| C-3 | Kabur: peluang flat 60%, abaikan speed | rendah | desain formula speed-based untuk Fase 3 |
+| C-3 | Kabur: peluang flat 60%, abaikan speed | rendah | ✅ SELESAI (Fase 3) — formula Gen-III+ berbasis SPEED (`BattleEngine.coba_kabur`): F = floor(SPE×32/penyebut) + 30×percobaan; docs `gameplay-depth.md` §4.1 |
 | C-4 | UI battle memakai posisi absolut tanpa setting `display/window` (stretch) | sedang | layout bisa terpotong pada resolusi lain |
 | C-5 | 12 ability dari `gameplay-depth.md` belum ada satu pun di engine | sedang | ✅ SELESAI `3637879` — AbilityEngine, 12/12 aktif di battle |
 | C-6 | Latihan (EV-lite) belum diimplementasikan | rendah | ✅ SELESAI `2a6dd71` — cap 50/25, 4:1, Teh Herba, tampil di layar status |
@@ -189,6 +189,16 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | Latihan (EV-lite): poin diberikan ke **stat kategori move terakhir pemain** (fisik→atk, spesial→spa); bonus via `stats_efektif` (stats dasar tetap — bersih untuk save/diagnosa) | sesuai gameplay-depth §6; 4:1, cap 50/25; Teh Herba Rp 500 reset | `2a6dd71` |
 | 2026-09-14 | Save/load = **JSON v1 di `user://simpanan.json`** (bukan Resource/custom biner): uang, stok, tim (level/HP/status/exp/latihan), nusadex; auto-load saat mulai & auto-save tiap battle selesai | JSON = ADR-06; user:// aman untuk PC & Web; validasi versi untuk migrasi kelak | `2a6dd71` |
 | 2026-09-14 | Pratinjau model 3D = **SubViewport + fallback diam** bila `.glb` belum ada (`ResourceLoader.exists`) | runtime siap untuk 15 model tahap 2/3; aset .glb menunggu eksekusi Blender (D-1) — tidak memblokir Fase 2 | `2a6dd71` |
+| 2026-09-14 | Klarifikasi risiko IP di dokumentasi (GDD §10 + `world-region.md` §8 baru): klaim "risiko IP" **hanya** menyasar similarity dengan Pokémon — nama lokasi/kota nyata bukan risiko IP; peta fiksi dipilih karena alasan kreatif (pacing/gating, kebebasan akurasi) & teknis (lisensi data peta: ToS Google Maps / ODbL OSM, performa Web), bukan mitigasi hukum | justifikasi dokumentasi dibuat akurat & tahan uji bila dipakai justifikasi ke pihak eksternal; mencegah salah kutip ulang | — |
+| 2026-09-14 | Fase 3 dimulai — peta Jawa: koneksi **eksplisit dua arah** (8 jalur untuk 5 lokasi), gate **hanya di arah masuk** (jalan pulang bebas — konvensi genre); gate data-driven di `world.json` (`{"jenis":"lencana","id":1}` pada kota_harapan→rute_2), jenis gate tak dikenal = gagal aman (terkunci) | traversal bisa dites headless; gate tanpa logika hard-code; konsisten ADR-06 | — |
+| 2026-09-14 | Progres dunia = **static store** `Progres` (lokasi + lencana) — bukan autoload; `WorldEngine.pindah()` murni (tak memutasi state, pemanggil yang update) | konvensi Inventori/Nusadex; engine murni mudah dites; save permanen menyusul di langkah lencana (simpanan v2) | — |
+| 2026-09-14 | Tabel encounter rute (spesies/bobot/level) sudah ada di `data/world.json` — engine rol-nya di langkah 2 | data & sistem terpisah; validate.ps1 sudah menjaga konsistensi id spesies | — |
+| 2026-09-14 | Encounter = **hybrid**: tabel khas per rute (world-region §2.1) untuk MVP + pool turunan **habitatPulau × bobot rarity** (gameplay-depth §4: 60/25/12/3/0/0) untuk lokasi tanpa tabel (Fase 4/5); starter & legendary bobot 0 (tidak liar) | menghormati desain per-rute sekaligus janji data habitat; gagal aman untuk rarity tak dikenal | — |
+| 2026-09-14 | Handoff world → battle via **antrean static** (`EncounterSystem.antrean_liar`, dikonsumsi sekali); battle tanpa antrean tetap rol acak prototipe (WILD_IDS) | konsisten pola static store; test_scene tak terpengaruh (proses terpisah) | — |
+| 2026-09-14 | C-3 ditutup: kabur liar = formula Gen-III+ (`coba_kabur`), +30 per percobaan gagal, reset tiap battle; SPE = stats_efektif × faktor tahap (konsisten urutan giliran); Cengkeraman Kuat tetap blokir | kabur baru benar-benar terpakai sejak ada encounter dunia; didokumentasikan `gameplay-depth.md` §4.1 | — |
+| 2026-09-14 | Trainer/gym = **data-driven** `data/trainers.json` (tim {spesies,level} berurutan = orde dikirim; dialog intro/menang/kalah; hadiah_uang; lencana {id,nama}); `TrainerEngine.buat_tim()` menghasilkan NusamonInstance stage 0; `trainer_di_kota()` menghubungkan gym ke lokasi via `gym.kota` | ADR-06 (data JSON = source of truth); gym tanpa trainer (mis. Arunika) otomatis "terkunci" — tidak perlu flag manual | — |
+| 2026-09-14 | Hadiah gym G1 = **Rp 1.200 + Lencana Harapan**; nama lencana diambil dari nama kota (Kota Harapan); harga tidak ditetapkan docs → diputuskan di sini (pola sama dengan harga Amukan di Fase 2) | single source of truth = data + catatan keputusan | — |
+| 2026-09-14 | POI gym di world scene: bila kota punya trainer, POI `gym_*` digantikan panel khusus (leader/profesi/tim/hadiah + tombol TANTANG, dinonaktifkan sampai langkah 4) | hindari duplikasi UI; integritas data tetap satu sumber | — |
 
 ## 5. Referensi
 

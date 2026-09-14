@@ -16,7 +16,7 @@
 | Fase 1 — Prototipe Battle | ✅ **Selesai** — battle core + tangkap + EXP/evolusi + PP + tahap stat (buff/debuff/heal) + UI; **78 asersi hijau (3 suite, Godot 4.7.2)**. Detail: `ROADMAP.md` |
 | Prototipe World/Catch (Fase 2) | ✅ **Selesai** — inventori & toko + tim/partai + switch + Nusadex + 12 ability + Latihan EV-lite + save/load (JSON `user://`) aktif; catatan: pratinjau model 3D menunggu aset Blender (D-1) |
 | Fase 3 — World & Gym pertama | ✅ **Selesai** — peta Jawa + encounter liar (habitatPulau × rarity) + kabur speed-based + battle trainer Bu Sari (menang → Lencana Harapan, Rute 2 terbuka) + **simpanan v2 (progres persisten)** + environment CC0/placeholder; catatan: aset .glb env menunggu unduhan (lihat `assets/env/README.md`) |
-| Fase 4 — Vertical Slice | 🔨 **Berjalan** — **starter selection + cutscene Prof. Candri aktif** (Anak Rimau/Orangkici/Penyuci → masuk tim Lv.5, persisten; encounter & gym terkunci sampai starter dipilih); berikutnya: gym G2, rival, pusat pemulihan, export Web. Detail: `ROADMAP.md` |
+| Fase 4 — Vertical Slice | 🔨 **Berjalan** — **starter selection + cutscene Prof. Candri aktif** (Anak Rimau/Orangkici/Penyuci → masuk tim Lv.5, persisten; encounter & gym terkunci sampai starter dipilih) + **gym G2 Pak Lesto aktif** (Beruang Muda Lv.14, Ayam Satria Lv.16 → Lencana Arunika); berikutnya: rival, pusat pemulihan, main end-to-end, export Web. Detail: `ROADMAP.md` |
 
 ## Struktur Proyek
 

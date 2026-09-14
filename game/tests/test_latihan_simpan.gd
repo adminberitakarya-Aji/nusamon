@@ -118,6 +118,44 @@ func _init() -> void:
 	cek("model tahap 2/3 belum digenerate (Blender) → pratinjau diam",
 		not ResourceLoader.exists(NusamonData.path_model("Rimau Muda")))
 
+	# ---------- 9. progres dunia persisten (Simpanan v2 — Fase 3 langkah 5)
+	Progres.reset()
+	Progres.lokasi = "rute_2"
+	Progres.tambah_lencana(1)
+	Progres.tandai_kalah_trainer("bu_sari")
+	var state_v2 := Simpanan.ambil_state()
+	cek("versi state = 2", int(state_v2["versi"]) == 2)
+	var prog := state_v2["progres"] as Dictionary
+	cek("state memuat lokasi", String(prog["lokasi"]) == "rute_2")
+	cek("state memuat lencana", (prog["lencana"] as Array).has(1))
+	cek("state memuat trainer_kalah", (prog["trainer_kalah"] as Array).has("bu_sari"))
+	# rusak progres sesi, lalu restore
+	Progres.reset()
+	Simpanan.terapkan(state_v2)
+	cek("lokasi direstore (rute_2)", Progres.lokasi == "rute_2")
+	cek("lencana direstore", Progres.punya_lencana(1))
+	cek("trainer_kalah direstore", Progres.sudah_kalah_trainer("bu_sari"))
+	# save v1 (tanpa progres) tetap dimuat — migrasi → progres DIRESET kosong
+	# (fresh start: pemain v1 belum punya progres dunia)
+	var v1 := {"versi": 1, "uang": 777, "stok": {}, "tim": [], "aktif_index": 0, "nusadex": []}
+	Simpanan.terapkan(v1)
+	cek("v1: uang dimuat", Inventori.uang == 777)
+	cek("v1: migrasi → progres direset kosong",
+		Progres.lokasi == "" and not Progres.punya_lencana(1)
+		and not Progres.sudah_kalah_trainer("bu_sari"))
+	# simpan v2 via file → muat ulang → progres kembali
+	Progres.lokasi = "rute_2"
+	Progres.tambah_lencana(1)
+	Progres.tandai_kalah_trainer("bu_sari")
+	Simpanan.simpan()
+	Progres.reset()
+	Progres.lokasi = "desa_sumberrejo"
+	cek("muat() v2 berhasil", Simpanan.muat())
+	cek("file v2: lokasi & lencana kembali",
+		Progres.lokasi == "rute_2" and Progres.punya_lencana(1)
+		and Progres.sudah_kalah_trainer("bu_sari"))
+	Simpanan.hapus()
+
 	# ---------- ringkasan
 	print("=== Hasil: %d lulus, %d gagal ===" % [lulus, gagal])
 	quit(1 if gagal > 0 else 0)

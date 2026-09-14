@@ -1,12 +1,14 @@
 class_name Simpanan
 extends RefCounted
-## Save/load sesi pemain ke user://simpanan.json (format TBD → JSON v1).
+## Save/load sesi pemain ke user://simpanan.json (JSON v2).
 ## Konten: versi, uang, stok inventori, tim (id spesies, tahap, level, HP,
-## status, exp_total, latihan), nusadex (lihat/tangkap), aktif_index.
+## status, exp_total, latihan), nusadex (lihat/tangkap), aktif_index —
+## v2 + progres dunia (lokasi, lencana, trainer_kalah) — Fase 3 langkah 5.
+## Migrasi: save v1 masih dimuat (progres = default kosong).
 ## Penulisan via FileAccess + JSON.stringify; pembacaan tervalidasi (versi).
 
 const PATH := "user://simpanan.json"
-const VERSI := 1
+const VERSI := 2
 
 
 ## Kembalikan dict state penuh (dipakai simpan & tes).
@@ -24,7 +26,12 @@ static func ambil_state() -> Dictionary:
 		dex.append({"id": int(id), "lihat": Nusadex.sudah_lihat(int(id)),
 			"tangkap": Nusadex.sudah_tangkap(int(id))})
 	return {"versi": VERSI, "uang": Inventori.uang, "stok": Inventori.stok.duplicate(),
-		"tim": tim, "aktif_index": Tim.aktif_index, "nusadex": dex}
+		"tim": tim, "aktif_index": Tim.aktif_index, "nusadex": dex,
+		"progres": {
+			"lokasi": Progres.lokasi,
+			"lencana": Progres.lencana.duplicate(),
+			"trainer_kalah": Progres.trainer_kalah.duplicate(),
+		}}
 
 
 static func simpan() -> bool:
@@ -49,8 +56,9 @@ static func muat() -> bool:
 	if typeof(data) != TYPE_DICTIONARY:
 		push_error("Simpanan: JSON tidak valid")
 		return false
-	if int(data.get("versi", 0)) != VERSI:
-		push_error("Simpanan: versi tidak didukung")
+	var versi := int(data.get("versi", 0))
+	if versi < 1 or versi > VERSI:
+		push_error("Simpanan: versi tidak didukung (%d)" % versi)
 		return false
 	terapkan(data)
 	return true
@@ -96,6 +104,17 @@ static func terapkan(data: Dictionary) -> void:
 			Nusadex.tangkap(id2)
 		elif bool(e.get("lihat", false)):
 			Nusadex.lihat(id2)
+	# progres dunia (v2; save v1 tanpa progres → default kosong — migrasi)
+	var prog: Variant = data.get("progres", {})
+	if typeof(prog) == TYPE_DICTIONARY:
+		var p := prog as Dictionary
+		Progres.lokasi = String(p.get("lokasi", ""))
+		Progres.lencana = []
+		for l in p.get("lencana", []):
+			Progres.tambah_lencana(int(l))
+		Progres.trainer_kalah = []
+		for t in p.get("trainer_kalah", []):
+			Progres.tandai_kalah_trainer(String(t))
 
 
 ## Hapus save file (prototipe/tes); true bila tak ada file / berhasil dihapus.

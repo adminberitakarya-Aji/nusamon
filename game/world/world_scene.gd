@@ -18,6 +18,8 @@ var lokasi_deskripsi: Label
 var daftar_tempat: VBoxContainer
 var daftar_tujuan: VBoxContainer
 var log_label: RichTextLabel
+var env_viewport: SubViewport
+var env_root: Node3D
 
 
 func _ready() -> void:
@@ -31,8 +33,8 @@ func _ready() -> void:
 	if Progres.lokasi == "":
 		Progres.lokasi = String(db.get("lokasi_awal", ""))
 	_bangun_ui()
-	_catatan("Selamat datang di Pulau Jawa! (Fase 3 langkah 1: peta + traversal.")
-	_catatan("Encounter liar & gym menyusul di langkah berikutnya.)")
+	_catatan("Selamat datang di Pulau Jawa!")
+	_catatan("Jelajahi rute (🔍) untuk battle liar; kalahkan Bu Sari untuk membuka Rute 2.")
 	_perbarui()
 
 
@@ -78,6 +80,24 @@ func _bangun_ui() -> void:
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
+	# latar 3D environment per lokasi (Fase 3 langkah 6 — CC0/placeholder)
+	var env_container := SubViewportContainer.new()
+	env_container.set_anchors_preset(Control.PRESET_FULL_RECT)
+	env_container.stretch = true
+	env_viewport = SubViewport.new()
+	env_viewport.transparent_bg = true
+	env_container.add_child(env_viewport)
+	var kamera := Camera3D.new()
+	kamera.position = Vector3(0, 8, 13)
+	kamera.rotation_degrees = Vector3(-30, 0, 0)
+	env_viewport.add_child(kamera)
+	var cahaya := DirectionalLight3D.new()
+	cahaya.rotation_degrees = Vector3(-55, 35, 0)
+	env_viewport.add_child(cahaya)
+	env_root = Node3D.new()
+	env_viewport.add_child(env_root)
+	add_child(env_container)
+
 	# judul
 	var judul := _panel(Vector2(40, 16), Vector2(420, 50), Color(0.08, 0.1, 0.08, 0.92))
 	var vj := VBoxContainer.new()
@@ -119,12 +139,23 @@ func _bangun_ui() -> void:
 	log_label.custom_minimum_size = Vector2(375, 85)
 	plog.add_child(log_label)
 
-	# tombol kembali ke battle
-	var pb := _panel(Vector2(40, 464), Vector2(420, 60))
+	# tombol kembali ke battle + save/load (Fase 3 langkah 5)
+	var pb := _panel(Vector2(40, 464), Vector2(420, 110))
 	var vb := VBoxContainer.new()
 	pb.add_child(vb)
 	_tombol("⚔ MENU BATTLE", vb, func() -> void:
 		get_tree().change_scene_to_file(SCENE_BATTLE))
+	_tombol("💾 SIMPAN", vb, func() -> void:
+		if Simpanan.simpan():
+			_catatan("Progres disimpan (lokasi, lencana, tim, uang).")
+		else:
+			_catatan("Gagal menyimpan progres."))
+	_tombol("📂 MUAT", vb, func() -> void:
+		if Simpanan.muat():
+			_catatan("Progres dimuat dari simpanan.json.")
+			_perbarui()
+		else:
+			_catatan("Tidak ada berkas simpanan / gagal memuat."))
 
 
 func _catatan(tek: String) -> void:
@@ -202,6 +233,12 @@ func _perbarui() -> void:
 			daftar_tujuan.add_child(_label("   🔒 %s" % String(t.get("alasan", "")), 12,
 				Color(0.95, 0.6, 0.4)))
 
+	# latar 3D per lokasi (Fase 3 langkah 6 — .glb CC0 / placeholder)
+	if env_root != null:
+		for c in env_root.get_children():
+			c.queue_free()
+		env_root.add_child(EnvBuilder.pasang(cur))
+
 
 func _pergi(tujuan_id: String) -> void:
 	var hasil := WorldEngine.pindah(db, Progres.lokasi, tujuan_id, _progres())
@@ -210,6 +247,7 @@ func _pergi(tujuan_id: String) -> void:
 		return
 	Progres.lokasi = tujuan_id
 	_catatan("Sampai di %s." % String(hasil.get("lokasi", {}).get("nama", tujuan_id)))
+	Simpanan.simpan()  # progres dunia persisten (v2) — Fase 3 langkah 5
 	_perbarui()
 
 
@@ -225,6 +263,7 @@ func _cari_encounter() -> void:
 		return
 	EncounterSystem.set_antrean(int(hasil["spesies"]), int(hasil["level"]))
 	_catatan("Sesuatu bergerak di rumput! (masuk battle liar)")
+	Simpanan.simpan()  # battle scene auto-load → state sesi tetap segar
 	get_tree().change_scene_to_file(SCENE_BATTLE)
 
 
@@ -235,4 +274,5 @@ func _tantang_gym(trainer_id: String) -> void:
 		return
 	TrainerEngine.set_antrean(trainer_id)
 	_catatan("Kamu melangkah maju menantang gym!")
+	Simpanan.simpan()  # battle scene auto-load → state sesi tetap segar
 	get_tree().change_scene_to_file(SCENE_BATTLE)

@@ -177,8 +177,14 @@ func _perbarui() -> void:
 			12, Color(0.95, 0.75, 0.4)))
 		var b_tantang := _tombol("⚔ TANTANG %s" % String(trainer_gym.get("nama", "?")).to_upper(),
 			daftar_tempat, func() -> void: _tantang_gym(tid))
-		b_tantang.disabled = true
-		b_tantang.tooltip_text = "Battle trainer menyusul — langkah 4 Fase 3"
+		if Progres.sudah_kalah_trainer(tid):
+			b_tantang.disabled = true
+			b_tantang.tooltip_text = "%s sudah dikalahkan (rematch menyusul)" % String(trainer_gym.get("nama", "?"))
+			daftar_tempat.add_child(_label("   ✓ Kamu mengalahkan %s" % String(trainer_gym.get("nama", "?")),
+				12, Color(0.6, 0.9, 0.6)))
+		else:
+			b_tantang.disabled = false
+			b_tantang.tooltip_text = "Mulai battle trainer!"
 
 	# tujuan
 	for c in daftar_tujuan.get_children():
@@ -222,6 +228,11 @@ func _cari_encounter() -> void:
 	get_tree().change_scene_to_file(SCENE_BATTLE)
 
 
-## Tantang gym leader (Fase 3 langkah 4 mengaktifkan battle trainer).
+## Tantang gym leader → antrean battle → scene battle (Fase 3 langkah 4).
 func _tantang_gym(trainer_id: String) -> void:
-	_catatan("Battle trainer %s menyusul — langkah 4 Fase 3." % trainer_id)
+	if Progres.sudah_kalah_trainer(trainer_id):
+		_catatan("%s sudah dikalahkan — rematch menyusul." % trainer_id)
+		return
+	TrainerEngine.set_antrean(trainer_id)
+	_catatan("Kamu melangkah maju menantang gym!")
+	get_tree().change_scene_to_file(SCENE_BATTLE)

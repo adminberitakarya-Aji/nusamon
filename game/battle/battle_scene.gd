@@ -46,6 +46,11 @@ var p_latihan: Label
 var pratinjau_wild: Node = null
 var pratinjau_player: Node = null
 var percobaan_kabur := 0                 # kabur: +30 tiap percobaan (C-3)
+var mode_trainer := false                # battle trainer: tanpa kabur/tangkap, tim multi-mon
+var trainers_db := {}
+var trainer_data := {}
+var tim_trainer: Array = []              # tim gym leader (orde data = orde dikirim)
+var idx_trainer := 0
 
 
 func _ready() -> void:
@@ -53,12 +58,61 @@ func _ready() -> void:
 	data = NusamonData.load_nusamons()
 	chart = NusamonData.load_type_chart()
 	moves_db = NusamonData.load_moves()
+	trainers_db = NusamonData.load_trainers()
 	if data.is_empty() or chart.is_empty() or moves_db.is_empty():
 		push_error("BattleScene: data game gagal dimuat")
 		return
 	_bangun_ui()
 	_auto_muat()
-	_mulai_battle_liar()
+	_mulai_battle()
+
+
+## Dispatch: battle trainer (antrean dari world scene) atau battle liar prototipe.
+func _mulai_battle() -> void:
+	var tid := TrainerEngine.ambil_antrean()
+	if tid != "":
+		_mulai_battle_trainer(tid)
+	else:
+		_mulai_battle_liar()
+
+
+## Siapkan tim pemain: buat mon default bila kosong, pulihkan yang pingsan
+## (placeholder pusat pemulihan — Fase 2/3), lalu mon aktif jadi player.
+func _siapkan_pemain() -> void:
+	if Tim.jumlah() == 0:
+		var spesies_p := NusamonData.find_species(data, PLAYER_ID)
+		Tim.tambah(NusamonInstance.create(
+			spesies_p, data["detailSpesies"][str(PLAYER_ID)], 0, PLAYER_LEVEL))
+	if Tim.pulihkan_semua() > 0:
+		_log("Tim dipulihkan di pusat pemulihan.")
+	player = Tim.aktif()  # EXP/level/evolusi tersimpan di anggota tim
+
+
+## Battle vs gym leader (Fase 3 langkah 4): tim multi-mon, tanpa kabur/tangkap,
+## EXP ×1.5 (multiplikator trainer di ExpSystem), hadiah uang + lencana.
+func _mulai_battle_trainer(tid: String) -> void:
+	trainer_data = TrainerEngine.cari(trainers_db, tid)
+	if trainer_data.is_empty():
+		push_error("BattleScene: trainer tidak dikenal: " + tid)
+		_mulai_battle_liar()
+		return
+	mode_trainer = true
+	tim_trainer = TrainerEngine.buat_tim(trainers_db, tid, data)
+	idx_trainer = 0
+	percobaan_kabur = 0
+	_siapkan_pemain()
+	wild = tim_trainer[0]
+	wild_detail = data["detailSpesies"][str(wild.id)]
+	Nusadex.lihat(wild.id)
+	_log("⚔ Battle Trainer — %s (%s)!" % [
+		String(trainer_data.get("nama", "?")), String(trainer_data.get("profesi", "?"))])
+	_log(String(trainer_data.get("dialog", {}).get("intro", "")))
+	_mon_masuk(player, wild)
+	_mon_masuk(wild, player)
+	_log("%s mengirim %s! (Lv.%d)" % [
+		String(trainer_data.get("nama", "?")), wild.display_name, wild.level])
+	_update_bars()
+	_perbarui_model()
 
 
 # ------------------------------------------------------------ UI (programatik)
@@ -266,16 +320,7 @@ func _mulai_battle_liar() -> void:
 	wild = NusamonInstance.create(spesies, wild_detail, 0, lv)
 	Nusadex.lihat(id)  # melihat wild → entri Nusadex (siluet + nama)
 	percobaan_kabur = 0
-
-	# tim: buat mon awal bila kosong (prototipe: anak rimau lv5)
-	if Tim.jumlah() == 0:
-		var spesies_p := NusamonData.find_species(data, PLAYER_ID)
-		Tim.tambah(NusamonInstance.create(
-			spesies_p, data["detailSpesies"][str(PLAYER_ID)], 0, PLAYER_LEVEL))
-	# mon pingsan dipulihkan (placeholder pusat pemulihan — Fase 2/3)
-	if Tim.pulihkan_semua() > 0:
-		_log("Tim dipulihkan di pusat pemulihan.")
-	player = Tim.aktif()  # EXP/level/evolusi tersimpan di anggota tim
+	_siapkan_pemain()
 
 	_mon_masuk(player, wild)
 	_mon_masuk(wild, player)
@@ -570,7 +615,7 @@ func _akhir_battle(musuh_kalah: bool) -> void:
 	_semua_menu(false)
 	if musuh_kalah:
 		var yield_base := int(wild_detail.get("baseExpYield", 55))
-		var gain := ExpSystem.exp_gain(yield_base, wild.level)
+		var gain := ExpSystem.exp_gain(yield_base, wild.level, mode_trainer)  # ×1.5 trainer
 		_log("%s dikalahkan!" % wild.display_name)
 		var hasil := ExpSystem.add_exp(player, NusamonData.find_species(data, player.id),
 			data["detailSpesies"][str(player.id)], gain)
@@ -582,10 +627,50 @@ func _akhir_battle(musuh_kalah: bool) -> void:
 		if diterima > 0:
 			_log("%s mendapat 1 poin Latihan %s (%d/50)." % [
 				player.display_name, stat_kunci, player.latihan_total])
+		if mode_trainer:
+			idx_trainer += 1
+			if idx_trainer < tim_trainer.size():
+				_mon_trainer_berikutnya()
+			else:
+				_trainer_kalah()
+			return
 		_selesai(true)
 	else:
+		if mode_trainer:
+			_log(String(trainer_data.get("dialog", {}).get("kalah_pemain", "")))
 		_log("%s pingsan... pulang ke pusat pemulihan." % player.display_name)
 		_selesai(false)
+
+
+## Mon berikutnya tim gym leader maju (battle trainer — Fase 3 langkah 4).
+func _mon_trainer_berikutnya() -> void:
+	wild = tim_trainer[idx_trainer]
+	wild_detail = data["detailSpesies"][str(wild.id)]
+	Nusadex.lihat(wild.id)
+	_log("%s mengirim %s! (Lv.%d)" % [
+		String(trainer_data.get("nama", "?")), wild.display_name, wild.level])
+	_mon_masuk(wild, player)
+	_update_bars()
+	_perbarui_model()
+	_semua_menu(false)
+	turn_aktif = false
+
+
+## Seluruh tim leader kalah: dialog, hadiah uang, lencana (membuka gate dunia).
+func _trainer_kalah() -> void:
+	var dlg: Dictionary = trainer_data.get("dialog", {})
+	_log(String(dlg.get("menang_pemain", "")))
+	var hadiah := int(trainer_data.get("hadiah_uang", 0))
+	Inventori.uang += hadiah
+	_update_uang()
+	if hadiah > 0:
+		_log("Hadiah: Rp %d!" % hadiah)
+	var lencana: Dictionary = trainer_data.get("lencana", {})
+	Progres.tambah_lencana(int(lencana.get("id", 0)))
+	Progres.tandai_kalah_trainer(String(trainer_data.get("id", "")))
+	_log("Mendapat %s! (Lencana G%d — jalan berikutnya terbuka)" % [
+		String(lencana.get("nama", "?")), int(lencana.get("id", 0))])
+	_selesai(true, "menang vs trainer")
 
 
 func _selesai(menang: bool, teks := "") -> void:
@@ -598,6 +683,9 @@ func _selesai(menang: bool, teks := "") -> void:
 
 func _kabur() -> void:
 	if turn_aktif:
+		return
+	if mode_trainer:
+		_log("Tidak bisa kabur dari battle trainer!")
 		return
 	if AbilityEngine.lawan_terkunci(wild.ability):
 		_log("Tidak bisa kabur — %s terkunci Cengkeraman Kuat!" % player.display_name)
@@ -623,6 +711,9 @@ func _kabur() -> void:
 
 func _lempar_amukan(ball_id: String) -> void:
 	if turn_aktif:
+		return
+	if mode_trainer:
+		_log("Tidak bisa menangkap Nusamon milik %s!" % String(trainer_data.get("nama", "?")))
 		return
 	turn_aktif = true
 	_semua_menu(true)

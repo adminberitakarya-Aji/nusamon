@@ -69,3 +69,20 @@ static func lencana(db: Dictionary, id: String) -> Dictionary:
 	if l == null or typeof(l) != TYPE_DICTIONARY:
 		return {}
 	return l
+
+
+# ------------------------------------------------------------ antrean battle trainer
+
+## Handoff world scene → battle scene (pola sama dengan antrean encounter liar).
+static var antrean_battle: String = ""
+
+
+static func set_antrean(id: String) -> void:
+	antrean_battle = id
+
+
+## Ambil & kosongkan antrean (dikonsumsi battle scene sekali saat mulai).
+static func ambil_antrean() -> String:
+	var hasil := antrean_battle
+	antrean_battle = ""
+	return hasil

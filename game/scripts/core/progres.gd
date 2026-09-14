@@ -13,6 +13,7 @@ static var lencana: Array = []   # id lencana gym (int), urut perolehan
 static func reset() -> void:
 	lokasi = ""
 	lencana = []
+	trainer_kalah = []
 
 
 static func punya_lencana(id: int) -> bool:
@@ -27,3 +28,19 @@ static func tambah_lencana(id: int) -> void:
 
 static func jumlah_lencana() -> int:
 	return lencana.size()
+
+
+# ------------------------------------------------------------ battle trainer
+
+static var trainer_kalah: Array = []   # id trainer gym yang sudah dikalahkan
+
+
+## Trainer gym sudah dikalahkan pemain?
+static func sudah_kalah_trainer(id: String) -> bool:
+	return trainer_kalah.has(id)
+
+
+## Catat kemenangan atas trainer gym (idempoten).
+static func tandai_kalah_trainer(id: String) -> void:
+	if not sudah_kalah_trainer(id):
+		trainer_kalah.append(id)

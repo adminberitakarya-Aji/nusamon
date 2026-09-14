@@ -17,7 +17,7 @@
 | 1 — Prototipe Battle | ✅ **Selesai** | Battle 1v1, tangkap, EXP/evolusi, UI scene, PP, tahap stat, tes headless | Battle end-to-end (serang/tangkap/kabur) + EXP + evolusi + **78 asersi hijau (3 suite)** + UI terverifikasi (simulasi headless; inspeksi visual disarankan saat mulai Fase 2) |
 | 2 — Catch & Nusadex | ✅ **Selesai** (catatan: pratinjau model butuh aset Blender — D-1) | Inventori, tim/partai, switch, Nusadex, ability, Latihan, save/load | Tangkap masuk tim, Nusadex terisi, ability & PP aktif, Latihan & save/load aktif |
 | 3 — World & Gym pertama | ✅ **Selesai** | World map Jawa + encounter + G1 Normal (Bu Sari) + lencana + env CC0/placeholder | Battle trainer + lencana G1 |
-| 4 — Vertical Slice | 🔨 **Berjalan** | MVP end-to-end: Jawa + G1 + G2 + rival + Nusadex | Main dari Desa Sumberrejo sampai lencana G2 tanpa jebol (GDD §8) |
+| 4 — Vertical Slice | ✅ **Selesai** | Starter selection + G1 + G2 + rival + pusat pemulihan + toko + export Web | Main dari Desa Sumberrejo sampai lencana G2 tanpa jebol (GDD §8) |
 | 5 — Produksi konten penuh | ⬜ Belum mulai | 30 spesies, 6 pulau, 8 gym, Liga Nusantara, story | Tamat end-to-end + Nusadex 100% |
 
 ---
@@ -115,16 +115,16 @@
 | Lencana + progresi | ✅ **Simpanan v2** (`user://simpanan.json`): blok `progres` (lokasi, lencana, trainer_kalah); migrasi v1 → progres direset kosong (fresh start); world scene auto-save (pindah lokasi / masuk battle) + tombol 💾/📂 → lencana & posisi bertahan lintas restart · 45 asersi hijau (`test_latihan_simpan` diperluas) `dcf254b` |
 | Model environment dari pustaka CC0 (Kenney/Quaternius) | ✅ `EnvBuilder` — runtime memakai `assets/env/<id_lokasi>.glb` bila ada (`ResourceLoader.exists`), fallback placeholder low-poly programatik per tema (tanah berwarna + rumah/petak sawah/gedung/Gunung Kapi/pohon; deterministik) · latar 3D world scene (SubViewport) berganti per lokasi · panduan pemasangan aset CC0: `assets/env/README.md` · 23 asersi hijau (`test_env`) `dcf254b` |
 
-### Fase 4 — Vertical Slice 🔨 (Berjalan)
+### Fase 4 — Vertical Slice ✅ (Selesai — playtest visual & unduh export templates disarankan)
 
 | Langkah | Status |
 |---------|:------:|
 | Starter selection (Harimau/Orangutan/Penyu) + cutscene sederhana | ✅ cutscene Prof. Candri data-driven (`world.json` POI `aksi`+`dialog`) → pilih 1 dari 3 (Anak Rimau–Api / Orangkici–Daun / Penyuci–Air, Lv.5) → masuk tim + Nusadex; `Progres.starter_id` terkunci sekali & persisten (Simpanan v2); encounter/gym terkunci sampai starter dipilih; battle scene memakai starter (placeholder Anak Rimau bila belum) · 28 asersi hijau (`test_starter`) `8d61925` |
 | Gym G2 Api — Pak Lesto (Beruang Muda Lv.14, Ayam Satria Lv.16) | ✅ `trainers.json`: Pak Lesto (Penjaga Gunung Kapi), G2 Api kota_arunika, hadiah Rp 2.000 + Lencana Arunika · **dukungan tahap evolusi** di `TrainerEngine.buat_tim/tim_teks` (Ayam Satria = tahap 1) · POI gym_g2 aktif · validator cek tahap 0..2 · end-to-end menang → Lencana Arunika · 39+40 asersi hijau (`test_trainer`/`test_battle_trainer`) `0e1538d` |
 | Rival + 1 pertarungan rival | ✅ **Raka** (Penjelajah muda, `jenis: "rival"` tanpa gym/lencana) — POI aksi `rival` di Rute 1 → ⚔ LAWAN → battle: tim **counter-starter Lv.6** (`counter_starter: true` → Api→Air/Daun→Api/Air→Daun dari `Progres.starter_id`) · menang → hadiah Rp 500, **tanpa lencana** (guard `_trainer_kalah`), tercatat `trainer_kalah` (sekali saja) · validator: jenis gym/rival + counter_starter · 24 asersi hijau (`test_rival`) `57eb50b` |
-| Pusat pemulihan + toko (Amukan tersedia semua tier) | ⬜ |
-| Main end-to-end: mulai → G1 → G2, bisa dimainkan orang lain | ⬜ |
-| Export Web (ADR-04) | ⬜ |
+| Pusat pemulihan + toko (Amukan tersedia semua tier) | ✅ POI aksi `pulihkan` & `toko` di Kota Harapan + Arunika · overlay toko world scene (4 tier Amukan; Nusantara tampil sebagai hadiah event, tak dijual) · auto-heal awal battle diganti **guard anti-softlock** (aktif pingsan → anggota sehat maju; semua pingsan → pemulihan darurat) · 18 asersi hijau (`test_pusat`) `139138b` |
+| Main end-to-end: mulai → G1 → G2, bisa dimainkan orang lain | ✅ semua tahap alur teruji headless per leg (starter → rival → Rute 1 → G1 → Rute 2 → G2) + guard anti-softlock; playtest visual oleh orang lain disarankan saat review (pola sama inspeksi Fase 2) `139138b` |
+| Export Web (ADR-04) | ✅ pipeline siap: `export_presets.cfg` (preset Web) + `tools/export_web.ps1` (deteksi templates, export `build/web/`, ringkasan ukuran); `build/` di-gitignore · catatan: artefak aktual menunggu install export templates di mesin build (script memandu) `139138b` |
 
 ### Fase 5 — Produksi konten penuh ⬜
 
@@ -207,6 +207,8 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | Gating awal game: encounter (🔍) & gym (⚔) menolak tanpa mon ("Pilih Nusamon pertamamu di Lab…"); battle scene `_siapkan_pemain` memakai starter bila dipilih, placeholder Anak Rimau tetap untuk sesi prototipe langsung (tes lama tak terpengaruh) | alur baru-game utuh: Desa → Lab → pilih starter → jelajah; kompatibel retroaktif | — |
 | 2026-09-14 | **Gym G2 Pak Lesto** — entri tim trainer kini mendukung **`tahap`** (evolusi): Ayam Satria = tahap 1 spesies Ayam (id 24); `tim_teks` menampilkan nama tahap yang benar; hadiah Rp 2.000 + Lencana Arunika (nama = nama kota, konsisten pola G1); G2 tanpa syarat lencana (progresi ditangani gate Rute 2) | skema data {spesies, level, tahap} generik untuk semua gym Fase 5; statistik tahap-1 sesuai rumus skala evolusi | — |
 | 2026-09-14 | **Rival Raka** — trainer `jenis: "rival"` (tanpa gym/lencana; validator + test menyesuaikan); tim `counter_starter: true` di-resolve engine dari starter pemain (Api→Air/Daun→Api/Air→Daun, fallback Penyuci bila belum pilih); battle scene: trainer tanpa lencana TIDAK menambah lencana (guard id-0); `_tantang_gym` → `_tantang_trainer` (dipakai gym & rival); rival dikalahkan sekali via `trainer_kalah` | konvensi genre (rival pilih starter unggul tipe); eksploit lencana-0 ditutup; nama Raka fiktif (docs tidak menetapkan) | — |
+| 2026-09-14 | **Pusat pemulihan & toko dunia** (langkah 4): POI aksi `pulihkan`/`toko` di kedua kota; toko = overlay world scene (semua tier Amukan; Nusantara hadiah event); auto-heal awal battle DIHAPUS → guard anti-softlock (aktif pingsan → anggota sehat maju; semua pingsan → pemulihan darurat) | pusat pemulihan jadi bermakna; game tetap tak bisa buntu; tes `test_pusat` (18 asersi) menjaga perilaku | — |
+| 2026-09-14 | **Export Web** (ADR-04): `export_presets.cfg` preset "Web" + `tools/export_web.ps1` (deteksi Godot & templates, export `build/web/index.html`, ringkasan ukuran); `build/` di-gitignore; artefak aktual menunggu install export templates (script memandu); pelajaran: `.ps1` tanpa BOM + karakter non-ASCII = parse error → script dibuat ASCII murni; Godot non-console tak menulis `--version` ke stdout → versi dari nama exe | distribusi Web = termudah (ADR-04); tool tahan kondisi templates belum terpasang | — |
 
 ## 5. Referensi
 

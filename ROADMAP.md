@@ -120,7 +120,7 @@
 | Langkah | Status |
 |---------|:------:|
 | Starter selection (Harimau/Orangutan/Penyu) + cutscene sederhana | ✅ cutscene Prof. Candri data-driven (`world.json` POI `aksi`+`dialog`) → pilih 1 dari 3 (Anak Rimau–Api / Orangkici–Daun / Penyuci–Air, Lv.5) → masuk tim + Nusadex; `Progres.starter_id` terkunci sekali & persisten (Simpanan v2); encounter/gym terkunci sampai starter dipilih; battle scene memakai starter (placeholder Anak Rimau bila belum) · 28 asersi hijau (`test_starter`) `8d61925` |
-| Gym G2 Api — Pak Lesto (Beruang Muda Lv.14, Ayam Satria Lv.16) | ⬜ |
+| Gym G2 Api — Pak Lesto (Beruang Muda Lv.14, Ayam Satria Lv.16) | ✅ `trainers.json`: Pak Lesto (Penjaga Gunung Kapi), G2 Api kota_arunika, hadiah Rp 2.000 + Lencana Arunika · **dukungan tahap evolusi** di `TrainerEngine.buat_tim/tim_teks` (Ayam Satria = tahap 1) · POI gym_g2 aktif · validator cek tahap 0..2 · end-to-end menang → Lencana Arunika · 39+40 asersi hijau (`test_trainer`/`test_battle_trainer`) `0e1538d` |
 | Rival + 1 pertarungan rival | ⬜ |
 | Pusat pemulihan + toko (Amukan tersedia semua tier) | ⬜ |
 | Main end-to-end: mulai → G1 → G2, bisa dimainkan orang lain | ⬜ |
@@ -205,6 +205,7 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 | 2026-09-14 | Environment (langkah 6): **`EnvBuilder`** — `.glb` CC0 dari `assets/env/<id>.glb` dipakai bila ada, selain itu placeholder programatik per tema (konvensi fallback model monster/D-1); latar 3D SubViewport world scene berganti tiap pindah lokasi; panduan pemasangan: `assets/env/README.md` (Kenney/Quaternius, lisensi CC0) | repo tidak membundel binari pihak ketiga — runtime siap, aset dipasang kapan saja tanpa ubah kode; placeholder deterministik & headless-testable | — |
 | 2026-09-14 | Fase 4 dimulai — **starter selection**: POI lab data-driven (`aksi: "pilih_starter"` + dialog cutscene di `world.json`); `Progres.starter_id` sekali-pilih terkunci & masuk Simpanan v2 (field `starter`, additive — file v2 lama tanpa field tetap terbaca); starter masuk tim Lv.5 + Nusadex lihat+tangkap | ADR-06; cutscene MVP = dialog bertahap overlay (sistem story penuh = Fase 5); penamaan mengikuti data: spesies **Rimau** (bukan "Harimau" di README §keputusan) — Anak Rimau/Orangkici/Penyuci | — |
 | 2026-09-14 | Gating awal game: encounter (🔍) & gym (⚔) menolak tanpa mon ("Pilih Nusamon pertamamu di Lab…"); battle scene `_siapkan_pemain` memakai starter bila dipilih, placeholder Anak Rimau tetap untuk sesi prototipe langsung (tes lama tak terpengaruh) | alur baru-game utuh: Desa → Lab → pilih starter → jelajah; kompatibel retroaktif | — |
+| 2026-09-14 | **Gym G2 Pak Lesto** — entri tim trainer kini mendukung **`tahap`** (evolusi): Ayam Satria = tahap 1 spesies Ayam (id 24); `tim_teks` menampilkan nama tahap yang benar; hadiah Rp 2.000 + Lencana Arunika (nama = nama kota, konsisten pola G1); G2 tanpa syarat lencana (progresi ditangani gate Rute 2) | skema data {spesies, level, tahap} generik untuk semua gym Fase 5; statistik tahap-1 sesuai rumus skala evolusi | — |
 
 ## 5. Referensi
 

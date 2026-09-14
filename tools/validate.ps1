@@ -112,7 +112,7 @@ foreach ($l in $w.lokasi) {
         elseif ([double]$l.peluang_encounter -le 0 -or [double]$l.peluang_encounter -gt 1) { Fail "world $($l.id): peluang_encounter harus 0..1 (aktual $($l.peluang_encounter))" }
     }
     foreach ($poi in $l.tempat) {
-        if ($null -ne $poi.aksi -and @('pilih_starter', 'rival') -notcontains $poi.aksi) { Fail "world $($l.id): aksi POI tidak dikenal ($($poi.aksi))" }
+        if ($null -ne $poi.aksi -and @('pilih_starter', 'rival', 'pulihkan', 'toko') -notcontains $poi.aksi) { Fail "world $($l.id): aksi POI tidak dikenal ($($poi.aksi))" }
         if ($null -ne $poi.dialog -and ($poi.dialog | Measure-Object).Count -lt 1) { Fail "world $($l.id): dialog POI kosong" }
         if ($null -ne $poi.dialog -and (($poi.dialog | ForEach-Object { $_.Trim() }) -contains '')) { Fail "world $($l.id): ada baris dialog kosong" }
     }

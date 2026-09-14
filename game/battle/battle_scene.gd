@@ -85,8 +85,24 @@ func _siapkan_pemain() -> void:
 		var spesies_p := NusamonData.find_species(data, id_p)
 		Tim.tambah(NusamonInstance.create(
 			spesies_p, data["detailSpesies"][str(id_p)], 0, PLAYER_LEVEL))
-	if Tim.pulihkan_semua() > 0:
-		_log("Tim dipulihkan di pusat pemulihan.")
+	# pemulihan resmi = Pusat Pemulihan di kota (Fase 4) — tanpa auto-heal.
+	# Penjaga softlock: mon aktif pingsan → anggota sehat pertama maju;
+	# seluruh tim pingsan → pemulihan darurat agar game tidak buntu.
+	if Tim.jumlah() > 0:
+		var ada_sehat := false
+		for m in Tim.anggota:
+			if not m.is_fainted():
+				ada_sehat = true
+				break
+		if not ada_sehat:
+			Tim.pulihkan_semua()
+			_log("Seluruh tim pingsan — dipulihkan darurat agar petualangan bisa lanjut.")
+		elif Tim.aktif().is_fainted():
+			for i in Tim.jumlah():
+				if not Tim.anggota[i].is_fainted():
+					Tim.ubah_aktif(i)
+					_log("%s maju menggantikan mon yang pingsan!" % Tim.aktif().display_name)
+					break
 	player = Tim.aktif()  # EXP/level/evolusi tersimpan di anggota tim
 
 

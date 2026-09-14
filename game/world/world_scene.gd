@@ -203,6 +203,10 @@ func _perbarui() -> void:
 			else:
 				_tombol("⚔ LAWAN %s" % String(t.get("nama", "RIVAL")).to_upper(),
 					daftar_tempat, func() -> void: _tantang_trainer(rid))
+		elif String(t.get("aksi", "")) == "pulihkan":
+			_tombol("💤 PULIHKAN TIM", daftar_tempat, _pulihkan_tim)
+		elif String(t.get("aksi", "")) == "toko":
+			_tombol("🛒 BUKA TOKO", daftar_tempat, _buka_toko_dunia)
 
 	# panel gym (Fase 3 langkah 3): leader, tim, hadiah — battle = langkah 4
 	if not trainer_gym.is_empty():
@@ -355,7 +359,7 @@ func _tampilkan_langkah_cutscene() -> void:
 			b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 
 
-func _tombol_layar(induk: VBoxContainer, tek: String, cb: Callable) -> Button:
+func _tombol_layar(induk: Container, tek: String, cb: Callable) -> Button:
 	var b := Button.new()
 	b.text = tek
 	b.pressed.connect(cb)
@@ -385,6 +389,96 @@ func _tutup_cutscene() -> void:
 	if cutscene_overlay != null:
 		cutscene_overlay.queue_free()
 		cutscene_overlay = null
+
+
+# ------------------------------------------------------------ pusat pemulihan & toko (Fase 4)
+
+## Pusat pemulihan: pulihkan seluruh tim (HP penuh + bersihkan status), gratis.
+func _pulihkan_tim() -> void:
+	if Tim.jumlah() == 0:
+		_catatan("Belum punya Nusamon — pilih starter di Laboratorium dulu!")
+		return
+	var n := Tim.pulihkan_semua()
+	Simpanan.simpan()
+	if n > 0:
+		_catatan("Tim dipulihkan sepenuhnya! (%d Nusamon kembali bugar)" % Tim.jumlah())
+	else:
+		_catatan("Timmu sudah dalam kondisi prima.")
+	_perbarui()
+
+
+# --- overlay toko (semua tier Amukan; Nusantara = hadiah event, tidak dijual)
+var toko_overlay: Control = null
+
+
+func _buka_toko_dunia() -> void:
+	_tampilkan_toko()
+
+
+func _tampilkan_toko() -> void:
+	if toko_overlay != null:
+		toko_overlay.queue_free()
+	var overlay := ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0.65)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(overlay)
+	toko_overlay = overlay
+	var panel := PanelContainer.new()
+	var st := StyleBoxFlat.new()
+	st.bg_color = Color(0.08, 0.1, 0.08, 0.97)
+	st.set_corner_radius_all(10)
+	st.content_margin_left = 20
+	st.content_margin_right = 20
+	st.content_margin_top = 16
+	st.content_margin_bottom = 16
+	panel.add_theme_stylebox_override("panel", st)
+	panel.position = Vector2(230, 90)
+	panel.custom_minimum_size = Vector2(690, 470)
+	overlay.add_child(panel)
+	var v := VBoxContainer.new()
+	panel.add_child(v)
+	v.add_child(_label("🛒 TOKO — Amukan semua tier", 20, Color(1.0, 0.92, 0.6)))
+	v.add_child(_label("Uang: Rp %d" % Inventori.uang, 15, Color(1.0, 0.9, 0.5)))
+	var spasi := Control.new()
+	spasi.custom_minimum_size = Vector2(0, 8)
+	v.add_child(spasi)
+	for it in Inventori.daftar_amukan():
+		var iid := String(it.get("id", ""))
+		var nama := String(it.get("nama", iid))
+		var harga := Inventori.harga(iid)
+		if harga < 0:
+			# hadiah event (mis. Amukan Nusantara) — tidak dijual
+			v.add_child(_label("%s — hadiah event (tidak dijual) [stok %d]" % [
+				nama, Inventori.stok_item(iid)], 14, Color(0.7, 0.7, 0.65)))
+			continue
+		var baris := HBoxContainer.new()
+		v.add_child(baris)
+		var teks := _label("%s — Rp %d [stok %d]" % [
+			nama, harga, Inventori.stok_item(iid)], 14)
+		teks.custom_minimum_size = Vector2(380, 0)
+		baris.add_child(teks)
+		var b := _tombol_layar(baris, "BELI", func() -> void: _beli_toko(iid))
+		b.disabled = Inventori.uang < harga
+	var spasi2 := Control.new()
+	spasi2.custom_minimum_size = Vector2(0, 10)
+	v.add_child(spasi2)
+	_tombol_layar(v, "TUTUP", _tutup_toko)
+
+
+func _beli_toko(iid: String) -> void:
+	if Inventori.beli(iid):
+		_catatan("Membeli %s. (stok %d, uang Rp %d)" % [
+			iid, Inventori.stok_item(iid), Inventori.uang])
+		Simpanan.simpan()
+	_tampilkan_toko()   # segarkan harga/stok/keadaan tombol
+
+
+func _tutup_toko() -> void:
+	if toko_overlay != null:
+		toko_overlay.queue_free()
+		toko_overlay = null
+	_perbarui()
 
 
 ## Tantang trainer (gym/rival) → antrean battle → scene battle.

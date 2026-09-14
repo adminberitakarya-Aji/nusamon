@@ -20,6 +20,9 @@ desktop.ini
 *.tmp
 export_presets.cfg.bak
 
+# Build export (PC/Web) — artefak, tidak masuk repo
+build/
+
 # Python
 __pycache__/
 *.pyc

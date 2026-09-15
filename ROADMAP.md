@@ -15,7 +15,7 @@
 |--:|--------|-----------|------------------------|
 | 0 — Desain | ✅ **Selesai** | GDD, roster 30 spesies, type chart 11×11, base stats, data JSON tervalidasi | 9 dokumen desain + 3 file data JSON + `validate.ps1` lolos |
 | 1 — Prototipe Battle | ✅ **Selesai** | Battle 1v1, tangkap, EXP/evolusi, UI scene, PP, tahap stat, tes headless | Battle end-to-end (serang/tangkap/kabur) + EXP + evolusi + **78 asersi hijau (3 suite)** + UI terverifikasi (simulasi headless; inspeksi visual disarankan saat mulai Fase 2) |
-| 2 — Catch & Nusadex | ✅ **Selesai** (catatan: pratinjau model butuh aset Blender — D-1) | Inventori, tim/partai, switch, Nusadex, ability, Latihan, save/load | Tangkap masuk tim, Nusadex terisi, ability & PP aktif, Latihan & save/load aktif |
+| 2 — Catch & Nusadex | ✅ **Selesai** (D-1 tutup di Fase 5 — 62/62 model) | Inventori, tim/partai, switch, Nusadex, ability, Latihan, save/load | Tangkap masuk tim, Nusadex terisi, ability & PP aktif, Latihan & save/load aktif |
 | 3 — World & Gym pertama | ✅ **Selesai** | World map Jawa + encounter + G1 Normal (Bu Sari) + lencana + env CC0/placeholder | Battle trainer + lencana G1 |
 | 4 — Vertical Slice | ✅ **Selesai** | Starter selection + G1 + G2 + rival + pusat pemulihan + toko + export Web | Main dari Desa Sumberrejo sampai lencana G2 tanpa jebol (GDD §8) |
 | 5 — Produksi konten penuh | 🔨 **Berjalan** | 30 spesies (62 model .glb), 6 pulau + Laut Nusantara, 8 gym, Liga Nusantara + Juara, legendary trio, audio (placeholder terprogram) | Tamat end-to-end + Nusadex 100% (playtest visual menyusul) |
@@ -102,7 +102,7 @@
 | Sistem PP move (`poin` di `moves.json`) — PP per move + Meronta | ✅ `4629f5c` (dikerjakan di penutupan Fase 1) |
 | Latihan (EV-lite): poin per battle, cap 50/25, konversi 4:1, item reset — Teh Herba (Rp 500) di toko | ✅ `2a6dd71` |
 | Penyimpanan (save/load) — format **JSON v1** `user://simpanan.json`: uang, stok, tim (level/HP/status/exp/latihan), nusadex; tombol 💾/📂 + auto-load & auto-save | ✅ `2a6dd71` |
-| Impor model tahap 2/3 + tampil di battle — runtime selesai (`path_model`, pratinjau SubViewport, fallback diam); **aset .glb menunggu Blender** (D-1) | 🔨 runtime `2a6dd71` |
+| Impor model tahap 2/3 + tampil di battle — runtime selesai (`path_model`, pratinjau SubViewport, fallback diam); aset lengkap 62/62 di Fase 5 (D-1 tutup) | ✅ runtime `2a6dd71` + aset Fase 5 |
 
 ### Fase 3 — World & Gym pertama ✅ (Selesai — aset env .glb CC0 menunggu unduhan)
 
@@ -144,18 +144,18 @@ Diverifikasi via audit total + eksekusi suite tes pertama (Godot 4.7.2). Item �
 
 | ID | Item | Prioritas | Catatan |
 |----|------|-----------|---------|
-| B-1 | 4 move status (kikik/fokus/istirahat/benteng_karang) terlihat di UI tapi efek `debuff_atk`/`buff_atk`/`heal_50`/`buff_def` diabaikan engine | 🔨 | ✅ SELESAI `4629f5c` — sistem tahap stat + 4 efek aktif |
-| B-2 | PP (`poin`) belum diimplementasikan — move tak pernah habis | 🔨 | ✅ SELESAI `4629f5c` — PP per move + fallback Meronta |
-| B-3 | Status **kelumpuhan** unreachable: tak ada move dengan efekData kelumpuhan di `moves.json` (GDD §4.1 mendefinisikannya) | sedang | tambah move Listrik dengan efek kelumpuhan atau revisi GDD |
-| C-1 | Kontradiksi clamp stat: `data_loader.gd` min 1 vs `docs/base-stats.md` min 20 | rendah | tidak bermuara pada data saat ini (semua ≥23); samakan salah satu |
+| B-1 | 4 move status (kikik/fokus/istirahat/benteng_karang) terlihat di UI tapi efek `debuff_atk`/`buff_atk`/`heal_50`/`buff_def` diabaikan engine | ✅ | ✅ SELESAI `4629f5c` — sistem tahap stat + 4 efek aktif |
+| B-2 | PP (`poin`) belum diimplementasikan — move tak pernah habis | ✅ | ✅ SELESAI `4629f5c` — PP per move + fallback Meronta |
+| B-3 | Status **kelumpuhan** unreachable: tak ada move dengan efekData kelumpuhan di `moves.json` (GDD §4.1 mendefinisikannya) | ✅ SELESAI (audit Fase 5) — move `kejut_petir` (Listrik) membawa `efekData` kelumpuhan 10% + engine menanganinya (battle_scene §cek status) |
+| C-1 | Kontradiksi clamp stat: `data_loader.gd` min 1 vs `docs/base-stats.md` min 20 | ✅ SELESAI (audit Fase 5) — docs disamakan ke clamp engine (min 1; data final semua ≥ 23) |
 | C-2 | Kelumpuhan di-rol 2× per giliran (cek serangan + pesan fase status) | sedang | ✅ SELESAI `4629f5c` — cek lumpuh hanya saat mon mencoba beraksi |
 | C-3 | Kabur: peluang flat 60%, abaikan speed | rendah | ✅ SELESAI (Fase 3) — formula Gen-III+ berbasis SPEED (`BattleEngine.coba_kabur`): F = floor(SPE×32/penyebut) + 30×percobaan; docs `gameplay-depth.md` §4.1 |
-| C-4 | UI battle memakai posisi absolut tanpa setting `display/window` (stretch) | sedang | layout bisa terpotong pada resolusi lain |
+| C-4 | UI battle memakai posisi absolut tanpa setting `display/window` (stretch) | ✅ SELESAI (audit Fase 5) — viewport 1280×720 + stretch `canvas_items`/`keep` di project.godot |
 | C-5 | 12 ability dari `gameplay-depth.md` belum ada satu pun di engine | sedang | ✅ SELESAI `3637879` — AbilityEngine, 12/12 aktif di battle |
 | C-6 | Latihan (EV-lite) belum diimplementasikan | rendah | ✅ SELESAI `2a6dd71` — cap 50/25, 4:1, Teh Herba, tampil di layar status |
 | C-7 | Kosmetik: tangkap berhasil terlog "Battle selesai (menang)" — kurang naratif | rendah | ✅ SELESAI `4629f5c` — kini "(tertangkap)" |
-| D-1 | Builder Blender baru 6/15 model MVP (tahap 1 saja) | sedang | 9 model line tahap 2/3 belum ada; terjadwal Fase 1 penutup/Fase 2 |
-| E-1 | CI GitHub Actions (validate + tes headless) belum ada | sedang | direncanakan di `tech-stack.md` §5 |
+| D-1 | Builder Blender baru 6/15 model MVP (tahap 1 saja) | ✅ SELESAI (Fase 5) — 62/62 model semua tahapan 30 line (Blender 5.2 headless) |
+| E-1 | CI GitHub Actions (validate + tes headless) belum ada | ✅ SELESAI (audit Fase 5) — `.github/workflows/ci.yml`: validasi + import + 18 suite headless (Godot 4.7.2) |
 | E-2 | `validate.ps1` hard-code daftar ability & angka konten — perlu edit tiap penambahan konten | rendah | pindahkan whitelist ke data/config |
 
 ## 4. Riwayat Keputusan Teknis per Langkah

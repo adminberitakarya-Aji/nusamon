@@ -1,4 +1,4 @@
-# NUSAMON — Game Design Document (v0.1)
+﻿# NUSAMON — Game Design Document (v0.1)
 
 > Dokumen ini mengunci seluruh keputusan desain hasil diskusi. Setiap perubahan desain harus memperbarui dokumen ini.
 
@@ -114,6 +114,8 @@ catch jika random(0..255) < a (dengan shake check)
 
 ## 8. Scope MVP (Prototipe Pertama)
 
+> **Status:** MVP Fase 0–4 selesai. Fase 5 memperluas ke konten penuh (30 spesies / 6 pulau / Liga) — lihat ROADMAP.md.
+
 | Item | Isi |
 |------|-----|
 | Wilayah | Jawa ringkas: Desa Sumberrejo → Rute 1 → Kota Harapan (G1) → Rute 2 → Kota Arunika (G2) |
@@ -128,11 +130,11 @@ catch jika random(0..255) < a (dengan shake check)
 > **Rencana makro.** Status pengerjaan granular step-by-step (per langkah, per commit) ada di **`ROADMAP.md`** — sumber tunggal status progres; wajib diperbarui di setiap commit berfitur.
 
 1. **Fase 0 — Desain** ✅ (GDD, roster, type chart, stats)
-2. **Fase 1 — Prototipe Battle** (engine disipasi, pertarungan 1v1 berjalan)
-3. **Fase 2 — Catch & Nusadex**
-4. **Fase 3 — World & Gym pertama**
-5. **Fase 4 — Vertical Slice** (MVP lengkap, bisa dimainkan end-to-end)
-6. **Fase 5 — Produksi konten penuh** (30 spesies, semua pulau, story)
+2. **Fase 1 — Prototipe Battle** ✅ (engine disipasi, pertarungan 1v1 berjalan)
+3. **Fase 2 — Catch & Nusadex** ✅
+4. **Fase 3 — World & Gym pertama** ✅
+5. **Fase 4 — Vertical Slice** ✅ (MVP lengkap, bisa dimainkan end-to-end)
+6. **Fase 5 — Produksi konten penuh** 🔨 (30 spesies, 6 pulau, 8 gym + Liga, legendary, audio — status granular: `ROADMAP.md`)
 
 ## 10. Risiko & Catatan
 

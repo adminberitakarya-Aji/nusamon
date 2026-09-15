@@ -1,4 +1,4 @@
-# NUSAMON 🇮🇩
+﻿# NUSAMON 🇮🇩
 
 **Nusantara Monsters** — Game RPG monster-collection bergaya Pokémon dengan latar fauna dan budaya Indonesia.
 
@@ -45,10 +45,12 @@ NUSAMON/
 │   ├── items.json         # Data item (Amukan, Teh Herba)
 │   └── world.json         # Peta dunia (lokasi, koneksi, gate, encounter)
 ├── game/                  # Kode GDScript (data loader, battle, world, dst.)
-├── assets/models/         # Model .glb hasil generator
+├── assets/models/         # Model .glb hasil generator (62 tahapan)
+├── assets/audio/          # Audio placeholder terprogram (panduan CC0: README.md)
 └── tools/
     ├── blender/           # Generator aset 3D low-poly (Python Blender)
-    └── validate.ps1       # Validasi data JSON
+    ├── audio/             # Generator placeholder audio (Python stdlib)
+    ├── validate.ps1       # Validasi data JSON`n    ├── run_tests.ps1      # Runner 18 suite tes headless`n    └── export_web.ps1     # Export build Web
 ```
 
 ## Keputusan Desain Kunci (Locked)
@@ -59,8 +61,8 @@ NUSAMON/
 4. **3 Legendary single-stage** (tidak berevolusi): Elang Garuda, Cenderawasih Agung, Paus Samudra
 5. **3 Pseudo-Legendary 3-tahap**: line Komodo, Gajah, Badak
 6. **Maksimal 3 tahap evolusi** per spesies
-7. **Starter trio**: Harimau (Api), Orangutan (Daun), Penyu (Air)
-8. **Engine & art**: Godot 4 + 3D low-poly; aset dibuat terprogram via script Blender; MVP **PC + Web**, **15 spesies**; repo public
+7. **Starter trio**: Rimau (Api), Orangutan (Daun), Penyu (Air)
+8. **Engine & art**: Godot 4 + 3D low-poly; aset dibuat terprogram via script Blender; **PC + Web**, konten penuh **30 spesies** (Fase 5); repo public
 
 ## Dokumentasi
 

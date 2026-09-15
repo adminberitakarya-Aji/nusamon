@@ -1,4 +1,4 @@
-# Nusadex — Desain & Deskripsi Entri — v0.1
+﻿# Nusadex — Desain & Deskripsi Entri — v0.1
 
 ## 1. Konsep
 
@@ -11,7 +11,8 @@
 | Melihat Nusamon liar | Entri tercatat: siluet + nama |
 | Menangkap | Entri lengkap: sprite, stat, deskripsi |
 | Berevolusi / melihat tahap baru | Tahap evolusi bertambah di chain |
-| 30/30 lengkap | Lencana "Nusadex Lengkap" + hadiah endgame |
+| Menerima starter Program Konservasi (pasca-Juara, Fase 5) | Entri lengkap untuk line starter yang belum dimiliki |
+| 30/30 lengkap | Hadiah endgame "Nusadex Lengkap" (rencana pasca-Fase 5 — menyusul) |
 
 - Item **Nusadex Mini** diberikan Prof. Candri di Desa Sumberrejo (prolog).
 

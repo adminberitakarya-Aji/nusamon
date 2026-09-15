@@ -19,6 +19,13 @@ config/version="0.1"
 run/main_scene="res://game/battle/battle_scene.tscn"
 config/features=PackedStringArray("4.7")
 
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+
 [rendering]
 
 renderer/rendering_method="mobile"

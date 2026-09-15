@@ -1,4 +1,4 @@
-# Base Stats NUSAMON
+﻿# Base Stats NUSAMON
 
 > 6 stat: **HP, ATK, DEF, SPA, SPD, SPE** (format Pokémon: SPA = Special Attack, SPD = Special Defense, SPE = Speed).
 > Nilai di bawah = base stats **tahap akhir** tiap spesies.
@@ -11,7 +11,7 @@
 | 2 tahap | ×0.65 | ×1.00 | — |
 | 1 tahap (single) | ×1.00 | — | — |
 
-- Rumus: `stat_tahap = round(baseStatsFinal × skala)` — dibulatkan ke atas, nilai minimum tiap stat = 20.
+- Rumus: `stat_tahap = round(baseStatsFinal × skala)` — dibulatkan ke atas; clamp engine = min 1 (`NusamonData.stats_for_stage`; data final semua ≥ 23 sehingga clamp tak pernah menyentuh data).
 - Level evolusi standar: 3-tahap = Lv.16 & Lv.36; 2-tahap = Lv.22. (Dapat ditinjau per spesies.)
 - Tipe dapat berubah saat evolusi (lihat `data/nusamons.json`).
 

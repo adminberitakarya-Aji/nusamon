@@ -1,4 +1,4 @@
-# Dunia & Region NUSAMON — v0.1
+﻿# Dunia & Region NUSAMON — v0.1
 
 > **Region Nusantara** = satu region game berupa gugusan **6 pulau sub-region + Laut Nusantara** (laut transisi antar pulau).
 
@@ -21,6 +21,8 @@
 | 6 | **Maluku & Papua** | Hutan hujan, puncak bersalju | G8 Udara | Liga Nusantara (setelah G8) |
 | — | **Laut Nusantara** | Rute laut, terumbu karang, palung | — (area encounter) | Item Perahu Laut Dalam |
 
+**Catatan implementasi (Fase 5):** tabel khas final tiap rute = data/world.json (SSOT, divalidasi habitat via 	ools/validate.ps1); spesies laut hanya di Laut Nusantara; **starter & legendary tidak muncul liar** (bobot 0) — starter line lain diperoleh via Program Konservasi Prof. Candri (pasca-Juara).
+
 ## 2. Pulau per Pulau
 
 ### 2.1 Jawa — Area Pemula
@@ -37,46 +39,46 @@
 
 | Lokasi | Keterangan | Encounter Khas |
 |--------|-----------|----------------|
-| Pelabuhan Bakau | Gerbang kapal dari Jawa | Penyuci, Ikan Buntal Kecil |
-| **Hutan Rimba** (landmark) | Hutan hujan lebat | Orangkici, Beruang Muda, Rangkong Muda, Ulat Daun |
+| Pelabuhan Bakau | Gerbang kapal dari Jawa | — |
+| **Hutan Rimba** (landmark) | Hutan hujan lebat | Beruang Muda, Rangkong Muda, Ular Kecil, Monyet |
 | **Kota Rimba** | G3 — Gym Daun | — |
-| Rute 3 (pesisir timur) | Rawa & perairan payau | Ikan Buntal Kecil, Udang Kecil, Ular Kecil |
-| **Kota Toba** (Danau Toba) | G4 — Gym Racun | Hiu Kecil, Lumba Kecil (danau) |
+| Rute 3 (pesisir timur) | Rawa & perairan payau | Buaya Kecil, Beruang Muda, Ular Kecil |
+| **Kota Toba** (Danau Toba) | G4 — Gym Racun | — |
 
 ### 2.3 Kalimantan — Sungai Raksasa
 
 | Lokasi | Keterangan | Encounter Khas |
 |--------|-----------|----------------|
-| Muara Kapuas | Gerbang dari Sumatra | Buaya Kecil, Udang Kecil |
-| Rute 4 (Sungai Kapuas) | Rute air panjang berkelok | Arwana Kecil, Lumba Kecil, Udang Kecil |
-| **Hutan Gambut** (landmark) | Gambut lembap & gelap alami | Kantong Semar Kecil, Beruang Muda, Rangkong Muda |
+| Muara Kapuas | Gerbang dari Sumatra | — |
+| Rute 4 (Sungai Kapuas) | Rute air panjang berkelok | Arwana Kecil, Udang Kecil, Buaya Kecil, Banteng Muda |
+| **Hutan Gambut** (landmark) | Gambut lembap & gelap alami | Kantong Semar Kecil, Beruang Muda, Rangkong Muda, Banteng Muda |
 | **Kota Kapuas** | G5 — Gym Air | — |
 
 ### 2.4 Sulawesi — Pegunungan & Teluk
 
 | Lokasi | Keterangan | Encounter Khas |
 |--------|-----------|----------------|
-| Pelabuhan Anoa | Gerbang dari Kalimantan | Kepiting Kecil, Udang Kecil |
-| Rute 5 (pegunungan) | Bukit & lembah | Banteng Muda, Babirusa Muda, Rusa Muda |
+| Pelabuhan Anoa | Gerbang dari Kalimantan | — |
+| Rute 5 (pegunungan) | Bukit & lembah | Babirusa Muda, Rusa Muda, Gurita Kecil |
 | **Kota Maroso** | G6 — Gym Petarung | — |
-| **Teluk Karang** (landmark) | Teluk biru berterumbu | Gurita Kecil, Ikan Badut, Kepiting Kecil |
+| **Teluk Karang** (landmark) | Teluk biru berterumbu | Gurita Kecil, Kepiting Kecil, Rusa Muda |
 
 ### 2.5 Bali & Nusa Tenggara — Sabana
 
 | Lokasi | Keterangan | Encounter Khas |
 |--------|-----------|----------------|
-| Kota Pura | Gerbang dari Sulawesi | Kakatua Muda, Rusa Muda |
-| Rute 6 (sabana Nipah) | Padang kering luas | Merak Muda, Rusa Muda, Kakatua Muda |
+| Kota Pura | Gerbang dari Sulawesi | — |
+| Rute 6 (sabana Nipah) | Padang kering luas | Kakatua Muda, Rusa Muda, Monyet |
 | **Kota Sabana** | G7 — Gym Tanah | — |
-| **Pulau Komodo** (landmark) | Suaka satwa — habitat line Komodo | Biawak Kecil, Komodo, Kakatua Raja |
+| **Pulau Komodo** (landmark) | Suaka satwa — habitat line Komodo | Biawak Kecil, Kakatua Muda, Monyet |
 
 ### 2.6 Maluku & Papua — Ujung Timur
 
 | Lokasi | Keterangan | Encounter Khas |
 |--------|-----------|----------------|
-| Pelabuhan Cendana | Gerbang kapal laut dalam | Penyuci, Hiu Kecil |
-| **Hutan Cendana** (landmark) | Hutan hujan Papua; ada lorong rahasia | Kupu-kupu Ekor Walet, Rangkong Muda, Kantong Semar Kecil |
-| Rute 7 (pendakian) | Hutan → kabut → salju | Merak Muda, Rangkong Muda, Ulat Daun |
+| Pelabuhan Cendana | Gerbang kapal laut dalam | — |
+| **Hutan Cendana** (landmark) | Hutan hujan Papua; ada lorong rahasia | Ulat Daun, Kantong Semar Kecil |
+| Rute 7 (pendakian) | Hutan → kabut → salju | Ulat Daun, Kantong Semar Kecil |
 | **Kota Puncak** | G8 — Gym Udara + Liga Nusantara | — |
 | **Puncak Salju** (landmark) | Puncak tertinggi Nusantara | — (event legendary) |
 
@@ -125,7 +127,7 @@ Mulai (Desa Sumberrejo)
 → G6 → [Perahu] → Bali & Nusa Tenggara
 → G7 → [Perahu Laut Dalam] → Maluku & Papua
 → G8 → Liga Nusantara → Juara Nara
-→ Endgame: Trio Penjaga + Nusadex 100%
+→ Endgame: Trio Penjaga + Program Konservasi (starter lain) + Nusadex 100%
 ```
 
 ## 7. Catatan MVP

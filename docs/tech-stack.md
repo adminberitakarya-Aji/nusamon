@@ -1,4 +1,4 @@
-# Tech Stack & Keputusan Teknis (ADR) — v0.1
+﻿# Tech Stack & Keputusan Teknis (ADR) — v0.1
 
 > Architecture Decision Records NUSAMON. Setiap keputusan besar dicatat di sini beserta alternatifnya dan alasannya.
 
@@ -20,11 +20,13 @@ Root repo = root proyek Godot, sehingga `res://` = path repo (data JSON langsung
 
 ```
 project.godot            # Proyek Godot 4 (root)
-data/                    # Data JSON — satu-satunya sumber data
+data/                    # Data JSON — satu-satunya sumber data (nusamons, moves, type-chart, items, world, trainers, audio)
 game/                    # Kode GDScript (loader, battle, dst.)
-assets/models/           # Output generator (*.glb)
+assets/models/           # Output generator (*.glb, LFS)
+assets/audio/            # Audio (.wav placeholder terprogram; .ogg CC0 nanti)
 tools/blender/           # Generator aset low-poly (headless)
-tools/validate.ps1       # Validasi data JSON
+tools/audio/             # Generator placeholder audio (Python stdlib)
+tools/validate.ps1       # Validasi data JSON`ntools/run_tests.ps1      # Runner tes headless (18 suite)`ntools/export_web.ps1     # Export build Web
 docs/                    # 9 dokumen desain
 ```
 
@@ -58,11 +60,11 @@ game/                               (scene battle & world memakai model)
 | Ayam | `ayam_jantan`, `ayam_satria` |
 | Rusa | `rusa_muda`, `rusa_raksasa` |
 
-*(Fase 5 produksi penuh menambahkan 15 spesies sisanya sesuai roster v2.)*
+*Fase 5 selesai: 62/62 model (semua tahapan 30 line roster v2) digenerate via Blender 5.2 headless — D-1 tutup.*
 
 ## 5. Kontrol Versi & CI
 
-- LFS: `*.glb`, `*.blend`, `*.png`, `*.ogg` (lihat `.gitattributes`).
+- LFS: `*.glb`, `*.blend`, `*.png`, `*.ogg` (lihat `.gitattributes`). Placeholder `.wav` audio (~1,9 MB total) sengaja disimpan normal; `.ogg` final akan masuk LFS.
 - `tools/validate.ps1` wajib lolos sebelum data masuk `main` (nanti diotomasi via GitHub Actions).
 
 ## 6. Risiko Teknis & Mitigasi

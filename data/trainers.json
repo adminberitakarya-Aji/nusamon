@@ -1,6 +1,6 @@
-{
+﻿{
   "versi": "0.1",
-  "keterangan": "Data trainer/gym NUSAMON (Fase 3 langkah 3). Tim = entri {spesies: id nusamons.json, level}. Lencana = id gym 1..8 (gate dunia di world.json merujuk id ini). Orde tim = orde dikirim. Battle trainer (orkestrasi) = langkah 4 Fase 3. Sumber desain: docs/world-region.md §3.",
+  "keterangan": "Data trainer NUSAMON (Fase 3-5). Tim = entri {spesies: id nusamons.json, level, tahap?}. Lencana = id gym 1..8 (gate dunia di world.json merujuk id ini). jenis: gym (default, dgn lencana) / rival (counter-starter, tanpa gym) / liga (Elite Empat, urutan 1-4, tanpa gym) / juara (Juara Nara, TAMAT). Orde tim = orde dikirim. Sumber desain: docs/world-region.md §3-4.",
   "trainers": [
     {
       "id": "bu_sari",

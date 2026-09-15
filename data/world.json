@@ -1,6 +1,6 @@
 ﻿{
   "versi": "0.2",
-  "keterangan": "Peta dunia NUSAMON Fase 5 — 6 pulau + Laut Nusantara (docs/world-region.md §1-2). Koneksi eksplisit dua arah; gate hanya di arah MASUK (jalan pulang bebas). Gate jenis: lencana (id gym 1..8) & item (id items.json jenis kunci, field nama = teks UI). Encounter = tabel khas per rute (spesies = id nusamons.json; wajib berhabitat di pulau, dicek validate.ps1); starter & legendary bobot 0 (tidak liar). POI aksi Fase 5: tiket (terima item kunci sekali per save), legendary (encounter 1x per save), liga (Elite Empat + Juara).",
+  "keterangan": "Peta dunia NUSAMON Fase 5 — 6 pulau + Laut Nusantara (docs/world-region.md §1-2). Koneksi eksplisit dua arah; gate hanya di arah MASUK (jalan pulang bebas). Gate jenis: lencana (id gym 1..8) & item (id items.json jenis kunci, field nama = teks UI). Encounter = tabel khas per rute (spesies = id nusamons.json; wajib berhabitat di pulau, dicek validate.ps1); starter & legendary bobot 0 (tidak liar). POI aksi Fase 5: tiket (terima item kunci sekali per save), legendary (encounter 1x per save), liga (Elite Empat + Juara), starter_bonus (Program Konservasi Prof. Candri — line starter lain pasca-Juara, Nusadex 100%).",
   "pulau": ["Jawa", "Sumatra", "Kalimantan", "Sulawesi", "Bali & Nusa Tenggara", "Maluku & Papua", "Laut Nusantara"],
   "lokasi_awal": "desa_sumberrejo",
   "lokasi": [

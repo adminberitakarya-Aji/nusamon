@@ -52,14 +52,7 @@ func _label(tek: String, size := 16, warna := Color.WHITE) -> Label:
 
 func _panel(pos: Vector2, ukuran: Vector2, warna := Color(0.1, 0.12, 0.16, 0.92)) -> PanelContainer:
 	var p := PanelContainer.new()
-	var st := StyleBoxFlat.new()
-	st.bg_color = warna
-	st.set_corner_radius_all(8)
-	st.content_margin_left = 12
-	st.content_margin_right = 12
-	st.content_margin_top = 8
-	st.content_margin_bottom = 8
-	p.add_theme_stylebox_override("panel", st)
+	ThemeUI.terapkan_panel(p, Color(0.06, 0.09, 0.1, 0.9), Color(0.3, 0.5, 0.4, 0.7))
 	p.position = pos
 	p.custom_minimum_size = ukuran
 	add_child(p)
@@ -70,6 +63,7 @@ func _tombol(tek: String, induk: VBoxContainer, callback: Callable) -> Button:
 	var b := Button.new()
 	b.text = tek
 	b.pressed.connect(callback)
+	ThemeUI.terapkan_tombol(b)
 	induk.add_child(b)
 	return b
 

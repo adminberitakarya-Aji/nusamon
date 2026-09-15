@@ -43,6 +43,9 @@ var dex_header: Label
 var dex_daftar: VBoxContainer
 var dex_detail: RichTextLabel
 var p_latihan: Label
+var wild_tipe_chips: HBoxContainer
+var wild_hp_text: Label
+var p_tipe_chips: HBoxContainer
 var pratinjau_wild: Node = null
 var pratinjau_player: Node = null
 var percobaan_kabur := 0                 # kabur: +30 tiap percobaan (C-3)
@@ -144,30 +147,16 @@ func _label(tek: String, size := 16, warna := Color.WHITE) -> Label:
 	return l
 
 
-func _hp_bar(warna := Color(0.3, 0.85, 0.3)) -> ProgressBar:
+func _hp_bar(warna := Color(0.3, 0.85, 0.3), ukuran := Vector2(240, 18)) -> ProgressBar:
 	var bar := ProgressBar.new()
-	bar.min_value = 0
-	bar.max_value = 100
-	bar.value = 100
-	bar.show_percentage = false
-	bar.custom_minimum_size = Vector2(240, 18)
-	var fill := StyleBoxFlat.new()
-	fill.bg_color = warna
-	fill.set_corner_radius_all(4)
-	bar.add_theme_stylebox_override("fill", fill)
+	ThemeUI.bar_style(bar, warna, ukuran)
 	return bar
 
 
-func _panel(pos: Vector2, ukuran: Vector2, warna := Color(0.1, 0.12, 0.16, 0.92)) -> PanelContainer:
+func _panel(pos: Vector2, ukuran: Vector2, warna := ThemeUI.PANEL_BG,
+		border := ThemeUI.PANEL_BORDER) -> PanelContainer:
 	var p := PanelContainer.new()
-	var st := StyleBoxFlat.new()
-	st.bg_color = warna
-	st.set_corner_radius_all(8)
-	st.content_margin_left = 12
-	st.content_margin_right = 12
-	st.content_margin_top = 8
-	st.content_margin_bottom = 8
-	p.add_theme_stylebox_override("panel", st)
+	ThemeUI.terapkan_panel(p, warna, border)
 	p.position = pos
 	p.custom_minimum_size = ukuran
 	add_child(p)
@@ -178,6 +167,7 @@ func _tombol_menu(tek: String, induk: VBoxContainer, callback: Callable) -> Butt
 	var b := Button.new()
 	b.text = tek
 	b.pressed.connect(callback)
+	ThemeUI.terapkan_tombol(b)
 	induk.add_child(b)
 	return b
 
@@ -185,56 +175,63 @@ func _tombol_menu(tek: String, induk: VBoxContainer, callback: Callable) -> Butt
 func _bangun_ui() -> void:
 	# latar
 	var bg := ColorRect.new()
-	bg.color = Color(0.16, 0.3, 0.25)
+	bg.color = Color(0.05, 0.1, 0.13)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
 	# panel musuh (kiri-atas)
-	var musuh := _panel(Vector2(40, 30), Vector2(320, 110))
+	var musuh := _panel(Vector2(40, 24), Vector2(340, 116),
+		ThemeUI.PANEL_BG, Color(0.7, 0.4, 0.35, 0.7))
 	var vm := VBoxContainer.new()
 	musuh.add_child(vm)
+	wild_tipe_chips = HBoxContainer.new()
 	wild_nama = _label("?", 18)
-	wild_lv = _label("Lv.?", 14, Color(0.9, 0.85, 0.5))
-	wild_hp = _hp_bar(Color(0.9, 0.4, 0.3))
-	wild_status = _label("", 13, Color(0.8, 0.5, 0.9))
+	wild_lv = _label("Lv.?", 14, ThemeUI.AKSEN)
+	wild_hp = _hp_bar(Color(0.9, 0.4, 0.3), Vector2(300, 18))
+	wild_hp_text = _label("HP —", 12, Color(0.85, 0.9, 0.85))
+	wild_status = _label("", 13, Color(0.85, 0.55, 0.95))
 	vm.add_child(wild_nama)
 	vm.add_child(wild_lv)
+	vm.add_child(wild_tipe_chips)
 	vm.add_child(wild_hp)
+	vm.add_child(wild_hp_text)
 	vm.add_child(wild_status)
 
-	# panel pemain (kanan-bawah)
-	var pemain := _panel(Vector2(560, 300), Vector2(360, 140))
+	# panel pemain (tengah-bawah)
+	var pemain := _panel(Vector2(660, 555), Vector2(310, 160),
+		ThemeUI.PANEL_BG, Color(0.35, 0.7, 0.45, 0.7))
 	var vp := VBoxContainer.new()
 	pemain.add_child(vp)
+	p_tipe_chips = HBoxContainer.new()
 	p_nama = _label("?", 18)
-	p_lv = _label("Lv.?", 14, Color(0.9, 0.85, 0.5))
-	p_hp = _hp_bar()
-	p_hp_text = _label("HP ?/?", 13)
-	p_status = _label("", 13, Color(0.8, 0.5, 0.9))
-	p_latihan = _label("", 12, Color(0.6, 0.8, 0.6))
-	p_exp = _hp_bar(Color(0.35, 0.55, 0.95))
-	p_exp.custom_minimum_size = Vector2(240, 8)
+	p_lv = _label("Lv.?", 14, ThemeUI.AKSEN)
+	p_hp = _hp_bar(ThemeUI.HIJAU, Vector2(280, 18))
+	p_hp_text = _label("HP ?/?", 12, Color(0.85, 0.9, 0.85))
+	p_status = _label("", 13, Color(0.85, 0.55, 0.95))
+	p_latihan = _label("", 11, Color(0.55, 0.8, 0.6))
+	p_exp = _hp_bar(Color(0.35, 0.55, 0.95), Vector2(280, 7))
 	p_exp.max_value = 1
 	vp.add_child(p_nama)
 	vp.add_child(p_lv)
+	vp.add_child(p_tipe_chips)
 	vp.add_child(p_hp)
 	vp.add_child(p_hp_text)
 	vp.add_child(p_status)
 	vp.add_child(p_latihan)
 	vp.add_child(p_exp)
 
-	# log battle (bawah)
-	var panel_log := _panel(Vector2(40, 300), Vector2(500, 140))
+	# log battle (kiri-bawah)
+	var panel_log := _panel(Vector2(40, 470), Vector2(600, 238))
 	log_label = RichTextLabel.new()
 	log_label.bbcode_enabled = false
 	log_label.scroll_following = true
-	log_label.custom_minimum_size = Vector2(470, 115)
+	log_label.custom_minimum_size = Vector2(570, 210)
 	panel_log.add_child(log_label)
 
 	# menu utama (kanan)
 	menu_utama = VBoxContainer.new()
-	menu_utama.position = Vector2(930, 300)
-	menu_utama.custom_minimum_size = Vector2(150, 140)
+	menu_utama.position = Vector2(995, 280)
+	menu_utama.custom_minimum_size = Vector2(175, 140)
 	add_child(menu_utama)
 	_tombol_menu("⚔ SERANG", menu_utama, _buka_menu_move)
 	_tombol_menu("🎒 AMUKAN", menu_utama, _buka_menu_ball)
@@ -248,56 +245,53 @@ func _bangun_ui() -> void:
 
 	# menu move (muncul saat serang)
 	menu_move = VBoxContainer.new()
-	menu_move.position = Vector2(930, 300)
-	menu_move.custom_minimum_size = Vector2(150, 160)
+	menu_move.position = Vector2(995, 280)
+	menu_move.custom_minimum_size = Vector2(175, 160)
 	menu_move.visible = false
 	add_child(menu_move)
 
 	# menu Amukan
 	menu_ball = VBoxContainer.new()
-	menu_ball.position = Vector2(930, 300)
-	menu_ball.custom_minimum_size = Vector2(150, 160)
+	menu_ball.position = Vector2(995, 280)
+	menu_ball.custom_minimum_size = Vector2(175, 160)
 	menu_ball.visible = false
 	add_child(menu_ball)
 
 	# menu Toko
 	menu_toko = VBoxContainer.new()
-	menu_toko.position = Vector2(900, 300)
-	menu_toko.custom_minimum_size = Vector2(210, 170)
+	menu_toko.position = Vector2(965, 280)
+	menu_toko.custom_minimum_size = Vector2(230, 170)
 	menu_toko.visible = false
 	add_child(menu_toko)
 
 	# menu Ganti (daftar anggota tim)
 	menu_ganti = VBoxContainer.new()
-	menu_ganti.position = Vector2(850, 300)
-	menu_ganti.custom_minimum_size = Vector2(260, 200)
+	menu_ganti.position = Vector2(915, 280)
+	menu_ganti.custom_minimum_size = Vector2(280, 200)
 	menu_ganti.visible = false
 	add_child(menu_ganti)
 
 	# panel uang (kanan-atas)
-	var panel_uang := _panel(Vector2(930, 30), Vector2(150, 50))
-	uang_label = _label("Rp ?", 15, Color(1.0, 0.9, 0.5))
+	var panel_uang := _panel(Vector2(995, 24), Vector2(175, 50))
+	uang_label = _label("Rp ?", 16, ThemeUI.AKSEN)
 	panel_uang.add_child(uang_label)
 	_update_uang()
 
 	# panel tim (di bawah panel uang)
-	var panel_tim := _panel(Vector2(930, 92), Vector2(150, 200))
+	var panel_tim := _panel(Vector2(995, 86), Vector2(175, 180))
 	tim_label = _label("Tim ?", 13)
 	panel_tim.add_child(tim_label)
 	_update_tim_label()
 
 	# panel Nusadex (overlay layar daftar + detail)
 	dex_panel = PanelContainer.new()
-	var st_dex := StyleBoxFlat.new()
-	st_dex.bg_color = Color(0.08, 0.1, 0.12, 0.97)
-	st_dex.set_corner_radius_all(10)
-	dex_panel.add_theme_stylebox_override("panel", st_dex)
+	ThemeUI.terapkan_panel(dex_panel, Color(0.06, 0.09, 0.11, 0.98))
 	dex_panel.position = Vector2(30, 24)
 	dex_panel.custom_minimum_size = Vector2(840, 590)
 	add_child(dex_panel)
 	var vdex := VBoxContainer.new()
 	dex_panel.add_child(vdex)
-	dex_header = _label("", 15, Color(1.0, 0.9, 0.5))
+	dex_header = _label("", 15, ThemeUI.AKSEN)
 	vdex.add_child(dex_header)
 	var hdex := HBoxContainer.new()
 	hdex.custom_minimum_size = Vector2(820, 480)
@@ -353,6 +347,8 @@ func _mulai_battle_liar() -> void:
 # ------------------------------------------------------------ model 3D (tahap 2/3)
 
 ## Pasang pratinjau 3D (SubViewport + model .glb). Null & diam bila model belum ada.
+## UI pass 1: langit gradien + platform bulat + kamera 3/4 dekat + model
+## menghadap kamera (skala 2) — model jadi pusat perhatian, bukan titik kecil.
 func _pasang_pratinjau_3d(pos: Vector2, ukuran: Vector2, path: String) -> Node:
 	if not ResourceLoader.exists(path):
 		return null
@@ -366,14 +362,46 @@ func _pasang_pratinjau_3d(pos: Vector2, ukuran: Vector2, path: String) -> Node:
 	var sv := SubViewport.new()
 	sv.transparent_bg = true
 	svc.add_child(sv)
+	# langit gradien tropis (GDD §7) + ambient dari langit
+	var langit_mat := ProceduralSkyMaterial.new()
+	langit_mat.sky_top_color = ThemeUI.LANGIT_ATAS
+	langit_mat.sky_horizon_color = ThemeUI.LANGIT_CAKRAWALA
+	langit_mat.ground_bottom_color = Color(0.1, 0.16, 0.14)
+	langit_mat.ground_horizon_color = ThemeUI.LANGIT_CAKRAWALA
+	var env := Environment.new()
+	env.background_mode = Environment.BG_SKY
+	env.sky = Sky.new()
+	env.sky.sky_material = langit_mat
+	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
+	env.ambient_light_energy = 1.2
+	var we := WorldEnvironment.new()
+	we.environment = env
+	sv.add_child(we)
+	# platform arena bulat
+	var platform := MeshInstance3D.new()
+	var silinder := CylinderMesh.new()
+	silinder.top_radius = 1.35
+	silinder.bottom_radius = 1.55
+	silinder.height = 0.14
+	platform.mesh = silinder
+	var mat_lantai := StandardMaterial3D.new()
+	mat_lantai.albedo_color = Color(0.42, 0.6, 0.4)
+	platform.material_override = mat_lantai
+	platform.position = Vector3(0, -0.07, 0)
+	sv.add_child(platform)
 	var inst: Node3D = paket.instantiate()
+	inst.rotation_degrees.y = -90.0   # model dibangun menghadap +X → hadap kamera (+Z)
+	inst.scale = Vector3(2, 2, 2)
+	inst.position = Vector3(0, 0.07, 0)
 	sv.add_child(inst)
 	var kamera := Camera3D.new()
-	kamera.position = Vector3(0, 1.4, 3.4)
-	kamera.rotation_degrees.x = -14
+	kamera.position = Vector3(0, 2.2, 5.0)
+	kamera.rotation_degrees.x = -16
 	sv.add_child(kamera)
 	var cahaya := DirectionalLight3D.new()
-	cahaya.rotation_degrees = Vector3(-45, 30, 0)
+	cahaya.rotation_degrees = Vector3(-48, 32, 0)
+	cahaya.light_energy = 1.2
+	cahaya.shadow_enabled = true
 	sv.add_child(cahaya)
 	add_child(svc)
 	return svc
@@ -388,9 +416,9 @@ func _perbarui_model() -> void:
 	pratinjau_wild = null
 	pratinjau_player = null
 	var path_wild := NusamonData.path_model(_nama_tahap(data, wild.id, wild.stage_index))
-	pratinjau_wild = _pasang_pratinjau_3d(Vector2(400, 56), Vector2(220, 190), path_wild)
+	pratinjau_wild = _pasang_pratinjau_3d(Vector2(385, 30), Vector2(330, 250), path_wild)
 	var path_p := NusamonData.path_model(_nama_tahap(data, player.id, player.stage_index))
-	pratinjau_player = _pasang_pratinjau_3d(Vector2(560, 452), Vector2(200, 165), path_p)
+	pratinjau_player = _pasang_pratinjau_3d(Vector2(665, 285), Vector2(300, 260), path_p)
 
 
 ## Nama tahap aktif sebuah spesies (untuk path model).
@@ -404,15 +432,20 @@ func _nama_tahap(d: Dictionary, id: int, tahap: int) -> String:
 
 func _update_bars() -> void:
 	wild_nama.text = wild.display_name
-	wild_lv.text = "Lv.%d  [%s]" % [wild.level, " / ".join(wild.types)]
+	wild_lv.text = "Lv.%d" % wild.level
+	ThemeUI.isi_chip_tipe(wild_tipe_chips, wild.types)
 	wild_hp.max_value = wild.max_hp
 	wild_hp.value = wild.current_hp
+	ThemeUI.warna_fill(wild_hp, ThemeUI.hp_warna(float(wild.current_hp) / float(wild.max_hp)))
+	wild_hp_text.text = "HP %d/%d" % [wild.current_hp, wild.max_hp]
 	wild_status.text = "" if wild.status == "" else wild.status.to_upper()
 
 	p_nama.text = player.display_name
-	p_lv.text = "Lv.%d  [%s]" % [player.level, " / ".join(player.types)]
+	p_lv.text = "Lv.%d" % player.level
+	ThemeUI.isi_chip_tipe(p_tipe_chips, player.types)
 	p_hp.max_value = player.max_hp
 	p_hp.value = player.current_hp
+	ThemeUI.warna_fill(p_hp, ThemeUI.hp_warna(float(player.current_hp) / float(player.max_hp)))
 	p_hp_text.text = "HP %d/%d" % [player.current_hp, player.max_hp]
 	p_status.text = "" if player.status == "" else player.status.to_upper()
 	# Latihan (EV-lite): "Latihan 12/50" — stat dengan bonus 4:1 ditandai +

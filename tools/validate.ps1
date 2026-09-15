@@ -14,6 +14,7 @@ try {
     $it = Get-Content "$root\data\items.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     $w = Get-Content "$root\data\world.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     $tr = Get-Content "$root\data\trainers.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+    $au = Get-Content "$root\data\audio.json" -Raw -Encoding UTF8 | ConvertFrom-Json
 } catch {
     Write-Host "GAGAL PARSE JSON: $_" -ForegroundColor Red
     exit 1
@@ -195,9 +196,23 @@ if ($ligaUrutan.Count -ne ($ligaUrutan | Sort-Object -Unique).Count) { Fail "tra
 if (($ligaUrutan | Sort-Object) -join ',' -ne (@(1..4) -join ',')) { Fail "trainers: Elite Empat tidak lengkap (ada $(($ligaUrutan | Sort-Object) -join ','))" }
 if ($adaJuara -ne 1) { Fail "trainers: harus tepat 1 juara (ada $adaJuara)" }
 
+# --- audio (Fase 5 langkah 5) — SSOT id/file/volume; placeholder .wav wajib ada
+$dupAu = @($au.lagu + $au.sfx) | Group-Object id | Where-Object { $_.Count -gt 1 }
+if ($dupAu) { Fail ("audio: id duplikat: " + ($dupAu.Name -join ', ')) }
+foreach ($l in $au.lagu) {
+    if (@('bgm', 'jingle', 'sting') -notcontains $l.jenis) { Fail "audio $($l.id): jenis lagu tidak dikenal ($($l.jenis))" }
+    if ([double]$l.volume -le 0 -or [double]$l.volume -gt 1) { Fail "audio $($l.id): volume di luar 0..1" }
+    if (-not (Test-Path "$root\$($l.file)")) { Fail "audio $($l.id): file tidak ditemukan ($($l.file))" }
+}
+foreach ($s in $au.sfx) {
+    if ($s.jenis -ne 'sfx') { Fail "audio $($s.id): sfx harus jenis 'sfx' (ada $($s.jenis))" }
+    if ([double]$s.volume -le 0 -or [double]$s.volume -gt 1) { Fail "audio $($s.id): volume di luar 0..1" }
+    if (-not (Test-Path "$root\$($s.file)")) { Fail "audio $($s.id): file tidak ditemukan ($($s.file))" }
+}
+
 # --- hasil
 if ($errs.Count -eq 0) {
-    Write-Host "VALIDASI LOLOS: data NUSAMON konsisten (30 spesies / 25 move / 11 tipe / 9 item / world 28 lokasi 6 pulau+laut / trainer 8 gym + liga + juara)" -ForegroundColor Green
+    Write-Host "VALIDASI LOLOS: data NUSAMON konsisten (30 spesies / 25 move / 11 tipe / 9 item / world 28 lokasi 6 pulau+laut / trainer 8 gym + liga + juara / audio 17 file)" -ForegroundColor Green
     exit 0
 } else {
     Write-Host "VALIDASI GAGAL:" -ForegroundColor Red

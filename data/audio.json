@@ -1,0 +1,25 @@
+{
+  "versi": "0.1",
+  "keterangan": "Data audio NUSAMON (Fase 5 langkah 5). SSOT id/file/volume — dimuat AudioManager (static, konvensi engine lain). Placeholder 'gamelan-ambient' terprogram dari tools/audio/generate_sfx.py (deterministik); ganti file .wav dengan .ogg/.wav CC0/produksi asli kapan saja tanpa ubah kode (assets/audio/README.md). BGM loop = Music bus; sfx/jingle/sting = SFX bus (jingle/sting BGM-class tapi sekali-putar — putar via mulai_bgm, tanpa loop).",
+  "lagu": [
+    { "id": "bgm_jawa", "jenis": "bgm", "file": "assets/audio/bgm_jawa.wav", "volume": 0.5, "loop": true, "ket": "BGM dunia (semua lokasi non-battle; upgrade per-pulau pasca-rilis)." },
+    { "id": "bgm_battle", "jenis": "bgm", "file": "assets/audio/bgm_battle.wav", "volume": 0.5, "loop": true, "ket": "BGM battle (liar & trainer)." },
+    { "id": "bgm_liga", "jenis": "bgm", "file": "assets/audio/bgm_liga.wav", "volume": 0.55, "loop": true, "ket": "BGM liga (Kota Puncak POI liga; nanti juga battle Elite Empat/Juara)." },
+    { "id": "jingle_menang", "jenis": "jingle", "file": "assets/audio/jingle_menang.wav", "volume": 0.6, "loop": false, "ket": "Battle menang (trainer/wild ganti jingle dulu sebelum kembali dunia)." },
+    { "id": "jingle_lencana", "jenis": "jingle", "file": "assets/audio/jingle_lencana.wav", "volume": 0.6, "loop": false, "ket": "Dapatkan lencana gym." },
+    { "id": "sting_legendary", "jenis": "sting", "file": "assets/audio/sting_legendary.wav", "volume": 0.6, "loop": false, "ket": "Event legendary dimulai (trio penjaga)." }
+  ],
+  "sfx": [
+    { "id": "sfx_ui_klik", "jenis": "sfx", "file": "assets/audio/sfx_ui_klik.wav", "volume": 0.55, "ket": "Klik tombol UI." },
+    { "id": "sfx_serang_hit", "jenis": "sfx", "file": "assets/audio/sfx_serang_hit.wav", "volume": 0.65, "ket": "Serang kena (efektif)." },
+    { "id": "sfx_serang_miss", "jenis": "sfx", "file": "assets/audio/sfx_serang_miss.wav", "volume": 0.45, "ket": "Serang meleset/tak efektif." },
+    { "id": "sfx_pingsan", "jenis": "sfx", "file": "assets/audio/sfx_pingsan.wav", "volume": 0.6, "ket": "Nusamon pingsan." },
+    { "id": "sfx_lempar_amukan", "jenis": "sfx", "file": "assets/audio/sfx_lempar_amukan.wav", "volume": 0.55, "ket": "Lempar Amukan." },
+    { "id": "sfx_tangkap_sukses", "jenis": "sfx", "file": "assets/audio/sfx_tangkap_sukses.wav", "volume": 0.6, "ket": "Tangkap berhasil." },
+    { "id": "sfx_tangkap_gagal", "jenis": "sfx", "file": "assets/audio/sfx_tangkap_gagal.wav", "volume": 0.5, "ket": "Tangkap gagal." },
+    { "id": "sfx_naik_level", "jenis": "sfx", "file": "assets/audio/sfx_naik_level.wav", "volume": 0.6, "ket": "Naik level." },
+    { "id": "sfx_evolusi", "jenis": "sfx", "file": "assets/audio/sfx_evolusi.wav", "volume": 0.6, "ket": "Evolusi terpicu." },
+    { "id": "sfx_pulihkan", "jenis": "sfx", "file": "assets/audio/sfx_pulihkan.wav", "volume": 0.55, "ket": "Pusat pemulihan." },
+    { "id": "sfx_gate_terkunci", "jenis": "sfx", "file": "assets/audio/sfx_gate_terkunci.wav", "volume": 0.5, "ket": "Percobaan pindah ditolak gate." }
+  ]
+}

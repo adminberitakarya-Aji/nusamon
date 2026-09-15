@@ -69,6 +69,7 @@ func _ready() -> void:
 
 ## Dispatch: battle trainer (antrean dari world scene) atau battle liar prototipe.
 func _mulai_battle() -> void:
+	AudioManager.ganti_bgm("bgm_battle")
 	var tid := TrainerEngine.ambil_antrean()
 	if tid != "":
 		_mulai_battle_trainer(tid)
@@ -343,6 +344,8 @@ func _mulai_battle_liar() -> void:
 	_mon_masuk(player, wild)
 	_mon_masuk(wild, player)
 	_log("Seekor %s liar muncul! (Lv.%d)" % [wild.display_name, wild.level])
+	if id in [4, 5, 6]:
+		AudioManager.mainkan_jingle("sting_legendary")   # trio penjaga (Fase 5)
 	_update_bars()
 	_perbarui_model()
 
@@ -634,11 +637,17 @@ func _akhir_battle(musuh_kalah: bool) -> void:
 	if musuh_kalah:
 		var yield_base := int(wild_detail.get("baseExpYield", 55))
 		var gain := ExpSystem.exp_gain(yield_base, wild.level, mode_trainer)  # ×1.5 trainer
+		AudioManager.mainkan_sfx("sfx_pingsan")
 		_log("%s dikalahkan!" % wild.display_name)
 		var hasil := ExpSystem.add_exp(player, NusamonData.find_species(data, player.id),
 			data["detailSpesies"][str(player.id)], gain)
 		for p in hasil["messages"]:
 			_log(p)
+			var pesan := String(p).to_lower()
+			if "evolusi" in pesan or "berevolusi" in pesan:
+				AudioManager.mainkan_sfx("sfx_evolusi")
+			elif "naik" in pesan:
+				AudioManager.mainkan_sfx("sfx_naik_level")
 		# Latihan (EV-lite): +1 poin untuk stat utama yang dipakai (gameplay-depth §6)
 		var stat_kunci := _stat_kunci_kemenangan()
 		var diterima := player.tambah_latihan(stat_kunci, 1)
@@ -687,6 +696,7 @@ func _trainer_kalah() -> void:
 	if not lencana.is_empty():
 		# hanya gym — rival tidak memberi lencana
 		Progres.tambah_lencana(int(lencana.get("id", 0)))
+		AudioManager.mainkan_jingle("jingle_lencana")
 		_log("Mendapat %s! (Lencana G%d — jalan berikutnya terbuka)" % [
 			String(lencana.get("nama", "?")), int(lencana.get("id", 0))])
 	Progres.tandai_kalah_trainer(String(trainer_data.get("id", "")))
@@ -696,6 +706,8 @@ func _trainer_kalah() -> void:
 
 
 func _selesai(menang: bool, teks := "") -> void:
+	if menang:
+		AudioManager.mainkan_jingle("jingle_menang")
 	turn_aktif = true
 	_semua_menu(true)
 	_log("— Battle selesai (%s) —" % (teks if teks != "" else ("menang" if menang else "kalah")))
@@ -745,10 +757,12 @@ func _lempar_amukan(ball_id: String) -> void:
 		_semua_menu(false)
 		turn_aktif = false
 		return
+	AudioManager.mainkan_sfx("sfx_lempar_amukan")
 	var rate := int(wild_detail.get("catchRate", 100))
 	var hasil := CatchSystem.attempt_catch(wild, rate, ball_id, rng)
 	var getar := int(hasil["shakes"])
 	if bool(hasil["catch"]):
+		AudioManager.mainkan_sfx("sfx_tangkap_sukses")
 		if getar > 0:
 			_log("Amukan bergetar %d kali..." % getar)
 		Nusadex.tangkap(wild.id)
@@ -766,6 +780,7 @@ func _lempar_amukan(ball_id: String) -> void:
 			getar, wild.display_name])
 	else:
 		_log("Amukan langsung dilepas! %s berhasil keluar!" % wild.display_name)
+	AudioManager.mainkan_sfx("sfx_tangkap_gagal")
 	# musuh menyerang balik setelah gagal ditangkap
 	_eksekusi_serang(wild, player, _move_acak_musuh())
 	_update_bars()

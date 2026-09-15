@@ -11,6 +11,7 @@ const MOVES_PATH := "res://data/moves.json"
 const ITEMS_PATH := "res://data/items.json"
 const WORLD_PATH := "res://data/world.json"
 const TRAINERS_PATH := "res://data/trainers.json"
+const AUDIO_PATH := "res://data/audio.json"
 
 
 static func _read_json(path: String) -> Dictionary:
@@ -48,6 +49,10 @@ static func load_world() -> Dictionary:
 
 static func load_trainers() -> Dictionary:
 	return _read_json(TRAINERS_PATH)
+
+
+static func load_audio() -> Dictionary:
+	return _read_json(AUDIO_PATH)
 
 
 ## Efektivitas tipe penyerang -> pertahanan (default 1.0 jika tidak ada di chart).

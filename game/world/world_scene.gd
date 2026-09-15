@@ -32,6 +32,7 @@ func _ready() -> void:
 		return
 	if Progres.lokasi == "":
 		Progres.lokasi = String(db.get("lokasi_awal", ""))
+	AudioManager.ganti_bgm("bgm_jawa")   # BGM dunia (Fase 5 langkah 5)
 	_bangun_ui()
 	_catatan("Selamat datang di Nusantara!")
 	_catatan("Jelajahi rute (🔍) untuk battle liar; kumpulkan 8 lencana untuk Liga Nusantara!")
@@ -267,6 +268,7 @@ func _perbarui() -> void:
 func _pergi(tujuan_id: String) -> void:
 	var hasil := WorldEngine.pindah(db, Progres.lokasi, tujuan_id, _progres())
 	if not bool(hasil.get("ok", false)):
+		AudioManager.mainkan_sfx("sfx_gate_terkunci")
 		_catatan(String(hasil.get("alasan", "Tidak bisa pindah.")))
 		return
 	Progres.lokasi = tujuan_id
@@ -487,6 +489,7 @@ func _pulihkan_tim() -> void:
 		return
 	var n := Tim.pulihkan_semua()
 	Simpanan.simpan()
+	AudioManager.mainkan_sfx("sfx_pulihkan")
 	if n > 0:
 		_catatan("Tim dipulihkan sepenuhnya! (%d Nusamon kembali bugar)" % Tim.jumlah())
 	else:
@@ -555,6 +558,7 @@ func _tampilkan_toko() -> void:
 
 func _beli_toko(iid: String) -> void:
 	if Inventori.beli(iid):
+		AudioManager.mainkan_sfx("sfx_ui_klik")
 		_catatan("Membeli %s. (stok %d, uang Rp %d)" % [
 			iid, Inventori.stok_item(iid), Inventori.uang])
 		Simpanan.simpan()

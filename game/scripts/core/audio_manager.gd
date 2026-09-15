@@ -183,8 +183,7 @@ static func mainkan_sfx(id: String) -> bool:
 	if entri.is_empty() or String(entri.get("jenis", "")) != "sfx":
 		return false
 	pastikan_siap()
-	_sfx_aktif = _sfx_aktif.filter(func(p) -> bool: return is_instance_valid(p)
-		and not p.is_queued_for_deletion())
+	_sfx_aktif = _sfx_aktif.filter(func(p) -> bool: return is_instance_valid(p) and not p.is_queued_for_deletion())
 	if _sfx_aktif.size() >= MAX_SFX:
 		return true   # full voice — lewati senyap (tanpa antri)
 	var stream := _muat_stream(entri)

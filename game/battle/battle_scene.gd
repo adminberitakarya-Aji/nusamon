@@ -198,7 +198,7 @@ func _bangun_ui() -> void:
 	vm.add_child(wild_status)
 
 	# panel pemain (tengah-bawah)
-	var pemain := _panel(Vector2(660, 555), Vector2(310, 160),
+	var pemain := _panel(Vector2(660, 528), Vector2(310, 175),
 		ThemeUI.PANEL_BG, Color(0.35, 0.7, 0.45, 0.7))
 	var vp := VBoxContainer.new()
 	pemain.add_child(vp)
@@ -221,7 +221,7 @@ func _bangun_ui() -> void:
 	vp.add_child(p_exp)
 
 	# log battle (kiri-bawah)
-	var panel_log := _panel(Vector2(40, 470), Vector2(600, 238))
+	var panel_log := _panel(Vector2(40, 460), Vector2(600, 250))
 	log_label = RichTextLabel.new()
 	log_label.bbcode_enabled = false
 	log_label.scroll_following = true
@@ -416,9 +416,9 @@ func _perbarui_model() -> void:
 	pratinjau_wild = null
 	pratinjau_player = null
 	var path_wild := NusamonData.path_model(_nama_tahap(data, wild.id, wild.stage_index))
-	pratinjau_wild = _pasang_pratinjau_3d(Vector2(385, 30), Vector2(330, 250), path_wild)
+	pratinjau_wild = _pasang_pratinjau_3d(Vector2(385, 40), Vector2(340, 270), path_wild)
 	var path_p := NusamonData.path_model(_nama_tahap(data, player.id, player.stage_index))
-	pratinjau_player = _pasang_pratinjau_3d(Vector2(665, 285), Vector2(300, 260), path_p)
+	pratinjau_player = _pasang_pratinjau_3d(Vector2(665, 268), Vector2(300, 260), path_p)
 
 
 ## Nama tahap aktif sebuah spesies (untuk path model).

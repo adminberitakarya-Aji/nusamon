@@ -173,6 +173,12 @@ func _tombol_menu(tek: String, induk: VBoxContainer, callback: Callable) -> Butt
 
 
 func _bangun_ui() -> void:
+	# tema font (UI pass 2 — Baloo 2, OFL; fallback default bila file tak ada)
+	if ResourceLoader.exists("res://assets/ui/Baloo2.ttf"):
+		var tema := Theme.new()
+		tema.default_font = load("res://assets/ui/Baloo2.ttf")
+		tema.default_font_size = 15
+		theme = tema
 	# latar
 	var bg := ColorRect.new()
 	bg.color = Color(0.05, 0.1, 0.13)
@@ -223,7 +229,7 @@ func _bangun_ui() -> void:
 	# log battle (kiri-bawah)
 	var panel_log := _panel(Vector2(40, 460), Vector2(600, 250))
 	log_label = RichTextLabel.new()
-	log_label.bbcode_enabled = false
+	log_label.bbcode_enabled = true
 	log_label.scroll_following = true
 	log_label.custom_minimum_size = Vector2(570, 210)
 	panel_log.add_child(log_label)
@@ -310,8 +316,19 @@ func _bangun_ui() -> void:
 
 # ------------------------------------------------------------ alur battle
 
+var _log_baris: PackedStringArray = PackedStringArray()
+
+
+## Tulis pesan log (UI pass 2): baris terakhir disorot warna aksen.
 func _log(tek: String) -> void:
-	log_label.text += tek + "\n"
+	_log_baris.append(tek)
+	if _log_baris.size() > 60:
+		_log_baris = _log_baris.slice(_log_baris.size() - 60)
+	var tampil := ""
+	for i in _log_baris.size():
+		var warna := "#ffd966" if i == _log_baris.size() - 1 else "#cfd8d4"
+		tampil += "[color=%s]%s[/color]\n" % [warna, _log_baris[i]]
+	log_label.text = tampil
 
 
 func _mulai_battle_liar() -> void:
@@ -394,6 +411,13 @@ func _pasang_pratinjau_3d(pos: Vector2, ukuran: Vector2, path: String) -> Node:
 	inst.scale = Vector3(2, 2, 2)
 	inst.position = Vector3(0, 0.07, 0)
 	sv.add_child(inst)
+	# bob idle ringan (UI pass 2) — tween loop, ikut freed bersama inst
+	var bob := inst.create_tween()
+	bob.set_loops()
+	bob.tween_property(inst, "position:y", 0.2, 0.9) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	bob.tween_property(inst, "position:y", 0.07, 0.9) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	var kamera := Camera3D.new()
 	kamera.position = Vector3(0, 2.2, 5.0)
 	kamera.rotation_degrees.x = -16
@@ -435,7 +459,7 @@ func _update_bars() -> void:
 	wild_lv.text = "Lv.%d" % wild.level
 	ThemeUI.isi_chip_tipe(wild_tipe_chips, wild.types)
 	wild_hp.max_value = wild.max_hp
-	wild_hp.value = wild.current_hp
+	_animasi_bar(wild_hp, wild.current_hp)
 	ThemeUI.warna_fill(wild_hp, ThemeUI.hp_warna(float(wild.current_hp) / float(wild.max_hp)))
 	wild_hp_text.text = "HP %d/%d" % [wild.current_hp, wild.max_hp]
 	wild_status.text = "" if wild.status == "" else wild.status.to_upper()
@@ -444,9 +468,22 @@ func _update_bars() -> void:
 	p_lv.text = "Lv.%d" % player.level
 	ThemeUI.isi_chip_tipe(p_tipe_chips, player.types)
 	p_hp.max_value = player.max_hp
-	p_hp.value = player.current_hp
+	_animasi_bar(p_hp, player.current_hp)
 	ThemeUI.warna_fill(p_hp, ThemeUI.hp_warna(float(player.current_hp) / float(player.max_hp)))
 	p_hp_text.text = "HP %d/%d" % [player.current_hp, player.max_hp]
+
+
+## Animasi nilai bar (UI pass 2) — tween kelola ganda, tween lama dihentikan.
+func _animasi_bar(bar: ProgressBar, target: float) -> void:
+	if bar.has_meta("tween"):
+		var lama: Tween = bar.get_meta("tween")
+		if lama != null and lama.is_valid():
+			lama.kill()
+	bar.value = clampf(bar.value, 0.0, maxf(0.0, bar.max_value))
+	var tw := bar.create_tween()
+	tw.tween_property(bar, "value", target, 0.35) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	bar.set_meta("tween", tw)
 	p_status.text = "" if player.status == "" else player.status.to_upper()
 	# Latihan (EV-lite): "Latihan 12/50" — stat dengan bonus 4:1 ditandai +
 	var ringkas: Array = []

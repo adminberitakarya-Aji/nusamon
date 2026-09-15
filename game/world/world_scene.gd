@@ -23,6 +23,12 @@ var env_root: Node3D
 
 
 func _ready() -> void:
+	# tema font (UI pass 2 — Baloo 2, OFL; fallback default bila file tak ada)
+	if ResourceLoader.exists("res://assets/ui/Baloo2.ttf"):
+		var tema := Theme.new()
+		tema.default_font = load("res://assets/ui/Baloo2.ttf")
+		tema.default_font_size = 15
+		theme = tema
 	rng.randomize()
 	db = NusamonData.load_world()
 	trainers = NusamonData.load_trainers()
@@ -119,23 +125,23 @@ func _bangun_ui() -> void:
 	vt.add_child(daftar_tempat)
 
 	# panel tujuan (kanan)
-	var pu := _panel(Vector2(480, 80), Vector2(400, 250))
+	var pu := _panel(Vector2(480, 80), Vector2(700, 260))
 	var vu := VBoxContainer.new()
 	pu.add_child(vu)
 	vu.add_child(_label("🧭 Pergi ke…", 15, Color(0.8, 0.9, 1.0)))
 	daftar_tujuan = VBoxContainer.new()
 	vu.add_child(daftar_tujuan)
 
-	# panel log (bawah)
-	var plog := _panel(Vector2(480, 342), Vector2(400, 110))
+	# panel log (kanan-bawah)
+	var plog := _panel(Vector2(480, 352), Vector2(700, 250))
 	log_label = RichTextLabel.new()
-	log_label.bbcode_enabled = false
+	log_label.bbcode_enabled = true
 	log_label.scroll_following = true
-	log_label.custom_minimum_size = Vector2(375, 85)
+	log_label.custom_minimum_size = Vector2(675, 220)
 	plog.add_child(log_label)
 
-	# tombol kembali ke battle + save/load (Fase 3 langkah 5)
-	var pb := _panel(Vector2(40, 464), Vector2(420, 110))
+	# tombol kembali ke battle + save/load (kiri-bawah)
+	var pb := _panel(Vector2(40, 464), Vector2(420, 150))
 	var vb := VBoxContainer.new()
 	pb.add_child(vb)
 	_tombol("⚔ MENU BATTLE", vb, func() -> void:
@@ -153,8 +159,19 @@ func _bangun_ui() -> void:
 			_catatan("Tidak ada berkas simpanan / gagal memuat."))
 
 
+var _log_baris: PackedStringArray = PackedStringArray()
+
+
+## Tulis catatan dunia (UI pass 2): baris terakhir disorot warna aksen.
 func _catatan(tek: String) -> void:
-	log_label.text += tek + "\n"
+	_log_baris.append(tek)
+	if _log_baris.size() > 60:
+		_log_baris = _log_baris.slice(_log_baris.size() - 60)
+	var tampil := ""
+	for i in _log_baris.size():
+		var warna := "#ffd966" if i == _log_baris.size() - 1 else "#cfd8d4"
+		tampil += "[color=%s]%s[/color]\n" % [warna, _log_baris[i]]
+	log_label.text = tampil
 
 
 # ------------------------------------------------------------ alur dunia

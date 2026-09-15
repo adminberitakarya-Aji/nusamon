@@ -17,7 +17,7 @@
 | Prototipe World/Catch (Fase 2) | ✅ **Selesai** — inventori & toko + tim/partai + switch + Nusadex + 12 ability + Latihan EV-lite + save/load (JSON `user://`) aktif; catatan: pratinjau model 3D menunggu aset Blender (D-1) |
 | Fase 3 — World & Gym pertama | ✅ **Selesai** — peta Jawa + encounter liar (habitatPulau × rarity) + kabur speed-based + battle trainer Bu Sari (menang → Lencana Harapan, Rute 2 terbuka) + **simpanan v2 (progres persisten)** + environment CC0/placeholder; catatan: aset .glb env menunggu unduhan (lihat `assets/env/README.md`) |
 | Fase 4 — Vertical Slice | ✅ **Selesai** — starter selection + cutscene ✅ · rival Raka (counter-starter) ✅ · gym G2 Pak Lesto ✅ (Lencana Arunika) · pusat pemulihan + toko semua tier ✅ · main end-to-end (Desa → G1 → G2) ✅ · export Web (pipeline siap; templates menunggu install) ✅. Detail: `ROADMAP.md` |
-| Fase 5 — Produksi konten penuh | 🔨 **Berjalan** — 62 model semua tahapan ✅ · 6 pulau + Laut Nusantara (28 lokasi, gate item tiket/perahu) ✅ · 8 gym + Liga Nusantara (Elite Empat berantai) + Juara Nara (TAMAT) ✅ · legendary trio (1× per save) ✅ · audio (AudioManager + placeholder gamelan-ambient; aset CC0 pasca-rilis) ✅. Sisa: playtest visual. Detail: `ROADMAP.md` |
+| Fase 5 — Produksi konten penuh | 🔨 **Berjalan** — 62 model semua tahapan ✅ · 6 pulau + Laut Nusantara (28 lokasi, gate item tiket/perahu) ✅ · 8 gym + Liga Nusantara (Elite Empat berantai) + Juara Nara (TAMAT) ✅ · legendary trio (1× per save) ✅ · audio (AudioManager + placeholder gamelan-ambient; aset CC0 pasca-rilis) ✅ · Nusadex 100% (Program Konservasi Prof. Candri + ✕ Lepaskan tim) ✅. Sisa: playtest visual. Detail: `ROADMAP.md` |
 
 ## Struktur Proyek
 

@@ -40,6 +40,21 @@ static func aktif() -> NusamonInstance:
 	return anggota[clampi(aktif_index, 0, anggota.size() - 1)]
 
 
+## Lepaskan (release) anggota tim dari koleksi — Fase 5 (Nusadex tetap tercatat).
+## Anggota terakhir tidak boleh dilepas (tim tak boleh kosong).
+## Mengembalikan instance yang dilepas; null bila index tidak valid / anggota tunggal.
+static func lepas(index: int) -> NusamonInstance:
+	if index < 0 or index >= anggota.size():
+		return null
+	if anggota.size() <= 1:
+		return null
+	var dilepas: NusamonInstance = anggota[index]
+	anggota.remove_at(index)
+	if aktif_index >= anggota.size():
+		aktif_index = anggota.size() - 1
+	return dilepas
+
+
 ## Ganti mon aktif; false bila index tidak valid.
 static func ubah_aktif(idx: int) -> bool:
 	if idx < 0 or idx >= anggota.size():

@@ -195,6 +195,84 @@ func _bagian_4() -> void:
 	scene.queue_free()
 	EncounterSystem.reset()
 
+	_bagian_5()
+
+
+func _bagian_5() -> void:
+	# ---------- 5. bonus starter Juara (Nusadex 100%) + Tim.lepas
+	Progres.reset()
+	Progres.starter_id = 1
+	cek("starter_yang_kurang awal = [2, 3]", Progres.starter_yang_kurang() == [2, 3])
+	Progres.tandai_starter_bonus(2)
+	Progres.tandai_starter_bonus(2)   # idempoten
+	cek("tandai starter_bonus idempoten", Progres.starter_bonus == [2])
+	cek("kurang tinggal [3]", Progres.starter_yang_kurang() == [3])
+	Simpanan.hapus()
+	Progres.starter_id = 1
+	Simpanan.simpan()
+	Progres.starter_bonus = []
+	var muat_ok := Simpanan.muat()
+	cek("starter_bonus roundtrip simpanan", muat_ok and Progres.starter_bonus == [2])
+	var state := Simpanan.ambil_state()
+	state.erase("versi")
+	state["progres"] = {"lokasi": "desa_sumberrejo", "lencana": [], "trainer_kalah": [], "starter": 1}
+	Simpanan.terapkan(state)
+	cek("starter_bonus aditif (v2 lama tanpa field)", Progres.starter_bonus.is_empty()
+		and Progres.starter_id == 1)
+	Simpanan.hapus()
+	var dunia2 := NusamonData.load_world()
+	var poi_bonus := false
+	for l in dunia2.get("lokasi", []):
+		if String(l.get("id", "")) == "desa_sumberrejo":
+			for poi in l.get("tempat", []):
+				if String(poi.get("aksi", "")) == "starter_bonus":
+					poi_bonus = true
+	cek("POI starter_bonus ada di desa_sumberrejo", poi_bonus)
+	# scene-level: terima bonus setelah juara
+	Progres.reset()
+	Progres.starter_id = 1
+	Progres.tandai_kalah_trainer("nara")   # sudah juara
+	Tim.reset()
+	Nusadex.reset()
+	var nusamons := NusamonData.load_nusamons()
+	var mon_awal: NusamonInstance = NusamonInstance.create(
+		NusamonData.find_species(nusamons, 1), nusamons["detailSpesies"]["1"], 0, 5)
+	Tim.tambah(mon_awal)
+	TrainerEngine.set_antrean("")
+	EncounterSystem.reset()
+	var paket_w: PackedScene = load("res://game/world/world_scene.tscn")
+	var w: Control = paket_w.instantiate()
+	get_root().add_child(w)
+	w._terima_starter_bonus(2)
+	cek("starter bonus 2 masuk tim", Tim.jumlah() == 2)
+	cek("Nusadex tangkap id 2", Nusadex.sudah_tangkap(2))
+	w._terima_starter_bonus(3)
+	cek("starter bonus 3 masuk tim", Tim.jumlah() == 3)
+	cek("Nusadex tangkap id 3", Nusadex.sudah_tangkap(3))
+	cek("ketiga line starter tercatat (Nusadex 30/30 tercapai)", Progres.starter_yang_kurang().is_empty())
+	var n_before := Tim.jumlah()
+	w._terima_starter_bonus(2)   # grant ulang → idempoten
+	cek("grant ulang idempoten (tanpa tambah)", Tim.jumlah() == n_before)
+	# Tim.lepas
+	var dilepas: NusamonInstance = Tim.lepas(2)
+	cek("Tim.lepas mengurangi anggota", dilepas != null and Tim.jumlah() == 2)
+	cek("lepas index invalid → null", Tim.lepas(9) == null)
+	# tim penuh → grant ditolak (tanpa merusak state)
+	Tim.reset()
+	for sid in [1, 2, 3, 22, 23, 24]:
+		Tim.tambah(NusamonInstance.create(NusamonData.find_species(nusamons, sid),
+			nusamons["detailSpesies"][str(sid)], 0, 5))
+	Progres.starter_bonus = []
+	Progres.starter_id = 1
+	Progres.tandai_kalah_trainer("nara")
+	w._terima_starter_bonus(2)
+	cek("tim penuh → bonus ditolak (tidak merusak state)",
+		Tim.jumlah() == 6 and Progres.starter_yang_kurang() == [2, 3])
+	w.queue_free()
+	Progres.reset()
+	Tim.reset()
+	Nusadex.reset()
+
 	print("")
 	print("=== Hasil: %d lulus, %d gagal ===" % [lulus, gagal])
 	quit(1 if gagal > 0 else 0)

@@ -216,6 +216,8 @@ func _perbarui() -> void:
 			_tampilkan_poi_legendary(t)
 		elif String(t.get("aksi", "")) == "liga":
 			_tampilkan_poi_liga(t)
+		elif String(t.get("aksi", "")) == "starter_bonus":
+			_tampilkan_poi_starter_bonus(t)
 
 	# panel gym (Fase 3 langkah 3): leader, tim, hadiah — battle = langkah 4
 	if not trainer_gym.is_empty():
@@ -373,6 +375,55 @@ func _tampilkan_poi_liga(t: Dictionary) -> void:
 			continue
 		_tombol("⚔ TANTANG %s" % String(LIGA_NAMA[tid]).to_upper(), daftar_tempat,
 			func() -> void: _tantang_trainer(tid))
+
+
+## POI aksi "starter_bonus": Program Konservasi Prof. Candri (Fase 5 — Nusadex 100%).
+## Setelah Juara, pemain menerima line starter yang belum dimiliki (satu per
+## interaksi, masuk tim + tercatat Nusadex.lihat/tangkap). Idempoten via Progres.
+const BONUS_STARTER_LEVEL := 20
+
+func _tampilkan_poi_starter_bonus(t: Dictionary) -> void:
+	if not Progres.sudah_kalah_trainer("nara"):
+		daftar_tempat.add_child(_label("   🔒 Terbuka setelah menjadi Juara Nusantara",
+			12, Color(0.95, 0.6, 0.4)))
+		return
+	var kurang: Array = Progres.starter_yang_kurang()
+	if kurang.is_empty():
+		daftar_tempat.add_child(_label("   ✓ Program selesai — ketiga line starter tercatat",
+			12, Color(0.6, 0.9, 0.6)))
+		return
+	if Tim.jumlah() >= 6:
+		daftar_tempat.add_child(_label("   ⚠ Tim penuh (6/6) — lepaskan satu anggota dulu",
+			12, Color(0.95, 0.6, 0.4)))
+		return
+	var sid := int(kurang[0])
+	var sp := NusamonData.find_species(nusamons, sid)
+	var nama_tahap := "?"
+	var tahapan: Array = sp.get("tahapan", [])
+	if not tahapan.is_empty():
+		nama_tahap = String(tahapan[0].get("nama", "?"))
+	_tombol("🎁 TERIMA %s" % String(nama_tahap).to_upper(), daftar_tempat,
+		func() -> void: _terima_starter_bonus(sid))
+
+
+## Beri satu starter bonus (dipanggil tombol POI; satu per interaksi).
+func _terima_starter_bonus(sid: int) -> void:
+	if Progres.sudah_terima_starter_bonus(sid) or Tim.penuh():
+		return
+	var sp := NusamonData.find_species(nusamons, sid)
+	var mon := NusamonInstance.create(
+		sp, nusamons["detailSpesies"][str(sid)], 0, BONUS_STARTER_LEVEL)
+	if not Tim.tambah(mon):
+		return
+	Progres.tandai_starter_bonus(sid)
+	Nusadex.lihat(sid)
+	Nusadex.tangkap(sid)
+	AudioManager.mainkan_sfx("sfx_tangkap_sukses")
+	_catatan("Prof. Candri: Hasil program konservasi kami — %s! Rawat dia baik-baik." %
+		mon.display_name)
+	_catatan("Tercatat di Nusadex: #%02d %s (Lv.%d)" % [sid, mon.display_name, mon.level])
+	Simpanan.simpan()
+	_perbarui()
 
 
 # ------------------------------------------------------------ cutscene starter (Fase 4)

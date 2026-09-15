@@ -911,8 +911,27 @@ func _buka_menu_ganti() -> void:
 			m.display_name, tanda, m.level, m.current_hp, m.max_hp],
 			menu_ganti, func() -> void: _ganti_mon(idx))
 		b.disabled = (m == Tim.aktif()) or m.is_fainted()
+		# LEPASKAN (Fase 5 — koleksi): bebas slot tim; Nusadex tetap tercatat
+		var nonaktif := m != Tim.aktif()
+		var bl := _tombol_menu("✕ LEPASKAN %s" % m.display_name.to_upper(),
+			menu_ganti, func() -> void: _lepas_mon(idx))
+		bl.disabled = not nonaktif or Tim.jumlah() <= 1
 	_tombol_menu("Kembali", menu_ganti, _tutup_sub_menu)
 	menu_ganti.visible = true
+
+
+## Lepaskan anggota tim dari koleksi (Nusadex tetap tercatat — Fase 5).
+func _lepas_mon(idx: int) -> void:
+	if idx < 0 or idx >= Tim.jumlah():
+		return
+	var dilepas: NusamonInstance = Tim.lepas(idx)
+	if dilepas == null:
+		_log("Anggota terakhir tidak boleh dilepas!")
+		return
+	_log("%s dilepaskan ke alam liar. Selamat tinggal!" % dilepas.display_name)
+	Simpanan.simpan()
+	_update_tim_label()
+	_buka_menu_ganti()
 
 
 func _ganti_mon(idx: int) -> void:

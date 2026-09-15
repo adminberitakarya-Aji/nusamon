@@ -16,6 +16,7 @@ static func reset() -> void:
 	lencana = []
 	trainer_kalah = []
 	legendary_dijumpai = []
+	starter_bonus = []
 	starter_id = 0
 
 
@@ -62,6 +63,31 @@ static func sudah_jumpai_legendary(id: int) -> bool:
 static func tandai_legendary(id: int) -> void:
 	if not sudah_jumpai_legendary(id):
 		legendary_dijumpai.append(id)
+
+
+# ------------------------------------------------------------ bonus starter (Fase 5 — Nusadex 100%)
+
+static var starter_bonus: Array = []   # id spesies starter hadiah Juara yang sudah diterima
+
+
+## Starter hadiah Juara (id spesies) sudah diterima?
+static func sudah_terima_starter_bonus(id: int) -> bool:
+	return starter_bonus.has(id)
+
+
+## Catat starter bonus (idempoten) — dipanggil saat hadiah diterima.
+static func tandai_starter_bonus(id: int) -> void:
+	if not sudah_terima_starter_bonus(id):
+		starter_bonus.append(id)
+
+
+## Line starter yang BELUM dimiliki pemain (bukan starter awal & belum bonus).
+static func starter_yang_kurang() -> Array:
+	var hasil: Array = []
+	for sid in [1, 2, 3]:
+		if sid != starter_id and not sudah_terima_starter_bonus(sid):
+			hasil.append(sid)
+	return hasil
 
 
 ## Trainer gym sudah dikalahkan pemain?

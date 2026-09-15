@@ -32,6 +32,7 @@ static func ambil_state() -> Dictionary:
 			"lencana": Progres.lencana.duplicate(),
 			"trainer_kalah": Progres.trainer_kalah.duplicate(),
 			"legendary": Progres.legendary_dijumpai.duplicate(),
+			"starter_bonus": Progres.starter_bonus.duplicate(),
 			"starter": Progres.starter_id,
 		}}
 
@@ -121,6 +122,10 @@ static func terapkan(data: Dictionary) -> void:
 		Progres.legendary_dijumpai = []
 		for lg in p.get("legendary", []):
 			Progres.tandai_legendary(int(lg))
+		# bonus starter Juara (Fase 5, additive)
+		Progres.starter_bonus = []
+		for sb in p.get("starter_bonus", []):
+			Progres.tandai_starter_bonus(int(sb))
 		Progres.starter_id = maxi(0, int(p.get("starter", 0)))
 
 

@@ -24,6 +24,8 @@ static var volume_sfx := 0.9
 # ------------------------------------------------------------ setup
 
 ## Pastikan bus & player siap (idempoten; aman dipanggil berulang).
+## add_child pakai call_deferred — bila dipanggil dari _ready() scene, root
+## sedang busy setup children dan add_child sinkron ditolak engine.
 static func pastikan_siap() -> void:
 	if _siap:
 		return
@@ -34,7 +36,7 @@ static func pastikan_siap() -> void:
 		_musik = AudioStreamPlayer.new()
 		_musik.name = "AudioManagerMusic"
 		_musik.bus = BUS_MUSIC
-		root.add_child(_musik)
+		root.add_child.call_deferred(_musik)
 	_siap = true
 
 
@@ -121,7 +123,13 @@ static func ganti_bgm(id: String, fade := 0.8) -> bool:
 	if stream == null:
 		return false
 	var vol := linear_to_db(maxf(0.01, float(entri.get("volume", 0.5)) * volume_musik))
-	if _musik.playing and fade > 0.0:
+	if not _musik.is_inside_tree():
+		# player menunggu deferred-add (dipanggil dari _ready scene) —
+		# jadwalkan play saat node resmi masuk tree
+		_musik.stream = stream
+		_musik.volume_db = vol
+		_musik.tree_entered.connect(_musik.play, CONNECT_ONE_SHOT)
+	elif _musik.playing and fade > 0.0:
 		var tw := _musik.create_tween()
 		tw.tween_property(_musik, "volume_db", -40.0, fade * 0.5)
 		tw.tween_callback(func() -> void:
@@ -152,8 +160,8 @@ static func mainkan_jingle(id: String) -> bool:
 	p.bus = BUS_MUSIC
 	p.stream = stream
 	p.volume_db = linear_to_db(maxf(0.01, float(entri.get("volume", 0.6)) * volume_musik))
-	root.add_child(p)
-	p.play()
+	root.add_child.call_deferred(p)
+	p.tree_entered.connect(p.play, CONNECT_ONE_SHOT)
 	p.finished.connect(func() -> void:
 		if is_instance_valid(p):
 			p.queue_free())
@@ -175,7 +183,8 @@ static func mainkan_sfx(id: String) -> bool:
 	if entri.is_empty() or String(entri.get("jenis", "")) != "sfx":
 		return false
 	pastikan_siap()
-	_sfx_aktif = _sfx_aktif.filter(func(p) -> bool: return is_instance_valid(p) and p.playing)
+	_sfx_aktif = _sfx_aktif.filter(func(p) -> bool: return is_instance_valid(p)
+		and not p.is_queued_for_deletion())
 	if _sfx_aktif.size() >= MAX_SFX:
 		return true   # full voice — lewati senyap (tanpa antri)
 	var stream := _muat_stream(entri)
@@ -187,8 +196,8 @@ static func mainkan_sfx(id: String) -> bool:
 	p.bus = BUS_SFX
 	p.stream = stream
 	p.volume_db = linear_to_db(maxf(0.01, float(entri.get("volume", 0.7)) * volume_sfx))
-	root.add_child(p)
-	p.play()
+	root.add_child.call_deferred(p)
+	p.tree_entered.connect(p.play, CONNECT_ONE_SHOT)
 	_sfx_aktif.append(p)
 	p.finished.connect(func() -> void:
 		if is_instance_valid(p):
